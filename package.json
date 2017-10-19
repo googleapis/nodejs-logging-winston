@@ -1,8 +1,13 @@
 {
   "name": "@google-cloud/logging-winston",
-  "version": "0.6.0",
-  "author": "Google Inc.",
   "description": "Stackdriver Logging transport for Winston",
+  "version": "0.6.0",
+  "license": "Apache-2.0",
+  "author": "Google Inc.",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "repository": "googleapis/nodejs-logging-winston",
   "main": "./src/index.js",
   "files": [
     "src",
@@ -10,7 +15,6 @@
     "CONTRIBUTORS",
     "LICENSE"
   ],
-  "repository": "googlecloudplatform/google-cloud-node",
   "keywords": [
     "google apis client",
     "google api client",
@@ -27,6 +31,29 @@
     "winston transport",
     "winston"
   ],
+  "contributors": [
+    "Ace Nassri <anassri@google.com>",
+    "Ali Ijaz Sheikh <ofrobots@google.com>",
+    "Bill Prin <waprin@google.com>",
+    "Dave Gramlich <callmehiphop@gmail.com>",
+    "Dave Raffensperger <daveraff@google.com>",
+    "Jason Dobry <jason.dobry@gmail.com>",
+    "Jason Dobry <jmdobry@users.noreply.github.com>",
+    "Joshua Toenyes <JoshuaToenyes@users.noreply.github.com>",
+    "Michael Gao <fgao@google.com>",
+    "Stephen Sawchuk <sawchuk@gmail.com>",
+    "Stephen Sawchuk <stephenplusplus@users.noreply.github.com>",
+    "Stephen Sawchuk <stephenplusplusplus@gmail.com>",
+    "Tim Swast <swast@google.com>",
+    "circle-ci <circle-ci@circleci.com>"
+  ],
+  "scripts": {
+    "publish-module": "node ../../scripts/publish.js logging-winston",
+    "test": "mocha test/*.js",
+    "system-test": "mocha system-test/*.js --no-timeouts --bail",
+    "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
+    "generate-scaffolding": "repo-tools generate all && repo-tools generate lib_samples_readme -l samples/ --config ../.cloud-repo-tools.json"
+  },
   "dependencies": {
     "@google-cloud/common": "^0.13.0",
     "@google-cloud/logging": "^1.0.0",
@@ -34,21 +61,13 @@
     "is": "^3.2.0",
     "lodash.mapvalues": "^4.6.0"
   },
-  "peerDependencies": {
-    "winston": "^2.x"
-  },
   "devDependencies": {
+    "@google-cloud/nodejs-repo-tools": "^2.0.10",
     "mocha": "^3.2.0",
     "proxyquire": "^1.7.10",
     "winston": "^2.2.0"
   },
-  "scripts": {
-    "publish-module": "node ../../scripts/publish.js logging-winston",
-    "test": "mocha test/*.js",
-    "system-test": "mocha system-test/*.js --no-timeouts --bail"
-  },
-  "license": "Apache-2.0",
-  "engines": {
-    "node": ">=4.0.0"
+  "peerDependencies": {
+    "winston": "^2.x"
   }
 }
