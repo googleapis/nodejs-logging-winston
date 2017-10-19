@@ -1,0 +1,24 @@
+{
+  "requiresKeyFile": true,
+  "requiresProjectId": true,
+  "product": "logging",
+  "client_reference_url": 
+    "https://cloud.google.com/logging/docs/setup/nodejs",
+  "release_quality": "beta",
+  "samples": [
+    {
+      "id": "logs",
+      "name": "Logging",
+      "file": "logs.js",
+      "docs_link": "https://cloud.google.com/logging/docs/",
+      "usage": "node logs.js --help"
+    },
+    {
+      "id": "sinks",
+      "name": "Sinks",
+      "file": "sinks.js",
+      "docs_link": "https://cloud.google.com/logging/docs/",
+      "usage": "node sinks.js --help"
+    }
+  ]
+}
