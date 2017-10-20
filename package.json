@@ -52,7 +52,9 @@
     "test": "mocha test/*.js",
     "system-test": "mocha system-test/*.js --no-timeouts --bail",
     "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
-    "generate-scaffolding": "repo-tools generate all && repo-tools generate lib_samples_readme -l samples/ --config ../.cloud-repo-tools.json"
+    "generate-scaffolding": "repo-tools generate all && repo-tools generate lib_samples_readme -l samples/ --config ../.cloud-repo-tools.json",
+    "lint": "repo-tools lint --cmd eslint -- src/ samples/ system-test/ test/",
+    "prettier": "prettier --write src/*.js src/*/*.js samples/*.js samples/*/*.js test/*.js test/*/*.js system-test/*.js system-test/*/*.js"
   },
   "dependencies": {
     "@google-cloud/common": "^0.13.0",
@@ -63,7 +65,12 @@
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^2.0.10",
+    "eslint": "^4.9.0",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-node": "^5.2.0",
+    "eslint-plugin-prettier": "^2.3.1",
     "mocha": "^3.2.0",
+    "prettier": "^1.7.4",
     "proxyquire": "^1.7.10",
     "winston": "^2.2.0"
   },

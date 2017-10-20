@@ -39,7 +39,7 @@ var NPM_LEVEL_NAME_TO_CODE = {
   info: 6,
   verbose: 7,
   debug: 7,
-  silly: 7
+  silly: 7,
 };
 
 /**
@@ -56,7 +56,7 @@ var STACKDRIVER_LOGGING_LEVEL_CODE_TO_NAME = {
   4: 'warning',
   5: 'notice',
   6: 'info',
-  7: 'debug'
+  7: 'debug',
 };
 
 /**
@@ -119,15 +119,18 @@ function LoggingWinston(options) {
     return new LoggingWinston(options);
   }
 
-  options = extend({
-    scopes: ['https://www.googleapis.com/auth/logging.write']
-  }, options);
+  options = extend(
+    {
+      scopes: ['https://www.googleapis.com/auth/logging.write'],
+    },
+    options
+  );
 
   var logName = options.logName || 'winston_log';
 
   winston.Transport.call(this, {
     level: options.level,
-    name: logName
+    name: logName,
   });
 
   this.inspectMetadata_ = options.inspectMetadata === true;
@@ -195,7 +198,7 @@ LoggingWinston.prototype.log = function(levelName, msg, metadata, callback) {
   var stackdriverLevel = STACKDRIVER_LOGGING_LEVEL_CODE_TO_NAME[levelCode];
 
   var entryMetadata = {
-    resource: this.resource_
+    resource: this.resource_,
   };
 
   var data = {};
@@ -220,8 +223,9 @@ LoggingWinston.prototype.log = function(levelName, msg, metadata, callback) {
   data.message = msg;
 
   if (is.object(metadata)) {
-    data.metadata =
-      this.inspectMetadata_ ? mapValues(metadata, util.inspect) : metadata;
+    data.metadata = this.inspectMetadata_
+      ? mapValues(metadata, util.inspect)
+      : metadata;
 
     // If the metadata contains a httpRequest property, promote it to the entry
     // metadata. This allows Stackdriver to use request log formatting.
