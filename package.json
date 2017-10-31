@@ -37,24 +37,22 @@
     "Bill Prin <waprin@google.com>",
     "Dave Gramlich <callmehiphop@gmail.com>",
     "Dave Raffensperger <daveraff@google.com>",
-    "Jason Dobry <jason.dobry@gmail.com>",
-    "Jason Dobry <jmdobry@users.noreply.github.com>",
+    "Jason Dobry <jdobry@google.com>",
     "Joshua Toenyes <JoshuaToenyes@users.noreply.github.com>",
+    "Luke Sneeringer <lukesneeringer@google.com>",
     "Michael Gao <fgao@google.com>",
     "Stephen Sawchuk <sawchuk@gmail.com>",
-    "Stephen Sawchuk <stephenplusplus@users.noreply.github.com>",
-    "Stephen Sawchuk <stephenplusplusplus@gmail.com>",
     "Tim Swast <swast@google.com>",
     "circle-ci <circle-ci@circleci.com>"
   ],
   "scripts": {
     "docs": "repo-tools exec -- jsdoc -c .jsdoc.js",
-    "generate-scaffolding": "repo-tools generate all && repo-tools generate lib_samples_readme -l samples/ --config ../.cloud-repo-tools.json",
+    "generate-scaffolding": "repo-tools generate all --except lib_readme",
     "lint": "repo-tools lint --cmd eslint -- src/ samples/ system-test/ test/",
-    "prettier": "prettier --write src/*.js src/*/*.js samples/*.js samples/*/*.js test/*.js test/*/*.js system-test/*.js system-test/*/*.js",
+    "prettier": "repo-tools exec -- prettier --write src/*.js src/*/*.js samples/*.js samples/*/*.js test/*.js test/*/*.js system-test/*.js system-test/*/*.js",
     "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
-    "system-test": "mocha system-test/*.js --no-timeouts --bail",
-    "test": "mocha test/*.js"
+    "system-test": "repo-tools test run --cmd mocha -- system-test/*.js --no-timeouts --bail",
+    "test": "repo-tools test run --cmd mocha -- test/*.js"
   },
   "dependencies": {
     "@google-cloud/common": "^0.13.0",
@@ -64,7 +62,7 @@
     "lodash.mapvalues": "^4.6.0"
   },
   "devDependencies": {
-    "@google-cloud/nodejs-repo-tools": "^2.0.10",
+    "@google-cloud/nodejs-repo-tools": "^2.1.0",
     "codecov": "^3.0.0",
     "eslint": "^4.9.0",
     "eslint-config-prettier": "^2.6.0",

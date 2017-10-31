@@ -1,8 +1,8 @@
 <img src="https://avatars2.githubusercontent.com/u/2810941?v=3&s=96" alt="Google Cloud Platform logo" title="Google Cloud Platform" align="right" height="96" width="96"/>
 
-# Stackdriver Logging: Node.js Samples
+# Stackdriver Logging for Winston: Node.js Samples
 
-[![Build](https://storage.googleapis.com/.svg)]()
+[![Open in Cloud Shell][shell_img]][shell_link]
 
 [Stackdriver Logging](https://cloud.google.com/logging/docs) allows you to store, search, analyze, monitor, and alert on log data and events from Google Cloud Platform and Amazon Web Services.
 
@@ -10,8 +10,8 @@
 
 * [Before you begin](#before-you-begin)
 * [Samples](#samples)
-  * [Logging](#logging)
-  * [Sinks](#sinks)
+  * [Quickstart](#quickstart)
+  * [Explict Auth Setup](#explict-auth-setup)
 
 ## Before you begin
 
@@ -21,75 +21,23 @@ library's README.
 
 ## Samples
 
-### Logging
+### Quickstart
 
-View the [source code][logs_0_code].
+View the [source code][quickstart_0_code].
 
-__Usage:__ `node logs.js --help`
+[![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-logging-winston&page=editor&open_in_editor=samples/quickstart.js,samples/README.md)
 
-```
-Commands:
-  list                                Lists log entries, optionally filtering, limiting, and sorting results.
-  list-simple <logName>               Lists log entries.
-  write <logName> <resource> <entry>  Writes a log entry to the specified log.
-  write-simple <logName>              Writes a basic log entry to the specified log.
-  bunyan                              Writes some logs entries to Stackdriver Logging via Winston.
-  bunyan-setup                        Setup up the Bunyan logger with explicit credentianls.
-  winston                             Writes some logs entries to Stackdriver Logging via Winston.
-  winston-setup                       Setup up the Winston logger with explicit credentianls.
-  delete <logName>                    Deletes the specified Log.
+[quickstart_0_docs]: https://cloud.google.com/logging/docs/
+[quickstart_0_code]: quickstart.js
 
-Options:
-  --version  Show version number                                                                               [boolean]
-  --help     Show help                                                                                         [boolean]
+### Explict Auth Setup
 
-Examples:
-  node logs.js list                                             List all log entries.
-  node logs.js list -f "severity=ERROR" -s "timestamp" -l 2     List up to 2 error entries, sorted by timestamp
-                                                                ascending.
-  node logs.js list -f 'logName="my-log"' -l 2                  List up to 2 log entries from the "my-log" log.
-  node logs.js write my-log                                     Write a string log entry.
-  '{"type":"gae_app","labels":{"module_id":"default"}}'
-  '"Hello World!"'
-  node logs.js write my-log '{"type":"global"}'                 Write a JSON log entry.
-  '{"message":"Hello World!"}'
-  node logs.js delete my-log                                    Delete "my-log".
+View the [source code][setup_explicit_1_code].
 
-For more information, see https://cloud.google.com/logging/docs
-```
+[![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-logging-winston&page=editor&open_in_editor=samples/setup_explicit.js,samples/README.md)
 
-[logs_0_docs]: https://cloud.google.com/logging/docs/
-[logs_0_code]: logs.js
+[setup_explicit_1_docs]: https://cloud.google.com/logging/docs/
+[setup_explicit_1_code]: setup_explicit.js
 
-### Sinks
-
-View the [source code][sinks_1_code].
-
-__Usage:__ `node sinks.js --help`
-
-```
-Commands:
-  create <sinkName> <bucketName> [filter]  Creates a new sink with the given name to the specified bucket with an
-                                           optional filter.
-  get <sinkName>                           Gets the metadata for the specified sink.
-  list                                     Lists all sinks.
-  update <sinkName> <filter>               Updates the filter for the specified sink.
-  delete <sinkName>                        Deletes the specified sink.
-
-Options:
-  --version  Show version number                                                                               [boolean]
-  --help     Show help                                                                                         [boolean]
-
-Examples:
-  node sinks.js create export-errors app-error-logs         Create a new sink named "export-errors" that exports logs to
-                                                            a bucket named "app-error-logs".
-  node sinks.js get export-errors                           Get the metadata for a sink name "export-errors".
-  node sinks.js list                                        List all sinks.
-  node sinks.js update export-errors "severity >= WARNING"  Update the filter for a sink named "export-errors".
-  node sinks.js delete export-errors                        Delete a sink named "export-errors".
-
-For more information, see https://cloud.google.com/logging/docs
-```
-
-[sinks_1_docs]: https://cloud.google.com/logging/docs/
-[sinks_1_code]: sinks.js
+[shell_img]: http://gstatic.com/cloudssh/images/open-btn.png
+[shell_link]: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-logging-winston&page=editor&open_in_editor=samples/README.md
