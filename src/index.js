@@ -269,6 +269,12 @@ LoggingWinston.prototype.log = function(levelName, msg, metadata, callback) {
   this.log_[stackdriverLevel](entry, callback);
 };
 
+/**
+ * Value: `logging.googleapis.com/trace`
+ *
+ * @name LoggingWinston.LOGGING_TRACE_KEY
+ * @type {string}
+ */
 LoggingWinston.LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
 
 /**
