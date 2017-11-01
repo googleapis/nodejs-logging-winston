@@ -20,7 +20,7 @@
 // Imports the Google Cloud client library for Winston
 const LoggingWinston = require('@google-cloud/logging-winston');
 
-// Instantiates a client
+// Creates a client
 const loggingWinston = new LoggingWinston({
   projectId: 'your-project-id',
   keyFilename: '/path/to/key.json',

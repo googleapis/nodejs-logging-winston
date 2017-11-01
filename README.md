@@ -170,6 +170,15 @@ Apache Version 2.0
 
 See [LICENSE](https://github.com/googleapis/nodejs-logging-winston/blob/master/LICENSE)
 
-[client-docs]: https://cloud.google.com/logging/docs/setup/nodejs
+[client-docs]: https://cloud.google.com/nodejs/docs/reference/logging-winston/latest/
 [product-docs]: https://cloud.google.com/logging/docs
 [shell_img]: http://gstatic.com/cloudssh/images/open-btn.png
+
+[http-request-message]: https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#HttpRequest
+[error-reporting]: https://cloud.google.com/error-reporting/
+[@google-cloud/error-reporting]: https://www.npmjs.com/package/@google-cloud/error-reporting
+[uncaught]: https://nodejs.org/api/process.html#process_event_uncaughtexception
+[unhandled]: https://nodejs.org/api/process.html#process_event_unhandledrejection
+[trace-agent]: https://www.npmjs.com/package/@google-cloud/trace-agent
+[LogEntry]: https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry
+[trace-viewing-log-entries]: https://cloud.google.com/trace/docs/viewing-details#log_entries
