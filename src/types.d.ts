@@ -96,7 +96,6 @@ interface ServiceContext {
   version: string;
 }
 
-
 interface StackdriverData {
   serviceContext?: ServiceContext,
   message?: string,
@@ -135,13 +134,11 @@ interface Metadata {
   stack?: string,
   httpRequest?: HttpRequest
 }
-
 interface StackdriverEntry {
   constructor: (metadata?: StackdriverEntryMetadata, data?: {}| string) => StackdriverEntry,
   data?: {}|string,
   metadata?: StackdriverEntryMetadata
 }
-
 type LogWriteResponse = {}[];
 
 interface HttpRequest {
