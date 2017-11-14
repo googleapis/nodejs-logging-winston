@@ -121,7 +121,9 @@ describe('logging-winston', function() {
         inspectMetadata: true,
       });
 
-      var loggingWinston = new LoggingWinston.LoggingWinston(optionsWithInspectMetadata);
+      var loggingWinston = new LoggingWinston.LoggingWinston(
+        optionsWithInspectMetadata
+      );
       assert.strictEqual(loggingWinston.inspectMetadata, true);
     });
 
@@ -133,7 +135,9 @@ describe('logging-winston', function() {
       var optionsWithoutLevels = extend({}, OPTIONS);
       delete optionsWithoutLevels.levels;
 
-      var loggingWinston = new LoggingWinston.LoggingWinston(optionsWithoutLevels);
+      var loggingWinston = new LoggingWinston.LoggingWinston(
+        optionsWithoutLevels
+      );
       assert.deepEqual(loggingWinston.levels, {
         error: 3,
         warn: 4,
@@ -172,10 +176,7 @@ describe('logging-winston', function() {
     });
 
     it('should localize the provided service context', function() {
-      assert.strictEqual(
-        loggingWinston.serviceContext,
-        OPTIONS.serviceContext
-      );
+      assert.strictEqual(loggingWinston.serviceContext, OPTIONS.serviceContext);
     });
   });
 
@@ -325,7 +326,8 @@ describe('logging-winston', function() {
 
     it('should promote prefixed trace property to metadata', function(done) {
       const metadataWithTrace = extend({}, METADATA);
-      metadataWithTrace[LoggingWinston.LoggingWinston.LOGGING_TRACE_KEY] = 'trace1';
+      metadataWithTrace[LoggingWinston.LoggingWinston.LOGGING_TRACE_KEY] =
+        'trace1';
 
       loggingWinston.stackdriverLog.entry = function(entryMetadata, data) {
         assert.deepStrictEqual(entryMetadata, {
@@ -424,7 +426,10 @@ describe('logging-winston', function() {
         return entry;
       };
 
-      loggingWinston.stackdriverLog[STACKDRIVER_LEVEL] = function(entry_, callback) {
+      loggingWinston.stackdriverLog[STACKDRIVER_LEVEL] = function(
+        entry_,
+        callback
+      ) {
         assert.strictEqual(entry_, entry);
         callback(); // done()
       };

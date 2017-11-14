@@ -17,7 +17,7 @@
 import * as extend from 'extend';
 import * as util from 'util';
 // TODO: Address type incorrectness in @types/is
-const is: {fn: (value: any) => boolean; object: (value: any) => boolean} =
+const is: {fn: (value: {}) => boolean; object: (value: {}) => boolean} =
     require('is');
 const logging = require('@google-cloud/logging');
 const mapValues = require('lodash.mapvalues');
@@ -84,17 +84,6 @@ function getCurrentTraceFromAgent(): string|null {
   return `projects/${traceProjectId}/traces/${traceId}`;
 }
 
-export interface ServiceContext {
-  /**
-   * An identifier of the service, such as the name of the executable, job, or
-   * Google App Engine service name.
-   */
-  service: string;
-  /**
-   * Represents the version of the service.
-   */
-  version: string;
-}
 
 /**
  * Credentials object.
@@ -109,7 +98,7 @@ export interface Options {
    * The default log level. Winston will filter messages with a severity lower
    * than this.
    */
-  level?: any;
+  level?: string;
   /**
    * Custom logging levels as supported by winston. This list is used to
    * translate your log level to the Stackdriver Logging level. Each property
@@ -176,7 +165,7 @@ export interface Options {
    * Custom promise module to use instead of native Promises.
    */
   // TODO: address the correct type of promise.
-  promise: any;
+  promise: {};
 }
 
 /**
@@ -261,7 +250,7 @@ export interface Options {
 export class LoggingWinston extends winston.Transport {
   inspectMetadata: boolean;
   levels: {[name: string]: number};
-  stackdriverLog: any;  // TODO: add type for @google-cloud/logging
+  stackdriverLog: StackdriverLog;  // TODO: add type for @google-cloud/logging
   resource: MonitoredResource|undefined;
   serviceContext: ServiceContext|undefined;
   static readonly LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
@@ -290,9 +279,10 @@ export class LoggingWinston extends winston.Transport {
     this.serviceContext = options.serviceContext;
   }
 
-  log(levelName: any, msg: string, metadata: any, callback: any) {
+  log(levelName: string, msg: string, metadata: Metadata|{},
+      callback: (err: Error, apiResponse: {}) => void) {
     if (is.fn(metadata)) {
-      callback = metadata;
+      callback = metadata as (err: Error, apiResponse: {}) => void;
       metadata = {};
     }
 
@@ -303,11 +293,11 @@ export class LoggingWinston extends winston.Transport {
     const levelCode = this.levels[levelName];
     const stackdriverLevel = STACKDRIVER_LOGGING_LEVEL_CODE_TO_NAME[levelCode];
 
-    let entryMetadata: any = {
+    const entryMetadata: StackdriverEntryMetadata = {
       resource: this.resource,
     };
 
-    let data: any = {};
+    const data: StackdriverData = {};
 
     // Stackdriver Logs Viewer picks up the summary line from the `message`
     // property of the jsonPayload.
@@ -321,8 +311,8 @@ export class LoggingWinston extends winston.Transport {
     // property on an object) as that works is accepted by Error Reporting in
     // for more resource types.
     //
-    if (metadata && metadata.stack) {
-      msg += (msg ? ' ' : '') + metadata.stack;
+    if (metadata && (metadata as Metadata).stack) {
+      msg += (msg ? ' ' : '') + (metadata as Metadata).stack;
       data.serviceContext = this.serviceContext;
     }
     data.message = msg;
@@ -337,15 +327,18 @@ export class LoggingWinston extends winston.Transport {
       // Note that the httpRequest field must properly validate as HttpRequest
       // proto message, or the log entry would be rejected by the API. We no do
       // validation here.
-      if (metadata.httpRequest) {
-        entryMetadata.httpRequest = metadata.httpRequest;
-        delete data.metadata.httpRequest;
+      if ((metadata as Metadata).httpRequest) {
+        entryMetadata.httpRequest = (metadata as Metadata).httpRequest;
+        delete (data.metadata as Metadata).httpRequest;
       }
     }
 
-    if (metadata && metadata[LOGGING_TRACE_KEY]) {
-      entryMetadata.trace = metadata[LOGGING_TRACE_KEY];
-      delete data.metadata[LOGGING_TRACE_KEY];
+    // tslint:disable-next-line:no-any
+    if (metadata && (metadata as any)[LOGGING_TRACE_KEY]) {
+      // tslint:disable-next-line:no-any
+      entryMetadata.trace = (metadata as any)[LOGGING_TRACE_KEY];
+      // tslint:disable-next-line:no-any
+      delete (data.metadata as any)[LOGGING_TRACE_KEY];
     } else {
       const trace = getCurrentTraceFromAgent();
       if (trace) {
@@ -354,8 +347,10 @@ export class LoggingWinston extends winston.Transport {
     }
 
     const entry = this.stackdriverLog.entry(entryMetadata, data);
-    this.stackdriverLog[stackdriverLevel](entry, callback);
+    // tslint:disable-next-line:no-any
+    (this.stackdriverLog as any)[stackdriverLevel](entry, callback);
   }
 }
 
+// tslint:disable-next-line:no-any
 (winston.transports as any).StackdriverLogging = LoggingWinston;
