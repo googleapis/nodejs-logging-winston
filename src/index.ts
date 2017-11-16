@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
+import * as is from '@sindresorhus/is';
 import * as extend from 'extend';
 import * as util from 'util';
-// TODO: Address type incorrectness in @types/is
-const is: {fn: (value: {}) => boolean; object: (value: {}) => boolean} =
-    require('is');
-const logging = require('@google-cloud/logging');
-const mapValues = require('lodash.mapvalues');
 import * as winston from 'winston';
 
-/**
- * Map of npm output levels to Stackdriver Logging levels.
- *
- * @type {object}
- * @private
- */
+const logging = require('@google-cloud/logging');
+const mapValues = require('lodash.mapvalues');
+
+// Map of npm output levels to Stackdriver Logging levels.
 const NPM_LEVEL_NAME_TO_CODE = {
   error: 3,
   warn: 4,
@@ -38,12 +32,7 @@ const NPM_LEVEL_NAME_TO_CODE = {
   silly: 7,
 };
 
-/**
- * Map of Stackdriver Logging levels.
- *
- * @type {object}
- * @private
- */
+// Map of Stackdriver Logging levels.
 const STACKDRIVER_LOGGING_LEVEL_CODE_TO_NAME: {[key: number]: string} = {
   0: 'emergency',
   1: 'alert',
@@ -93,166 +82,13 @@ export interface Credentials {
   private_key: string;
 }
 
-export interface Options {
-  /**
-   * The default log level. Winston will filter messages with a severity lower
-   * than this.
-   */
-  level?: string;
-  /**
-   * Custom logging levels as supported by winston. This list is used to
-   * translate your log level to the Stackdriver Logging level. Each property
-   * should have an integer value between 0 (most severe) and 7 (least severe).
-   * If you are passing a list of levels to your winston logger, you should
-   * provide the same list here.
-   */
-  levels?: {[name: string]: number};
-  /**
-   *  Serialize winston-provided log metadata using `util.inspect`.
-   */
-  inspectMetadata: boolean;
-  /**
-   * The name of the log that will receive messages written to this transport.
-   */
-  logName?: string;
-  /**
-   * The monitored resource that the transport corresponds to. On Google Cloud
-   * Platform, this is detected automatically, but you may optionally specify a
-   * specific monitored resource. For more information see the
-   * [official documentation]{@link
-   * https://cloud.google.com/logging/docs/api/reference/rest/v2/MonitoredResource}.
-   */
-  resource?: MonitoredResource;
-  /**
-   * For logged errors, we provide this as the service context. For more
-   * information see [this guide]{@link
-   * https://cloud.google.com/error-reporting/docs/formatting-error-messages}
-   * and the [official documentation]{@link
-   * https://cloud.google.com/error-reporting/reference/rest/v1beta1/ServiceContext}.
-   */
-  serviceContext?: ServiceContext;
-  /**
-   * he project ID from the Google Cloud Console, e.g. 'grape-spaceship-123'. We
-   * will also check the environment variable `GCLOUD_PROJECT` for your project
-   * ID. If your app is running in an environment which supports {@link
-   * https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application
-   * Application Default Credentials}, your project ID will be detected
-   * automatically.
-   */
-  projectId?: string;
-  /**
-   * Full path to the a .json, .pem, or .p12 key downloaded from the Google
-   * Cloud Console. If you provide a path to a JSON file, the `projectId` option
-   * above is not necessary. NOTE: .pem and .p12 require you to specify the
-   * `email` option as well.
-   */
-  keyFilenam?: string;
-  /**
-   * Account email address. Required when using a .pem or .p12 keyFilename.
-   */
-  email?: string;
-  /**
-   * Automatically retry requests if the response is related to rate limits or
-   * certain intermittent server errors. We will exponentially backoff
-   * subsequent requests by default.
-   */
-  autoRetry: boolean;
-  /**
-   * Maximum number of automatic retries attempted before returning the error.
-   */
-  maxRetries: number;
-  /**
-   * Custom promise module to use instead of native Promises.
-   */
-  // TODO: address the correct type of promise.
-  promise: {};
-}
-
-/**
- * This module provides support for streaming your winston logs to
- * [Stackdriver Logging](https://cloud.google.com/logging).
- *
- * @class
- *
- * @param {object} [options]
- * @param {object} [options.level] The default log level. Winston will filter
- *     messages with a severity lower than this.
- * @param {object} [options.levels] Custom logging levels as supported by
- *     winston. This list is used to translate your log level to the Stackdriver
- *     Logging level. Each property should have an integer value between 0 (most
- *     severe) and 7 (least severe). If you are passing a list of levels to your
- *     winston logger, you should provide the same list here.
- * @param {boolean} [options.inspectMetadata=false] Serialize winston-provided log
- *     metadata using `util.inspect`.
- * @param {string} [options.logName=winston_log] The name of the log that will receive
- *     messages written to this transport.
- * @param {object} [options.resource] The monitored resource that the transport
- *     corresponds to. On Google Cloud Platform, this is detected automatically,
- *     but you may optionally specify a specific monitored resource. For more
- *     information see the
- *     [official documentation]{@link
- * https://cloud.google.com/logging/docs/api/reference/rest/v2/MonitoredResource}.
- * @param {object} [options.serviceContext] For logged errors, we provide this
- *     as the service context. For more information see
- *     [this guide]{@link
- * https://cloud.google.com/error-reporting/docs/formatting-error-messages} and
- * the [official documentation]{@link
- * https://cloud.google.com/error-reporting/reference/rest/v1beta1/ServiceContext}.
- * @param {string} [options.serviceContext.service] An identifier of the
- *     service, such as the name of the executable, job, or Google App Engine
- *     service name.
- * @param {string} [options.serviceContext.version] Represents the version of
- *     the service.
- * @param {string} [options.projectId] The project ID from the Google Cloud
- *     Console, e.g. 'grape-spaceship-123'. We will also check the environment
- *     variable `GCLOUD_PROJECT` for your project ID. If your app is running in
- *     an environment which supports {@link
- * https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application
- * Application Default Credentials}, your project ID will be detected
- * automatically.
- * @param {string} [options.keyFilename] Full path to the a .json, .pem, or .p12
- *     key downloaded from the Google Cloud Console. If you provide a path
- *     to a JSON file, the `projectId` option above is not necessary. NOTE: .pem
- *     and .p12 require you to specify the `email` option as well.
- * @param {string} [options.email] Account email address. Required when using a
- *     .pem or .p12 keyFilename.
- * @param {object} [options.credentials] Credentials object.
- * @param {string} [options.credentials.client_email]
- * @param {string} [options.credentials.private_key]
- * @param {boolean} [options.autoRetry=true] Automatically retry requests if the
- *     response is related to rate limits or certain intermittent server errors.
- *     We will exponentially backoff subsequent requests by default.
- * @param {number} [options.maxRetries=3] Maximum number of automatic retries
- *     attempted before returning the error.
- * @param {constructor} [options.promise] Custom promise module to use instead
- *     of native Promises.
- *
- * @example <caption>Import the client library</caption>
- * const LoggingWinston = require('@google-cloud/logging-winston');
- *
- * @example <caption>Create a client that uses <a
- * href="https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application">Application
- * Default Credentials (ADC)</a>:</caption> const loggingWinston = new
- * LoggingWinston();
- *
- * @example <caption>Create a client with <a
- * href="https://cloud.google.com/docs/authentication/production#obtaining_and_providing_service_account_credentials_manually">explicit
- * credentials</a>:</caption> const loggingWinston = new LoggingWinston({
- *   projectId: 'your-project-id',
- *   keyFilename: '/path/to/keyfile.json'
- * });
- *
- * @example <caption>include:samples/quickstart.js</caption>
- * region_tag:logging_winston_quickstart
- * Full quickstart example:
- */
-
 export class LoggingWinston extends winston.Transport {
-  inspectMetadata: boolean;
-  levels: {[name: string]: number};
-  stackdriverLog: StackdriverLog;  // TODO: add type for @google-cloud/logging
-  resource: MonitoredResource|undefined;
-  serviceContext: ServiceContext|undefined;
+  private inspectMetadata: boolean;
+  private levels: {[name: string]: number};
+  private stackdriverLog:
+      StackdriverLog;  // TODO: add type for @google-cloud/logging
+  private resource: MonitoredResource|undefined;
+  private serviceContext: ServiceContext|undefined;
   static readonly LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
   constructor(options: Options) {
     if (new.target !== LoggingWinston) {
@@ -281,7 +117,7 @@ export class LoggingWinston extends winston.Transport {
 
   log(levelName: string, msg: string, metadata: Metadata|{},
       callback: (err: Error, apiResponse: {}) => void) {
-    if (is.fn(metadata)) {
+    if (is.default.function_(metadata)) {
       callback = metadata as (err: Error, apiResponse: {}) => void;
       metadata = {};
     }
@@ -317,7 +153,7 @@ export class LoggingWinston extends winston.Transport {
     }
     data.message = msg;
 
-    if (is.object(metadata)) {
+    if (is.default.object(metadata)) {
       data.metadata =
           this.inspectMetadata ? mapValues(metadata, util.inspect) : metadata;
 
@@ -333,10 +169,13 @@ export class LoggingWinston extends winston.Transport {
       }
     }
 
+    // metadata does not have index signature.
     // tslint:disable-next-line:no-any
     if (metadata && (metadata as any)[LOGGING_TRACE_KEY]) {
+      // metadata does not have index signature.
       // tslint:disable-next-line:no-any
       entryMetadata.trace = (metadata as any)[LOGGING_TRACE_KEY];
+      // metadata does not have index signature.
       // tslint:disable-next-line:no-any
       delete (data.metadata as any)[LOGGING_TRACE_KEY];
     } else {
@@ -347,10 +186,12 @@ export class LoggingWinston extends winston.Transport {
     }
 
     const entry = this.stackdriverLog.entry(entryMetadata, data);
+    // stackdriverLog does not have index signature. We need to call the
+    // corresponding log level function.
     // tslint:disable-next-line:no-any
     (this.stackdriverLog as any)[stackdriverLevel](entry, callback);
   }
 }
-
+// We need to add StackdriverLogging to winston.transport.
 // tslint:disable-next-line:no-any
 (winston.transports as any).StackdriverLogging = LoggingWinston;
