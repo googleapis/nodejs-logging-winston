@@ -192,6 +192,7 @@ export class LoggingWinston extends winston.Transport {
     (this.stackdriverLog as any)[stackdriverLevel](entry, callback);
   }
 }
-// We need to add StackdriverLogging to winston.transport.
+// We need to add StackdriverLogging to winston.transport which does not
+// contain this type.
 // tslint:disable-next-line:no-any
 (winston.transports as any).StackdriverLogging = LoggingWinston;
