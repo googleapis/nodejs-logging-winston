@@ -52,7 +52,7 @@
     "prettier": "repo-tools exec -- prettier --write src/*.js src/*/*.js samples/*.js samples/*/*.js test/*.js test/*/*.js system-test/*.js system-test/*/*.js",
     "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
     "system-test": "repo-tools test run --cmd mocha -- system-test/*.js --no-timeouts --bail",
-    "test": "repo-tools test run --cmd mocha -- test/*.js",
+    "test": "repo-tools test run --cmd mocha -- build/test/*.js",
     "check": "gts check",
     "clean": "gts clean",
     "compile": "tsc -p .",
@@ -67,8 +67,7 @@
     "@sindresorhus/is": "^0.5.0",
     "extend": "^3.0.0",
     "is": "^3.2.0",
-    "lodash.mapvalues": "^4.6.0",
-    "@types/lodash.mapvalues": "^4.6.3"
+    "lodash.mapvalues": "^4.6.0"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^2.1.0",
@@ -77,6 +76,7 @@
     "@types/is": "0.0.17",
     "@types/node": "^8.0.47",
     "@types/winston": "^2.3.7",
+    "@types/mocha": "^2.2.41",
     "codecov": "^3.0.0",
     "eslint": "^4.9.0",
     "eslint-config-prettier": "^2.6.0",
