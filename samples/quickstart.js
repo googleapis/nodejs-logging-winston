@@ -41,4 +41,5 @@ const logger = new Logger({
 // Writes some log entries
 logger.error('warp nacelles offline');
 logger.info('shields at 99%');
+logger.info('shields at 99%');
 // [END logging_winston_quickstart]
