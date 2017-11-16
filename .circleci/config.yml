@@ -134,8 +134,8 @@ jobs:
           name: Link the module being tested to the samples.
           command: |
             cd samples/
-            npm link @google-cloud/logging-winston
             npm install
+            npm link @google-cloud/logging-winston
             cd ..
       - run:
           name: Run linting.
@@ -173,8 +173,8 @@ jobs:
           name: Link the module being tested to the samples.
           command: |
             cd samples/
-            npm link @google-cloud/logging-winston
             npm install
+            npm link @google-cloud/logging-winston
             cd ..
       - run:
           name: Run sample tests.
