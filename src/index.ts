@@ -82,11 +82,12 @@ export interface Credentials {
 }
 
 export class LoggingWinston extends winston.Transport {
-  inspectMetadata: boolean;
-  levels: {[name: string]: number};
-  stackdriverLog: StackdriverLog;  // TODO: add type for @google-cloud/logging
-  resource: MonitoredResource|undefined;
-  serviceContext: ServiceContext|undefined;
+  private inspectMetadata: boolean;
+  private levels: {[name: string]: number};
+  private stackdriverLog:
+      StackdriverLog;  // TODO: add type for @google-cloud/logging
+  private resource: MonitoredResource|undefined;
+  private serviceContext: ServiceContext|undefined;
   static readonly LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
   constructor(options: Options) {
     if (new.target !== LoggingWinston) {
