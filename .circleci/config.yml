@@ -143,8 +143,8 @@ jobs:
           name: Link the module being tested to the samples.
           command: |
             cd samples/
-            npm link @google-cloud/logging-winston
             npm install
+            npm link @google-cloud/logging-winston
             cd ..
           environment:
             NPM_CONFIG_PREFIX: /home/node/.npm-global
@@ -191,8 +191,8 @@ jobs:
           name: Link the module being tested to the samples.
           command: |
             cd samples/
-            npm link @google-cloud/logging-winston
             npm install
+            npm link @google-cloud/logging-winston
             cd ..
           environment:
             NPM_CONFIG_PREFIX: /home/node/.npm-global
@@ -223,7 +223,7 @@ jobs:
                 -k "${SYSTEM_TESTS_ENCRYPTION_KEY}"
       - run:
           name: Install modules and dependencies.
-          command: npm install
+          command: npm install --unsafe-perm
       - run:
           name: Run system tests.
           command: npm run system-test

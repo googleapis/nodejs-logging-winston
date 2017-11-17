@@ -20,7 +20,7 @@ var assert = require('assert');
 var winston = require('winston');
 
 var logging = require('@google-cloud/logging')();
-var LoggingWinston = require('../');
+var LoggingWinston = require('../build/src/index.js').LoggingWinston;
 
 describe('LoggingWinston', function() {
   var WRITE_CONSISTENCY_DELAY_MS = 90000;
@@ -89,7 +89,6 @@ describe('LoggingWinston', function() {
       testData.forEach(function(test) {
         logger[test.level].apply(logger, test.args);
       });
-
       setTimeout(function() {
         logging.log('winston_log').getEntries(
           {
@@ -97,9 +96,7 @@ describe('LoggingWinston', function() {
           },
           function(err, entries) {
             assert.ifError(err);
-
             assert.strictEqual(entries.length, testData.length);
-
             entries.reverse().forEach(function(entry, index) {
               var test = testData[index];
               test.verify(entry);
