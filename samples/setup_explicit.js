@@ -18,10 +18,10 @@
 /* eslint-disable no-unused-vars */
 // [START logging_winston_setup_explicit]
 // Imports the Google Cloud client library for Winston
-const LoggingWinston = require('@google-cloud/logging-winston');
+const LoggingWinston = require('@google-cloud/logging-winston').LoggingWinston;
 
 // Creates a client
-const loggingWinston = new LoggingWinston.LoggingWinston({
+const loggingWinston = new LoggingWinston({
   projectId: 'your-project-id',
   keyFilename: '/path/to/key.json',
 });

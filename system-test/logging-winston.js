@@ -20,13 +20,13 @@ var assert = require('assert');
 var winston = require('winston');
 
 var logging = require('@google-cloud/logging')();
-var LoggingWinston = require('../build/src/index.js');
+var LoggingWinston = require('../build/src/index.js').LoggingWinston;
 
 describe('LoggingWinston', function() {
   var WRITE_CONSISTENCY_DELAY_MS = 90000;
 
   var logger = new winston.Logger({
-    transports: [new LoggingWinston.LoggingWinston()],
+    transports: [new LoggingWinston()],
   });
 
   describe('log', function() {

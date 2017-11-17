@@ -128,7 +128,7 @@ jobs:
       - run:
           name: Install modules and dependencies.
           command: |
-            npm install
+            npm install --unsafe-perm
             npm link
       - run:
           name: Link the module being tested to the samples.
@@ -167,7 +167,7 @@ jobs:
       - run:
           name: Install and link the module.
           command: |
-            npm install
+            npm install --unsafe-perm
             npm link
       - run:
           name: Link the module being tested to the samples.
@@ -201,7 +201,7 @@ jobs:
                 -k "${SYSTEM_TESTS_ENCRYPTION_KEY}"
       - run:
           name: Install modules and dependencies.
-          command: npm install
+          command: npm install --unsafe-perm
       - run:
           name: Run system tests.
           command: npm run system-test
