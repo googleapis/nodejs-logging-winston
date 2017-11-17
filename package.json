@@ -48,7 +48,7 @@
   "scripts": {
     "docs": "repo-tools exec -- jsdoc -c .jsdoc.js",
     "generate-scaffolding": "repo-tools generate all --except lib_readme",
-    "lint": "cd samples/ && npm link ../ && repo-tools lint --cmd eslint -- src/ samples/ system-test/ test/",
+    "lint": "repo-tools lint --cmd eslint -- src/ samples/ system-test/ test/",
     "prettier": "repo-tools exec -- prettier --write src/*.js src/*/*.js samples/*.js samples/*/*.js test/*.js test/*/*.js system-test/*.js system-test/*/*.js",
     "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
     "system-test": "repo-tools test run --cmd mocha -- system-test/*.js --no-timeouts --bail",
@@ -64,10 +64,10 @@
   "dependencies": {
     "@google-cloud/common": "^0.13.0",
     "@google-cloud/logging": "^1.1.1",
+    "@sindresorhus/is": "^0.5.0",
     "extend": "^3.0.0",
     "is": "^3.2.0",
-    "lodash.mapvalues": "^4.6.0",
-    "@types/lodash.mapvalues": "^4.6.3"
+    "lodash.mapvalues": "^4.6.0"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^2.1.0",
