@@ -1,3 +1,19 @@
+/*!
+ * Copyright 2017 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 declare namespace NodeJS {
   export interface Global {
     _google_trace_agent: any;
@@ -43,7 +59,7 @@ interface Options {
    */
   serviceContext?: ServiceContext,
   /**
-   * he project ID from the Google Cloud Console, e.g. 'grape-spaceship-123'. We
+   * The project ID from the Google Cloud Console, e.g. 'grape-spaceship-123'. We
    * will also check the environment variable `GCLOUD_PROJECT` for your project
    * ID. If your app is running in an environment which supports {@link
    * https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application
@@ -57,11 +73,15 @@ interface Options {
    * above is not necessary. NOTE: .pem and .p12 require you to specify the
    * `email` option as well.
    */
-  keyFilenam?: string,
+  keyFilename?: string,
   /**
    * Account email address. Required when using a .pem or .p12 keyFilename.
    */
   email?: string,
+  /**
+   * Credentials object.
+   */
+  credentials?: Credentials,
   /**
    * Automatically retry requests if the response is related to rate limits or
    * certain intermittent server errors. We will exponentially backoff
@@ -101,6 +121,11 @@ interface ServiceContext {
   version?: string;
 }
 
+interface Credentials {
+  client_email: string;
+  private_key: string;
+}
+
 interface StackdriverData {
   serviceContext?: ServiceContext,
   message?: string,
@@ -114,16 +139,15 @@ interface StackdriverEntryMetadata {
 }
 
 interface StackdriverLog {
-  constructor: (logging: StackdriverLogging, name: string, options?: {}) => StackdriverLog,  
-  critical: (entry: StackdriverEntry, options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  debug: (entry: StackdriverEntry, options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  emergency: (entry: StackdriverEntry, options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  error: (entry: StackdriverEntry, options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  info: (entry: StackdriverEntry, options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  notice: (entry: StackdriverEntry, options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  warning: (entry: StackdriverEntry, options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  write: (entry: StackdriverEntry, options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  alert: (entry: StackdriverEntry, options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
+  critical: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
+  debug: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
+  emergency: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
+  error: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
+  info: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
+  notice: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
+  warning: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
+  write: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
+  alert: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
   entry: (metadata: {}, data: {}|string) => StackdriverEntry
 }
 
