@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-'use strict';
+import * as assert from 'assert';
 import * as extend from 'extend';
+import * as proxyquire from 'proxyquire';
+import * as nodeutil from 'util';
 
-const assert = require('assert');
-const nodeutil = require('util');
-const proxyquire = require('proxyquire');
 const util = require('@google-cloud/common').util;
 
 describe('logging-winston', () => {

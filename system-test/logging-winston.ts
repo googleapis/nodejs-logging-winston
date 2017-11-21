@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-'use strict';
+import * as assert from 'assert';
 import * as winston from 'winston';
 
-const assert = require('assert');
 const logging = require('@google-cloud/logging')();
 const LoggingWinston = require('../src/index').LoggingWinston;
 

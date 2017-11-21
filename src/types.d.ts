@@ -25,7 +25,7 @@ interface Options {
    * The default log level. Winston will filter messages with a severity lower
    * than this.
    */
-  level?: string,
+  level?: string;
   /**
    * Custom logging levels as supported by winston. This list is used to
    * translate your log level to the Stackdriver Logging level. Each property
@@ -33,15 +33,15 @@ interface Options {
    * If you are passing a list of levels to your winston logger, you should
    * provide the same list here.
    */
-  levels?: {[name: string]: number},
+  levels?: {[name: string]: number};
   /**
    *  Serialize winston-provided log metadata using `util.inspect`.
    */
-  inspectMetadata?: boolean,
+  inspectMetadata?: boolean;
   /**
    * The name of the log that will receive messages written to this transport.
    */
-  logName?: string,
+  logName?: string;
   /**
    * The monitored resource that the transport corresponds to. On Google Cloud
    * Platform, this is detected automatically, but you may optionally specify a
@@ -49,7 +49,7 @@ interface Options {
    * [official documentation]{@link
    * https://cloud.google.com/logging/docs/api/reference/rest/v2/MonitoredResource}.
    */
-  resource?: MonitoredResource,
+  resource?: MonitoredResource;
   /**
    * For logged errors, we provide this as the service context. For more
    * information see [this guide]{@link
@@ -57,7 +57,7 @@ interface Options {
    * and the [official documentation]{@link
    * https://cloud.google.com/error-reporting/reference/rest/v1beta1/ServiceContext}.
    */
-  serviceContext?: ServiceContext,
+  serviceContext?: ServiceContext;
   /**
    * The project ID from the Google Cloud Console, e.g. 'grape-spaceship-123'. We
    * will also check the environment variable `GCLOUD_PROJECT` for your project
@@ -66,7 +66,7 @@ interface Options {
    * Application Default Credentials}, your project ID will be detected
    * automatically.
    */
-  projectId?: string,
+  projectId?: string;
   /**
    * Full path to the a .json, .pem, or .p12 key downloaded from the Google
    * Cloud Console. If you provide a path to a JSON file, the `projectId` option
@@ -77,7 +77,7 @@ interface Options {
   /**
    * Account email address. Required when using a .pem or .p12 keyFilename.
    */
-  email?: string,
+  email?: string;
   /**
    * Credentials object.
    */
@@ -87,20 +87,20 @@ interface Options {
    * certain intermittent server errors. We will exponentially backoff
    * subsequent requests by default.
    */
-  autoRetry?: boolean,
+  autoRetry?: boolean;
   /**
    * Maximum number of automatic retries attempted before returning the error.
    */
-  maxRetries?: number,
+  maxRetries?: number;
   /**
    * Custom promise module to use instead of native Promises.
    */
   // TODO: address the correct type of promise.
-  promise?: {},
+  promise?: {};
 
-  scopes?: string[]|string,
+  scopes?: string[]|string;
 
-  logname?: string,
+  logname?: string;
 
 }
 
@@ -127,63 +127,63 @@ interface Credentials {
 }
 
 interface StackdriverData {
-  serviceContext?: ServiceContext,
-  message?: string,
-  metadata?: Metadata
+  serviceContext?: ServiceContext;
+  message?: string;
+  metadata?: Metadata;
 }
 
 interface StackdriverEntryMetadata {
-  resource?: MonitoredResource,
-  httpRequest?: HttpRequest,
-  trace?: {}
+  resource?: MonitoredResource;
+  httpRequest?: HttpRequest;
+  trace?: {};
 }
 
 interface StackdriverLog {
-  critical: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  debug: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  emergency: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  error: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  info: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  notice: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  warning: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  write: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  alert: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>,
-  entry: (metadata: {}, data: {}|string) => StackdriverEntry
+  critical: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>;
+  debug: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>;
+  emergency: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>;
+  error: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>;
+  info: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>;
+  notice: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>;
+  warning: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>;
+  write: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>;
+  alert: (entry: StackdriverEntry|StackdriverEntry[], options?: {}, callback?: (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>;
+  entry: (metadata: {}, data: {}|string) => StackdriverEntry;
 }
 
 interface StackdriverLogging {
-  Entry?: StackdriverEntry,
-  Log?: StackdriverLog,
-  Logging?: StackdriverLogging,
-  entry?: (resource?: MonitoredResource, data?: {message: string}|string) => StackdriverEntry
+  Entry?: StackdriverEntry;
+  Log?: StackdriverLog;
+  Logging?: StackdriverLogging;
+  entry?: (resource?: MonitoredResource, data?: {message: string}|string) => StackdriverEntry;
   // define additional properties and methods.
 }
 
 interface Metadata {
-  stack?: string,
-  httpRequest?: HttpRequest
+  stack?: string;
+  httpRequest?: HttpRequest;
 }
 interface StackdriverEntry {
-  constructor: (metadata?: StackdriverEntryMetadata, data?: {message: string}| string) => StackdriverEntry,
-  data?: {message: string}|string,
-  metadata?: StackdriverEntryMetadata
+  constructor: (metadata?: StackdriverEntryMetadata, data?: {message: string}| string) => StackdriverEntry;
+  data?: {message: string}|string;
+  metadata?: StackdriverEntryMetadata;
 }
 type LogWriteResponse = {}[];
 
 interface HttpRequest {
-  requestMethod: string,
-  requestUrl: string,
-  requestSize: string,
-  status: number,
-  responseSize: string,
-  userAgent: string,
-  remoteIp: string,
-  serverIp: string,
-  referer: string,
-  latency: string,
-  cacheLookup: boolean,
-  cacheHit: boolean,
-  cacheValidatedWithOriginServer: boolean,
-  cacheFillBytes: string,
-  protocol: string,
+  requestMethod: string;
+  requestUrl: string;
+  requestSize: string;
+  status: number;
+  responseSize: string;
+  userAgent: string;
+  remoteIp: string;
+  serverIp: string;
+  referer: string;
+  latency: string;
+  cacheLookup: boolean;
+  cacheHit: boolean;
+  cacheValidatedWithOriginServer: boolean;
+  cacheFillBytes: string;
+  protocol: string;
 }
