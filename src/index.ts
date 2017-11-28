@@ -73,15 +73,6 @@ function getCurrentTraceFromAgent(): string|null {
   return `projects/${traceProjectId}/traces/${traceId}`;
 }
 
-
-/**
- * Credentials object.
- */
-export interface Credentials {
-  client_email: string;
-  private_key: string;
-}
-
 export class LoggingWinston extends winston.Transport {
   private inspectMetadata: boolean;
   private levels: {[name: string]: number};
