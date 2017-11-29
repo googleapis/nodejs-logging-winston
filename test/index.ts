@@ -15,7 +15,6 @@
  */
 
 import * as assert from 'assert';
-import * as extend from 'extend';
 import * as proxyquire from 'proxyquire';
 import * as nodeutil from 'util';
 
@@ -77,12 +76,6 @@ describe('logging-winston', () => {
   });
 
   describe('instantiation', () => {
-    it('should create a new instance of LoggingWinston', () => {
-      // jshint newcap:false
-      const loggingWinston = loggingWinstonLib.LoggingWinston(OPTIONS);
-      assert(loggingWinston instanceof loggingWinstonLib.LoggingWinston);
-    });
-
     it('should inherit from winston.Transport', () => {
       assert.deepEqual(loggingWinston.transportCalledWith_[0], {
         level: OPTIONS.level,
@@ -99,7 +92,7 @@ describe('logging-winston', () => {
     it('should initialize Log instance using provided scopes', () => {
       const fakeScope = 'fake scope';
 
-      const optionsWithScopes: Options = extend({}, OPTIONS);
+      const optionsWithScopes: Options = Object.assign({}, OPTIONS);
       optionsWithScopes.scopes = fakeScope;
 
       const loggingWinston =
@@ -121,7 +114,7 @@ describe('logging-winston', () => {
     });
 
     it('should localize the provided options.inspectMetadata', () => {
-      const optionsWithInspectMetadata = extend({}, OPTIONS, {
+      const optionsWithInspectMetadata = Object.assign({}, OPTIONS, {
         inspectMetadata: true,
       });
 
@@ -135,7 +128,7 @@ describe('logging-winston', () => {
     });
 
     it('should default to npm levels', () => {
-      const optionsWithoutLevels = extend({}, OPTIONS);
+      const optionsWithoutLevels = Object.assign({}, OPTIONS);
       delete optionsWithoutLevels.levels;
 
       const loggingWinston =
@@ -151,7 +144,7 @@ describe('logging-winston', () => {
     });
 
     it('should localize Log instance using default name', () => {
-      const loggingOptions = extend({}, fakeLoggingOptions_);
+      const loggingOptions = Object.assign({}, fakeLoggingOptions_);
       delete (loggingOptions as Options).scopes;
 
       assert.deepEqual(loggingOptions, OPTIONS);
@@ -161,13 +154,13 @@ describe('logging-winston', () => {
     it('should localize Log instance using provided name', () => {
       const logName = 'log-name-override';
 
-      const optionsWithLogName = extend({}, OPTIONS);
+      const optionsWithLogName = Object.assign({}, OPTIONS);
       optionsWithLogName.logName = logName;
 
       const loggingWinston =
           new loggingWinstonLib.LoggingWinston(optionsWithLogName);
 
-      const loggingOptions = extend({}, fakeLoggingOptions_);
+      const loggingOptions = Object.assign({}, fakeLoggingOptions_);
       delete (loggingOptions as Options).scopes;
 
       assert.deepEqual(loggingOptions, optionsWithLogName);
@@ -205,7 +198,7 @@ describe('logging-winston', () => {
     });
 
     it('should not throw on `0` log level', () => {
-      const options = extend({}, OPTIONS, {
+      const options = Object.assign({}, OPTIONS, {
         levels: {
           zero: 0,
         },
@@ -310,7 +303,7 @@ describe('logging-winston', () => {
       const HTTP_REQUEST = {
         statusCode: 418,
       };
-      const metadataWithRequest = extend(
+      const metadataWithRequest = Object.assign(
           {
             httpRequest: HTTP_REQUEST,
           },
@@ -332,7 +325,7 @@ describe('logging-winston', () => {
     });
 
     it('should promote prefixed trace property to metadata', (done) => {
-      const metadataWithTrace = extend({}, METADATA);
+      const metadataWithTrace = Object.assign({}, METADATA);
       const loggingTraceKey =
           loggingWinstonLib.LoggingWinston.LOGGING_TRACE_KEY;
       // metadataWithTrace does not have index signature.

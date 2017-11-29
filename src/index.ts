@@ -15,7 +15,6 @@
  */
 
 import * as is from '@sindresorhus/is';
-import * as extend from 'extend';
 import * as util from 'util';
 import * as winston from 'winston';
 
@@ -31,6 +30,7 @@ const NPM_LEVEL_NAME_TO_CODE = {
   debug: 7,
   silly: 7,
 };
+
 
 // Map of Stackdriver Logging levels.
 const STACKDRIVER_LOGGING_LEVEL_CODE_TO_NAME: {[key: number]: string} = {
@@ -82,11 +82,7 @@ export class LoggingWinston extends winston.Transport {
   private serviceContext: ServiceContext|undefined;
   static readonly LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
   constructor(options: Options) {
-    if (new.target !== LoggingWinston) {
-      return new LoggingWinston(options);
-    }
-
-    options = extend(
+    options = Object.assign(
         {
           scopes: ['https://www.googleapis.com/auth/logging.write'],
         },
