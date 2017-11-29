@@ -163,6 +163,7 @@ interface Metadata {
   stack?: string;
   httpRequest?: HttpRequest;
 }
+
 interface StackdriverEntry {
   constructor: (metadata?: StackdriverEntryMetadata, data?: {message: string}| string) => StackdriverEntry;
   data?: {message: string}|string;
