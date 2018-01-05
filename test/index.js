@@ -323,6 +323,24 @@ describe('logging-winston', function() {
       loggingWinston.log(LEVEL, MESSAGE, metadataWithRequest, assert.ifError);
     });
 
+    it('should promote labels from metadata to log entry', function(done) {
+      const metadataWithLabels = extend({}, METADATA);
+      metadataWithLabels.labels = { labelKey: 'labelValue' };
+
+      loggingWinston.log_.entry = function(entryMetadata, data) {
+        assert.deepStrictEqual(entryMetadata, {
+          resource: loggingWinston.resource_,
+          labels: { labelKey: 'labelValue' },
+        });
+        assert.deepStrictEqual(data, {
+          message: MESSAGE,
+          metadata: METADATA,
+        });
+        done();
+      };
+      loggingWinston.log(LEVEL, MESSAGE, metadataWithLabels, assert.ifError);
+    });
+
     it('should promote prefixed trace property to metadata', function(done) {
       const metadataWithTrace = extend({}, METADATA);
       metadataWithTrace[LoggingWinston.LOGGING_TRACE_KEY] = 'trace1';

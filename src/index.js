@@ -265,6 +265,13 @@ LoggingWinston.prototype.log = function(levelName, msg, metadata, callback) {
     }
   }
 
+  // If the metadata contains a labels property, promote it to the entry metadata.   
+  // https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry
+  if (metadata && metadata.labels) {
+    entryMetadata.labels = metadata.labels;
+    delete data.metadata.labels;
+  } 
+
   var entry = this.log_.entry(entryMetadata, data);
   this.log_[stackdriverLevel](entry, callback);
 };
