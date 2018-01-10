@@ -9,11 +9,14 @@
   },
   "repository": "googleapis/nodejs-logging-winston",
   "main": "./build/src/index.js",
+  "types": "./build/src/index.d.ts",
   "files": [
-    "src",
+    "build/src",
     "AUTHORS",
     "CONTRIBUTORS",
-    "LICENSE"
+    "LICENSE",
+    "README.md",
+    "CODE_OF_CONDUCT.md"
   ],
   "keywords": [
     "google apis client",
