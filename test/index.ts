@@ -213,7 +213,8 @@ describe('logging-winston', () => {
 
     it('should properly create an entry', (done) => {
       loggingWinston.stackdriverLog.entry =
-          (entryMetadata: types.StackdriverEntryMetadata, data: types.StackdriverData) => {
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
             assert.deepEqual(entryMetadata, {
               resource: loggingWinston.resource,
             });
@@ -233,7 +234,8 @@ describe('logging-winston', () => {
       };
 
       loggingWinston.stackdriverLog.entry =
-          (entryMetadata: types.StackdriverEntryMetadata, data: types.StackdriverData) => {
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
             assert.deepStrictEqual(data, {
               message: MESSAGE + ' ' + error.stack,
               metadata: error,
@@ -251,7 +253,8 @@ describe('logging-winston', () => {
       };
 
       loggingWinston.stackdriverLog.entry =
-          (entryMetadata: types.StackdriverEntryMetadata, data: types.StackdriverData) => {
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
             assert.deepStrictEqual(data, {
               message: error.stack,
               metadata: error,
@@ -265,7 +268,8 @@ describe('logging-winston', () => {
 
     it('should not require metadata', (done) => {
       loggingWinston.stackdriverLog.entry =
-          (entryMetadata: types.StackdriverEntryMetadata, data: types.StackdriverData) => {
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
             assert.deepEqual(entryMetadata, {
               resource: loggingWinston.resource,
             });
@@ -283,7 +287,8 @@ describe('logging-winston', () => {
       loggingWinston.inspectMetadata = true;
 
       loggingWinston.stackdriverLog.entry =
-          (entryMetadata: types.StackdriverEntryMetadata, data: types.StackdriverData) => {
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
             const expectedWinstonMetadata = {};
 
             for (const prop of Object.keys(METADATA)) {
@@ -312,7 +317,8 @@ describe('logging-winston', () => {
           METADATA);
 
       loggingWinston.stackdriverLog.entry =
-          (entryMetadata: types.StackdriverEntryMetadata, data: types.StackdriverData) => {
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
             assert.deepStrictEqual(entryMetadata, {
               resource: loggingWinston.resource,
               httpRequest: HTTP_REQUEST,
@@ -331,7 +337,8 @@ describe('logging-winston', () => {
       const metadataWithLabels = Object.assign({labels: LABELS}, METADATA);
 
       loggingWinston.stackdriverLog.entry =
-          (entryMetadata: types.StackdriverEntryMetadata, data: types.StackdriverData) => {
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
             assert.deepStrictEqual(entryMetadata, {
               resource: loggingWinston.resource,
               labels: LABELS,
@@ -354,7 +361,8 @@ describe('logging-winston', () => {
       (metadataWithTrace as any)[loggingTraceKey] = 'trace1';
 
       loggingWinston.stackdriverLog.entry =
-          (entryMetadata: types.StackdriverEntryMetadata, data: types.StackdriverData) => {
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
             assert.deepStrictEqual(entryMetadata, {
               resource: loggingWinston.resource,
               trace: 'trace1',
@@ -379,7 +387,8 @@ describe('logging-winston', () => {
         },
       };
       loggingWinston.stackdriverLog.entry =
-          (entryMetadata: types.StackdriverEntryMetadata, data: types.StackdriverData) => {
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
             assert.deepStrictEqual(entryMetadata, {
               resource: loggingWinston.resource,
               trace: 'projects/project1/traces/trace1',
@@ -398,7 +407,8 @@ describe('logging-winston', () => {
 
     it('should leave out trace metadata if trace unavailable', () => {
       loggingWinston.stackdriverLog.entry =
-          (entryMetadata: types.StackdriverEntryMetadata, data: types.StackdriverData) => {
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
             assert.deepStrictEqual(entryMetadata, {
               resource: loggingWinston.resource,
             });

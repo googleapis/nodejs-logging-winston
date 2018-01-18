@@ -58,21 +58,25 @@ new LoggingWinston({
 
 const JS_CODE_ARRAY: CodeSample[] = [
   {
-    code: `const LoggingWinston = require('@google-cloud/logging-winston').LoggingWinston;
+    code:
+        `const LoggingWinston = require('@google-cloud/logging-winston').LoggingWinston;
 new LoggingWinston();`,
     description: 'requires the module using Node 4+ syntax'
   },
   {
-    code: `const LoggingWinston = require('@google-cloud/logging-winston').LoggingWinston;
+    code:
+        `const LoggingWinston = require('@google-cloud/logging-winston').LoggingWinston;
 new LoggingWinston({
   serviceContext: {
     service: 'some service'
   }
 });`,
-    description: 'requires the module and starts with a partial `serviceContext`'
+    description:
+        'requires the module and starts with a partial `serviceContext`'
   },
   {
-    code: `const LoggingWinston = require('@google-cloud/logging-winston').LoggingWinston;
+    code:
+        `const LoggingWinston = require('@google-cloud/logging-winston').LoggingWinston;
 new LoggingWinston({
   projectId: 'some-project',
   serviceContext: {
@@ -153,14 +157,14 @@ describe('Installation', () => {
                'npm', ['install', '--save', 'winston'],
                {cwd: installDir, stdio}, log);
            await spawnP(
-                'npm', ['install', '--save-dev', '@types/winston'],
-                {cwd: installDir, stdio}, log);
+               'npm', ['install', '--save-dev', '@types/winston'],
+               {cwd: installDir, stdio}, log);
            await writeFileP(path.join(srcDir, INDEX_TS), sample.code, 'utf-8');
            await spawnP(
-                'npm', ['install', '--save-dev', 'gts', 'typescript@2.x'],
-                {cwd: installDir, stdio}, log);
+               'npm', ['install', '--save-dev', 'gts', 'typescript@2.x'],
+               {cwd: installDir, stdio}, log);
            await spawnP(
-                'gts', ['init', '--yes'], {cwd: installDir, stdio}, log);
+               'gts', ['init', '--yes'], {cwd: installDir, stdio}, log);
            await spawnP(
                'npm', ['run', 'compile'], {cwd: installDir, stdio}, log);
            const buildDir = path.join(installDir!, 'build');
@@ -178,11 +182,11 @@ describe('Installation', () => {
            this.timeout(TIMEOUT_MS);
            assert(installDir);
            await spawnP(
-              'npm', ['install', '--save', 'winston'],
-              {cwd: installDir, stdio}, log);
+               'npm', ['install', '--save', 'winston'],
+               {cwd: installDir, stdio}, log);
            await spawnP(
-              'npm', ['install', '--save-dev', '@types/winston'],
-              {cwd: installDir, stdio}, log);
+               'npm', ['install', '--save-dev', '@types/winston'],
+               {cwd: installDir, stdio}, log);
            await writeFileP(
                path.join(installDir!, INDEX_JS), sample.code, 'utf-8');
            await spawnP('node', [INDEX_JS], {cwd: installDir, stdio}, log);
