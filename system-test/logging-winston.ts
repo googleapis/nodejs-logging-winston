@@ -17,6 +17,8 @@
 import * as assert from 'assert';
 import * as winston from 'winston';
 
+import {StackdriverLog, Options, MonitoredResource, ServiceContext, Metadata, StackdriverEntryMetadata, StackdriverData, StackdriverEntry} from '../src/types';
+
 const logging = require('@google-cloud/logging')();
 const LoggingWinston = require('../src/index').LoggingWinston;
 

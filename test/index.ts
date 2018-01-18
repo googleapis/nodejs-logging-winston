@@ -18,6 +18,8 @@ import * as assert from 'assert';
 import * as proxyquire from 'proxyquire';
 import * as nodeutil from 'util';
 
+import {Options, StackdriverData, StackdriverEntry, StackdriverEntryMetadata, StackdriverLogging} from '../src/types';
+
 const util = require('@google-cloud/common').util;
 
 describe('logging-winston', () => {

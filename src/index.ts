@@ -18,6 +18,8 @@ import * as is from '@sindresorhus/is';
 import * as util from 'util';
 import * as winston from 'winston';
 
+import {StackdriverLog, Options, MonitoredResource, ServiceContext, Metadata, StackdriverEntryMetadata, StackdriverData} from './types';
+
 const logging = require('@google-cloud/logging');
 const mapValues = require('lodash.mapvalues');
 
@@ -81,7 +83,7 @@ export class LoggingWinston extends winston.Transport {
   private resource: MonitoredResource|undefined;
   private serviceContext: ServiceContext|undefined;
   static readonly LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
-  constructor(options: Options) {
+  constructor(options?: Options) {
     options = Object.assign(
         {
           scopes: ['https://www.googleapis.com/auth/logging.write'],
