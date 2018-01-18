@@ -18,7 +18,7 @@ import * as assert from 'assert';
 import * as proxyquire from 'proxyquire';
 import * as nodeutil from 'util';
 
-import * as types from '../src/types/types';
+import * as types from '../src/types/core';
 
 const util = require('@google-cloud/common').util;
 

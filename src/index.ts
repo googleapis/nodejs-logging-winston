@@ -18,7 +18,7 @@ import * as is from '@sindresorhus/is';
 import * as util from 'util';
 import * as winston from 'winston';
 
-import * as types from './types/types';
+import * as types from './types/core';
 
 const logging = require('@google-cloud/logging');
 const mapValues = require('lodash.mapvalues');
