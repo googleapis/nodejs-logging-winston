@@ -17,7 +17,7 @@
 import * as assert from 'assert';
 import * as winston from 'winston';
 
-import * as types from '../src/types';
+import * as types from '../src/types/types';
 
 const logging = require('@google-cloud/logging')();
 const LoggingWinston = require('../src/index').LoggingWinston;
