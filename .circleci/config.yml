@@ -251,5 +251,5 @@ jobs:
           name: Install modules and dependencies.
           command: npm install
       - run:
-         name: Publish the module to npm.
-         command: npm publish
+          name: Publish the module to npm.
+          command: npm publish
