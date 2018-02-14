@@ -65,7 +65,9 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "posttest": "npm run check"
+    "posttest": "npm run check",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "@google-cloud/common": "^0.16.1",
@@ -80,7 +82,8 @@
     "once": "^1.4.0",
     "pify": "^3.0.0",
     "rimraf": "^2.6.2",
-    "tmp": "0.0.33"
+    "tmp": "0.0.33",
+    "snyk": "^1.69.7"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^2.1.0",
@@ -112,5 +115,6 @@
   },
   "peerDependencies": {
     "winston": "^2.x"
-  }
+  },
+  "snyk": true
 }
