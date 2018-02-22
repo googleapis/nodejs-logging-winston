@@ -147,6 +147,51 @@ winston.info('Log entry with custom trace value', {
 });
 ```
 
+### Specifying default labels in the constructor
+
+You can specify `labels` when initiating the logger constructor.
+
+```js
+// Creates a Winston Stackdriver Logging client
+const loggingWinston = new LoggingWinston({
+  labels: {
+    name: 'some-name',
+    version: '0.1.0'
+  }
+});
+
+// Writes some log entries
+logger.debug('test msg');
+
+// you can also put some `labels` when calling the logger function
+// the `labels` will be merge together
+logger.debug('test msg', {
+  labels: {
+    module: 'some-module'
+  }
+});
+```
+
+The `labels` will be on the Log Viewer.
+
+![Request log with labels](doc/images/request-log-with-labels.png)
+
+### Add prefix for easily identify log
+
+To quickly identify log from which modules in the same project like in console transporter. 
+You can add some `prefix` in the constructor and that `prefix` will be on logging messages.
+
+```js
+// Creates a Winston Stackdriver Logging client
+const loggingWinston = new LoggingWinston({
+  prefix: 'some-module'
+});
+
+logger.debug('test msg');
+```
+
+![Request log with prefix](doc/images/request-log-with-prefix.png)
+
 ## Samples
 
 Samples are in the [`samples/`](https://github.com/googleapis/nodejs-logging-winston/tree/master/samples) directory. The samples' `README.md`
