@@ -176,10 +176,9 @@ The `labels` will be on the Log Viewer.
 
 ![Request log with labels](doc/images/request-log-with-labels.png)
 
-### Add prefix for easily identify log
+### Add a prefix to easily identify logs
 
-To quickly identify log from which modules in the same project like in console transporter. 
-You can add some `prefix` in the constructor and that `prefix` will be on logging messages.
+You can specify a `prefix` in the constructor, and that `prefix` will be prepended to all logging messages. This can be helpful, for example, to quickly identify logs from different modules in a project.
 
 ```js
 // Creates a Winston Stackdriver Logging client
