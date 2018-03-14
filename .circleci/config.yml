@@ -65,7 +65,9 @@ workflows:
             - docs
           filters:
             branches:
-              only: master
+              only:
+                - master
+                - fix/address-sys-tests
             tags:
               only: '/^v[\d.]+$/'
       - publish_npm:
