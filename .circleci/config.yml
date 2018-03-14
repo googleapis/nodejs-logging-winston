@@ -56,7 +56,9 @@ workflows:
             - docs
           filters:
             branches:
-              only: master
+              only:
+                - master
+                - fix/address-sys-tests
             tags:
               only: '/^v[\d.]+$/'
       - sample_tests:
@@ -65,9 +67,7 @@ workflows:
             - docs
           filters:
             branches:
-              only:
-                - master
-                - fix/address-sys-tests
+              only: master
             tags:
               only: '/^v[\d.]+$/'
       - publish_npm:
