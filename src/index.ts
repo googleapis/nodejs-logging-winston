@@ -170,7 +170,7 @@ export class LoggingWinston extends winston.Transport {
       // https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry
       if ((metadata as types.Metadata).labels) {
         entryMetadata.labels = (entryMetadata.labels) ?
-            Object.assign(
+            Object.assign({},
                 entryMetadata.labels, (metadata as types.Metadata).labels) :
             (metadata as types.Metadata).labels;
         delete (data.metadata as types.Metadata).labels;
