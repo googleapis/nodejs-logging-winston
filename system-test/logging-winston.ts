@@ -21,12 +21,15 @@ import * as types from '../src/types/core';
 
 const logging = require('@google-cloud/logging')();
 const LoggingWinston = require('../src/index').LoggingWinston;
+const LOG_NAME = 'winston_log_system_tests';
 
 describe('LoggingWinston', () => {
   const WRITE_CONSISTENCY_DELAY_MS = 90000;
 
   const logger = new winston.Logger({
-    transports: [new LoggingWinston()],
+    transports: [new LoggingWinston({
+      logName: LOG_NAME
+    })],
   });
 
   describe('log', () => {
@@ -96,7 +99,7 @@ describe('LoggingWinston', () => {
         (logger as any)[test.level].apply(logger, test.args);
       });
       setTimeout(() => {
-        logging.log('winston_log')
+        logging.log(LOG_NAME)
             .getEntries(
                 {
                   pageSize: testData.length,
