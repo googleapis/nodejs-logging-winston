@@ -38,7 +38,8 @@ new LoggingWinston({
     service: 'some service'
   }
 });`,
-    description: 'imports the module and starts with a partial `serviceContext`',
+    description:
+        'imports the module and starts with a partial `serviceContext`',
     dependencies: ['winston@2'],
     devDependencies: ['@types/winston@2']
   },
@@ -91,8 +92,8 @@ new LoggingWinston({
 });`,
     description:
         'requires the module and starts with a partial `serviceContext`',
-        dependencies: ['winston@2'],
-        devDependencies: []
+    dependencies: ['winston@2'],
+    devDependencies: []
   },
   {
     code:
@@ -126,6 +127,5 @@ new LoggingWinston({
   }
 ];
 
-check.testInstallation(TS_CODE_SAMPLES, JS_CODE_SAMPLES, {
-  timeout: 2*60*1000
-});
+check.testInstallation(
+    TS_CODE_SAMPLES, JS_CODE_SAMPLES, {timeout: 2 * 60 * 1000});
