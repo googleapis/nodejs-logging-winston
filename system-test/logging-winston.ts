@@ -27,9 +27,7 @@ describe('LoggingWinston', () => {
   const WRITE_CONSISTENCY_DELAY_MS = 90000;
 
   const logger = new winston.Logger({
-    transports: [new LoggingWinston({
-      logName: LOG_NAME
-    })],
+    transports: [new LoggingWinston({logName: LOG_NAME})],
   });
 
   describe('log', () => {
@@ -99,21 +97,20 @@ describe('LoggingWinston', () => {
         (logger as any)[test.level].apply(logger, test.args);
       });
       setTimeout(() => {
-        logging.log(LOG_NAME)
-            .getEntries(
-                {
-                  pageSize: testData.length,
-                },
-                (err: Error, entries: types.StackdriverEntry[]) => {
-                  assert.ifError(err);
-                  assert.strictEqual(entries.length, testData.length);
-                  entries.reverse().forEach((entry, index) => {
-                    const test = testData[index];
-                    test.verify(entry);
-                  });
+        logging.log(LOG_NAME).getEntries(
+            {
+              pageSize: testData.length,
+            },
+            (err: Error, entries: types.StackdriverEntry[]) => {
+              assert.ifError(err);
+              assert.strictEqual(entries.length, testData.length);
+              entries.reverse().forEach((entry, index) => {
+                const test = testData[index];
+                test.verify(entry);
+              });
 
-                  done();
-                });
+              done();
+            });
       }, WRITE_CONSISTENCY_DELAY_MS);
     });
   });
