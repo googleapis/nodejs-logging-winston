@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import {LOGGING_TRACE_KEY} from '..';
-
 export interface Options {
   /**
    * The default log level. Winston will filter messages with a severity lower
