@@ -15,7 +15,7 @@
   "dependencies": {
     "@google-cloud/logging-winston": "0.9.0",
     "winston": "2.4.0",
-    "yargs": "10.0.3"
+    "yargs": "10.1.2"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "2.2.4",
