@@ -112,9 +112,9 @@
     "source-map-support": "^0.5.6",
     "tmp": "0.0.33",
     "typescript": "^2.9.2",
-    "winston": "^2.2.0"
+    "winston": "^3.0.0"
   },
   "peerDependencies": {
-    "winston": "^2.x"
+    "winston": "^3.0.0"
   }
 }
