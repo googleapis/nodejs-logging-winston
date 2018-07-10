@@ -9,22 +9,18 @@ workflows:
               only: /.*/
       - node8:
           filters: *all_commits
-      - node9:
-          filters: *all_commits
       - node10:
           filters: *all_commits
       - lint:
           requires:
             - node6
             - node8
-            - node9
             - node10
           filters: *all_commits
       - docs:
           requires:
             - node6
             - node8
-            - node9
             - node10
           filters: *all_commits
       - system_tests:
