@@ -116,7 +116,7 @@ describe('LoggingWinston', () => {
     });
   });
 
-  describe.only('ErrorReporting', () => {
+  describe('ErrorReporting', () => {
     const ERROR_REPORTING_DELEY_MS = 10*1000;
     const errorsTransport = new ErrorsApiTransport();
 
