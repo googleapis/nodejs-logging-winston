@@ -18,6 +18,7 @@ import * as assert from 'assert';
 import * as winston from 'winston';
 
 import * as types from '../src/types/core';
+import {ErrorsApiTransport} from './errors-transport';
 
 const logging = require('@google-cloud/logging')();
 const LoggingWinston = require('../src/index').LoggingWinston;
@@ -112,6 +113,40 @@ describe('LoggingWinston', () => {
               done();
             });
       }, WRITE_CONSISTENCY_DELAY_MS);
+    });
+  });
+
+  describe.only('ErrorReporting', () => {
+    const ERROR_REPORTING_DELEY_MS = 10*1000;
+    const errorsTransport = new ErrorsApiTransport();
+
+    beforeEach(async function() {
+      this.timeout(2*ERROR_REPORTING_DELEY_MS);
+      await errorsTransport.deleteAllEvents();
+      await new Promise((resolve, reject) => {
+        setTimeout(resolve, ERROR_REPORTING_DELEY_MS);
+      });
+    });
+
+    afterEach(async () => {
+      await errorsTransport.deleteAllEvents();
+    });
+
+    it('reports errors when logging errors', function(done) {
+      this.timeout(2*ERROR_REPORTING_DELEY_MS);
+      const message = `an error at ${Date.now()}`;
+      // logger does not have index signature.
+      // tslint:disable-next-line:no-any
+      (logger as any)['error'].apply(logger, ['an error', new Error(message)]);
+      setTimeout(async () => {
+        const errors = await errorsTransport.getAllGroups();
+        assert.strictEqual(errors.length, 1);
+        const errEvent = errors[0];
+        assert.strictEqual(errEvent.count, '1');
+        assert.strictEqual(errEvent.representative.serviceContext.service, 'default');
+        assert(errEvent.representative.message.startsWith(`an error Error: ${message}`));
+        done();
+      }, ERROR_REPORTING_DELEY_MS);
     });
   });
 });

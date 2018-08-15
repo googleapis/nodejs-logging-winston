@@ -106,9 +106,17 @@ export class LoggingWinston extends winston.Transport {
     this.levels = options.levels || NPM_LEVEL_NAME_TO_CODE;
     this.stackdriverLog = new logging(options).log(logName);
     this.resource = options.resource;
-    this.serviceContext = options.serviceContext;
+    this.serviceContext = options.serviceContext || {};
     this.prefix = options.prefix;
     this.labels = options.labels;
+
+    // serviceContext.service is required by the Error Reporting
+    // API.  Without it, errors that are logged with level 'error'
+    // or higher will not be displayed in the Error Reporting
+    // console
+    if (!this.serviceContext.service) {
+      this.serviceContext.service = 'default';
+    }
   }
 
   log(levelName: string, msg: string, metadata: types.Metadata,
