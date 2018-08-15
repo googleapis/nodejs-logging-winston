@@ -117,11 +117,11 @@ describe('LoggingWinston', () => {
   });
 
   describe('ErrorReporting', () => {
-    const ERROR_REPORTING_DELEY_MS = 10*1000;
+    const ERROR_REPORTING_DELEY_MS = 10 * 1000;
     const errorsTransport = new ErrorsApiTransport();
 
     beforeEach(async function() {
-      this.timeout(2*ERROR_REPORTING_DELEY_MS);
+      this.timeout(2 * ERROR_REPORTING_DELEY_MS);
       await errorsTransport.deleteAllEvents();
       await new Promise((resolve, reject) => {
         setTimeout(resolve, ERROR_REPORTING_DELEY_MS);
@@ -133,7 +133,7 @@ describe('LoggingWinston', () => {
     });
 
     it('reports errors when logging errors', function(done) {
-      this.timeout(2*ERROR_REPORTING_DELEY_MS);
+      this.timeout(2 * ERROR_REPORTING_DELEY_MS);
       const message = `an error at ${Date.now()}`;
       // logger does not have index signature.
       // tslint:disable-next-line:no-any
@@ -143,8 +143,10 @@ describe('LoggingWinston', () => {
         assert.strictEqual(errors.length, 1);
         const errEvent = errors[0];
         assert.strictEqual(errEvent.count, '1');
-        assert.strictEqual(errEvent.representative.serviceContext.service, 'default');
-        assert(errEvent.representative.message.startsWith(`an error Error: ${message}`));
+        assert.strictEqual(
+            errEvent.representative.serviceContext.service, 'default');
+        assert(errEvent.representative.message.startsWith(
+            `an error Error: ${message}`));
         done();
       }, ERROR_REPORTING_DELEY_MS);
     });

@@ -69,4 +69,3 @@ export class ErrorsApiTransport extends common.Service {
     return response.body.errorGroupStats || [];
   }
 }
-
