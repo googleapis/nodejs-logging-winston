@@ -173,6 +173,19 @@ describe('logging-winston', () => {
     it('should localize the provided service context', () => {
       assert.strictEqual(loggingWinston.serviceContext, OPTIONS.serviceContext);
     });
+
+    it('should provide a service value if serviceContext is not specified',
+       () => {
+         const loggingWinston = new loggingWinstonLib.LoggingWinston();
+         assert.strictEqual(loggingWinston.serviceContext.service, 'default');
+       });
+
+    it('should provide a service value if serviceContext does not have one',
+       () => {
+         const loggingWinston = new loggingWinstonLib.LoggingWinston(
+             {serviceContext: {version: 'some-version'}});
+         assert.strictEqual(loggingWinston.serviceContext.service, 'default');
+       });
   });
 
   describe('log', () => {
