@@ -74,8 +74,9 @@
   },
   "dependencies": {
     "@google-cloud/logging": "^3.0.1",
-    "@sindresorhus/is": "^0.10.0",
-    "lodash.mapvalues": "^4.6.0"
+    "lodash.mapvalues": "^4.6.0",
+    "lodash.omit": "^4.5.0",
+    "winston-transport": "^4.2.0"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^2.3.0",
@@ -113,9 +114,9 @@
     "source-map-support": "^0.5.6",
     "tmp": "0.0.33",
     "typescript": "^3.0.0",
-    "winston": "^2.2.0"
+    "winston": "^3.0.0"
   },
   "peerDependencies": {
-    "winston": "^2.x"
+    "winston": "^3.x"
   }
 }

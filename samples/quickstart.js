@@ -17,8 +17,6 @@
 
 // [START logging_winston_quickstart]
 const winston = require('winston');
-const Logger = winston.Logger;
-const Console = winston.transports.Console;
 
 // Imports the Google Cloud client library for Winston
 const LoggingWinston = require('@google-cloud/logging-winston').LoggingWinston;
@@ -28,11 +26,11 @@ const loggingWinston = new LoggingWinston();
 
 // Create a Winston logger that streams to Stackdriver Logging
 // Logs will be written to: "projects/YOUR_PROJECT_ID/logs/winston_log"
-const logger = new Logger({
-  level: 'info', // log at 'info' and above
+const logger = winston.createLogger({
   transports: [
-    // Log to the console
-    new Console(),
+    new winston.transports.Console({
+      level: 'info',
+    }),
     // And log to Stackdriver Logging
     loggingWinston,
   ],

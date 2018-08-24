@@ -75,13 +75,6 @@ describe('logging-winston', () => {
   });
 
   describe('instantiation', () => {
-    it('should inherit from winston.Transport', () => {
-      assert.deepStrictEqual(loggingWinston.transportCalledWith_[0], {
-        level: OPTIONS.level,
-        name: OPTIONS.logName,
-      });
-    });
-
     it('should default to logging.write scope', () => {
       assert.deepStrictEqual((fakeLoggingOptions_ as types.Options).scopes, [
         'https://www.googleapis.com/auth/logging.write',
@@ -193,7 +186,8 @@ describe('logging-winston', () => {
     it('should throw on a bad log level', () => {
       assert.throws(() => {
         loggingWinston.log(
-            'non-existent-level', MESSAGE, METADATA, assert.ifError);
+            {level: 'non-existent-level', message: MESSAGE, metadata: METADATA},
+            assert.ifError);
       }, /Unknown log level: non-existent-level/);
     });
 
@@ -205,8 +199,7 @@ describe('logging-winston', () => {
       });
 
       loggingWinston = new loggingWinstonLib.LoggingWinston(options);
-
-      loggingWinston.log('zero', 'test message');
+      loggingWinston.log({level: 'zero', message: 'test message'});
     });
 
     it('should properly create an entry', (done) => {
@@ -223,12 +216,35 @@ describe('logging-winston', () => {
             done();
           };
 
-      loggingWinston.log(LEVEL, MESSAGE, METADATA, assert.ifError);
+      loggingWinston.log(
+        { level: LEVEL, message: MESSAGE, metadata: METADATA }, 
+        assert.ifError);
+    });
+
+    it('should accept any metadata key', (done) => {
+      loggingWinston.stackdriverLog.entry =
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
+            assert.deepStrictEqual(entryMetadata, {
+              resource: loggingWinston.resource,
+            });
+            assert.deepStrictEqual(data, {
+              message: MESSAGE,
+              metadata: METADATA,
+            });
+            done();
+          };
+
+      loggingWinston.log(
+        { level: LEVEL, message: MESSAGE, something: METADATA }, 
+        assert.ifError);
     });
 
     it('should append stack when metadata is an error', (done) => {
-      const error = {
+      const error: Error = {
         stack: 'the stack',
+        name: 'very bad error',
+        message: 'horrible situation'
       };
 
       loggingWinston.stackdriverLog.entry =
@@ -236,13 +252,13 @@ describe('logging-winston', () => {
            data: types.StackdriverData) => {
             assert.deepStrictEqual(data, {
               message: MESSAGE + ' ' + error.stack,
-              metadata: error,
+              error,
               serviceContext: OPTIONS.serviceContext,
             });
             done();
           };
 
-      loggingWinston.log(LEVEL, MESSAGE, error, assert.ifError);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE, error }, assert.ifError);
     });
 
     it('should use stack when metadata is err without message', (done) => {
@@ -261,7 +277,7 @@ describe('logging-winston', () => {
             done();
           };
 
-      loggingWinston.log(LEVEL, '', error, assert.ifError);
+      loggingWinston.log({ level: LEVEL, error }, '', assert.ifError);
     });
 
     it('should not require metadata', (done) => {
@@ -278,7 +294,7 @@ describe('logging-winston', () => {
             done();
           };
 
-      loggingWinston.log(LEVEL, MESSAGE, assert.ifError);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE }, assert.ifError);
     });
 
     it('should inspect metadata when inspectMetadata is set', (done) => {
@@ -301,7 +317,7 @@ describe('logging-winston', () => {
             done();
           };
 
-      loggingWinston.log(LEVEL, MESSAGE, METADATA, assert.ifError);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE, METADATA }, assert.ifError);
     });
 
     it('should promote httpRequest property to metadata', (done) => {
@@ -327,7 +343,7 @@ describe('logging-winston', () => {
             });
             done();
           };
-      loggingWinston.log(LEVEL, MESSAGE, metadataWithRequest, assert.ifError);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE, metadataWithRequest }, assert.ifError);
     });
 
     it('should promote labels from metadata to log entry', (done) => {
@@ -347,7 +363,7 @@ describe('logging-winston', () => {
             });
             done();
           };
-      loggingWinston.log(LEVEL, MESSAGE, metadataWithLabels, assert.ifError);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE, metadataWithLabels }, assert.ifError);
     });
 
     it('should promote prefixed trace property to metadata', (done) => {
@@ -371,7 +387,7 @@ describe('logging-winston', () => {
             });
             done();
           };
-      loggingWinston.log(LEVEL, MESSAGE, metadataWithTrace, assert.ifError);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE, metadataWithTrace }, assert.ifError);
     });
 
     it('should set trace metadata from agent if available', (done) => {
@@ -398,7 +414,7 @@ describe('logging-winston', () => {
             done();
           };
 
-      loggingWinston.log(LEVEL, MESSAGE, METADATA, assert.ifError);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE, METADATA }, assert.ifError);
 
       global._google_trace_agent = oldTraceAgent;
     });
@@ -419,7 +435,7 @@ describe('logging-winston', () => {
       const oldTraceAgent = global._google_trace_agent;
 
       global._google_trace_agent = {};
-      loggingWinston.log(LEVEL, MESSAGE, METADATA, assert.ifError);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE, METADATA }, assert.ifError);
 
       global._google_trace_agent = {
         getCurrentContextId: () => {
@@ -429,7 +445,7 @@ describe('logging-winston', () => {
           return null;
         },
       };
-      loggingWinston.log(LEVEL, MESSAGE, METADATA, assert.ifError);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE, METADATA }, assert.ifError);
 
       global._google_trace_agent = {
         getCurrentContextId: () => {
@@ -439,7 +455,7 @@ describe('logging-winston', () => {
           return 'project1';
         },
       };
-      loggingWinston.log(LEVEL, MESSAGE, METADATA, assert.ifError);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE, METADATA }, assert.ifError);
 
       global._google_trace_agent = {
         getCurrentContextId: () => {
@@ -449,7 +465,7 @@ describe('logging-winston', () => {
           return null;
         },
       };
-      loggingWinston.log(LEVEL, MESSAGE, METADATA, assert.ifError);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE, METADATA }, assert.ifError);
 
       global._google_trace_agent = oldTraceAgent;
     });
@@ -467,7 +483,7 @@ describe('logging-winston', () => {
             callback();  // done()
           };
 
-      loggingWinston.log(LEVEL, MESSAGE, METADATA, done);
+      loggingWinston.log({ level: LEVEL, message: MESSAGE, METADATA }, done);
     });
   });
 
@@ -525,10 +541,10 @@ describe('logging-winston', () => {
                    };
 
                loggingWinston.log(
-                   LEVEL, MESSAGE, metadataWithoutLabels, assert.ifError);
+                { level: LEVEL, message: MESSAGE, metadataWithoutLabels }, assert.ifError);
              };
 
-         loggingWinston.log(LEVEL, MESSAGE, METADATA, assert.ifError);
+         loggingWinston.log({ level: LEVEL, message: MESSAGE, metadata: METADATA }, assert.ifError);
        });
   });
 });
