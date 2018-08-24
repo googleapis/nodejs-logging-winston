@@ -122,9 +122,9 @@ export class LoggingWinston extends TransportStream {
     // Winston 3 does not explicitly define metadata, just level and mesasge.
     // Anything else is considered metadata.
     //
-    let nestedMetadata = Object.assign({}, omit(info, ['level', 'message', 'splat']));
+    const nestedMetadata = Object.assign({}, omit(info, ['level', 'message', 'splat']));
     const nestedKeys = Object.keys(nestedMetadata);
-    let metadata: any = {};
+    const metadata: any = {};
     nestedKeys.forEach((key) => {
       Object.keys(nestedMetadata[key]).forEach((internalKey) => {
         metadata[internalKey] = nestedMetadata[key][internalKey];
@@ -173,7 +173,7 @@ export class LoggingWinston extends TransportStream {
       // proto message, or the log entry would be rejected by the API. We no do
       // validation here.
       if (metadata.httpRequest) {
-        entryMetadata.httpRequest = (metadata as any).httpRequest;
+        entryMetadata.httpRequest = metadata.httpRequest;
         delete data.metadata!.httpRequest;
       }
 

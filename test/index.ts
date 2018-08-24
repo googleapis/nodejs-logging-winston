@@ -252,7 +252,7 @@ describe('logging-winston', () => {
            data: types.StackdriverData) => {
             assert.deepStrictEqual(data, {
               message: MESSAGE + ' ' + error.stack,
-              error: error,
+              error,
               serviceContext: OPTIONS.serviceContext,
             });
             done();
