@@ -16,7 +16,7 @@
 
 import * as is from '@sindresorhus/is';
 import * as util from 'util';
-import * as winston from 'winston';
+import * as TransportStream from 'winston-transport';
 
 import * as types from './types/core';
 
@@ -78,7 +78,7 @@ function getCurrentTraceFromAgent(): string|null {
   return `projects/${traceProjectId}/traces/${traceId}`;
 }
 
-export class LoggingWinston extends winston.Transport {
+export class LoggingWinston extends TransportStream {
   private inspectMetadata: boolean;
   private levels: {[name: string]: number};
   private stackdriverLog:
@@ -99,7 +99,6 @@ export class LoggingWinston extends winston.Transport {
 
     super({
       level: options.level,
-      name: logName,
     });
 
     this.inspectMetadata = options.inspectMetadata === true;
@@ -111,8 +110,11 @@ export class LoggingWinston extends winston.Transport {
     this.labels = options.labels;
   }
 
-  log(levelName: string, msg: string, metadata: types.Metadata,
-      callback: Callback) {
+  log(info: any, callback: Callback) {
+    const levelName = info.level;
+    let msg = info.message;
+    let metadata: any = info.metadata;
+
     if (is.default.function_(metadata)) {
       callback = metadata as Callback;
       metadata = {};
