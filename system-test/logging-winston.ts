@@ -26,7 +26,7 @@ const LOG_NAME = 'winston_log_system_tests';
 describe('LoggingWinston', () => {
   const WRITE_CONSISTENCY_DELAY_MS = 90000;
 
-  const logger = new winston.Logger({
+  const logger = winston.createLogger({
     transports: [new LoggingWinston({logName: LOG_NAME})],
   });
 

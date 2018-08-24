@@ -74,8 +74,8 @@
   },
   "dependencies": {
     "@google-cloud/logging": "^3.0.1",
-    "@sindresorhus/is": "^0.10.0",
     "lodash.mapvalues": "^4.6.0",
+    "lodash.omit": "^4.5.0",
     "winston-transport": "^4.2.0"
   },
   "devDependencies": {

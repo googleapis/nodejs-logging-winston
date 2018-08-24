@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import * as is from '@sindresorhus/is';
 import * as util from 'util';
 import * as TransportStream from 'winston-transport';
+import * as winston from 'winston';
 
 import * as types from './types/core';
 
 const logging = require('@google-cloud/logging');
 const mapValues = require('lodash.mapvalues');
+const omit = require('lodash.omit');
 
 type Callback = (err: Error, apiResponse: {}) => void;
 
@@ -111,25 +112,32 @@ export class LoggingWinston extends TransportStream {
   }
 
   log(info: any, callback: Callback) {
-    const levelName = info.level;
-    let msg = info.message;
-    let metadata: any = info.metadata;
+    const level = info.level;
+    let message = info.message || '';
 
-    if (is.default.function_(metadata)) {
-      callback = metadata as Callback;
-      metadata = {};
+    if (this.levels[level] === undefined) {
+      throw new Error('Unknown log level: ' + level);
     }
 
-    if (this.levels[levelName] === undefined) {
-      throw new Error('Unknown log level: ' + levelName);
-    }
+    // Winston 3 does not explicitly define metadata, just level and mesasge.
+    // Anything else is considered metadata.
+    //
+    let nestedMetadata = Object.assign({}, omit(info, ['level', 'message', 'splat']));
+    const nestedKeys = Object.keys(nestedMetadata);
+    let metadata: any = {};
+    nestedKeys.forEach((key) => {
+      Object.keys(nestedMetadata[key]).forEach((internalKey) => {
+        metadata[internalKey] = nestedMetadata[key][internalKey];
+      });
+    });
 
-    const levelCode = this.levels[levelName];
+    const levelCode = this.levels[level];
     const stackdriverLevel = STACKDRIVER_LOGGING_LEVEL_CODE_TO_NAME[levelCode];
 
     const entryMetadata: types.StackdriverEntryMetadata = {
       resource: this.resource,
     };
+
     if (this.labels) {
       entryMetadata.labels = this.labels;
     }
@@ -149,16 +157,15 @@ export class LoggingWinston extends TransportStream {
     // for more resource types.
     //
     if (metadata && metadata.stack) {
-      msg += (msg ? ' ' : '') + (metadata as types.Metadata).stack;
+      message += (message ? ' ' : '') + metadata.stack;
       data.serviceContext = this.serviceContext;
     }
     data.message = this.prefix ? `[${this.prefix}] ` : '';
-    data.message += msg;
+    data.message += message;
 
-    if (is.default.object(metadata)) {
+    if (metadata) {
       data.metadata =
           this.inspectMetadata ? mapValues(metadata, util.inspect) : metadata;
-
       // If the metadata contains a httpRequest property, promote it to the
       // entry metadata. This allows Stackdriver to use request log formatting.
       // https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#HttpRequest
@@ -166,7 +173,7 @@ export class LoggingWinston extends TransportStream {
       // proto message, or the log entry would be rejected by the API. We no do
       // validation here.
       if (metadata.httpRequest) {
-        entryMetadata.httpRequest = metadata.httpRequest;
+        entryMetadata.httpRequest = (metadata as any).httpRequest;
         delete data.metadata!.httpRequest;
       }
 
