@@ -81,7 +81,14 @@ const {LoggingWinston} = require('@google-cloud/logging-winston');
 // import {LoggingWinston} from '@google-cloud/logging-winston';
 
 // Creates a Winston Stackdriver Logging client
-const loggingWinston = new LoggingWinston();
+const loggingWinston = new LoggingWinston({
+  serviceContext: {
+    service: 'my-service', // required to report logged errors
+                           // to the Google Cloud Error Reporting
+                           // console
+    version: 'my-version'
+  }
+});
 
 // Create a Winston logger that streams to Stackdriver Logging
 // Logs will be written to: "projects/YOUR_PROJECT_ID/logs/winston_log"
@@ -102,7 +109,9 @@ logger.info('shields at 99%');
 
 ### Error Reporting
 
-Any `Error` objects you log at severity `error` or higher can automatically be picked up by [Stackdriver Error Reporting][error-reporting] if your application is running on Google Cloud Platform. Make sure to add logs to your [uncaught exception][uncaught] and [unhandled rejection][unhandled] handlers if you want to see those errors too.
+Any `Error` objects you log at severity `error` or higher can automatically be picked up by [Stackdriver Error Reporting][error-reporting] if you have specified a `serviceContext.service` when instatiating a `LoggingWinston` instance.  It is an error to specify a `serviceContext` but not specify `serviceContext.service`.
+
+Make sure to add logs to your [uncaught exception][uncaught] and [unhandled rejection][unhandled] handlers if you want to see those errors too.
 
 You may also want to see the [@google-cloud/error-reporting][@google-cloud/error-reporting] module which provides direct access to the Error Reporting API.
 
