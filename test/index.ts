@@ -174,17 +174,23 @@ describe('logging-winston', () => {
       assert.strictEqual(loggingWinston.serviceContext, OPTIONS.serviceContext);
     });
 
-    it('should provide a service value if serviceContext is not specified',
-       () => {
-         const loggingWinston = new loggingWinstonLib.LoggingWinston();
-         assert.strictEqual(loggingWinston.serviceContext.service, 'default');
-       });
+    it('should not throw if a serviceContext is not specified', () => {
+      // tslint:disable-next-line:no-unused-expression
+      new loggingWinstonLib.LoggingWinston();
+    });
 
-    it('should provide a service value if serviceContext does not have one',
-       () => {
-         const loggingWinston = new loggingWinstonLib.LoggingWinston(
-             {serviceContext: {version: 'some-version'}});
-         assert.strictEqual(loggingWinston.serviceContext.service, 'default');
+    it('should throw if a serviceContext is specified without a service',
+       done => {
+         try {
+           // tslint:disable-next-line:no-unused-expression
+           new loggingWinstonLib.LoggingWinston({serviceContext: {}});
+         } catch (err) {
+           assert.strictEqual(
+               err.message,
+               `If 'serviceContext' is specified then ` +
+                   `'serviceContext.service' is required.`);
+           done();
+         }
        });
   });
 
