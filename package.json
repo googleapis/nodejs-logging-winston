@@ -73,7 +73,7 @@
     "posttest": "npm run check"
   },
   "dependencies": {
-    "@google-cloud/logging": "^3.0.1",
+    "@google-cloud/logging": "^3.0.2",
     "@sindresorhus/is": "^0.10.0",
     "lodash.mapvalues": "^4.6.0"
   },
@@ -111,6 +111,7 @@
     "post-install-check": "0.0.1",
     "prettier": "^1.13.6",
     "proxyquire": "^2.0.1",
+    "request": "^2.88.0",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.6",
     "teeny-request": "^3.6.0",
