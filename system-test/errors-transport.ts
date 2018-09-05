@@ -15,6 +15,7 @@
  */
 
 import * as common from '@google-cloud/common';
+import {teenyRequest} from 'teeny-request';
 const packageJson = require('../../package.json');
 
 export interface ServiceContext {
@@ -46,7 +47,9 @@ export class ErrorsApiTransport extends common.Service {
     super({
       baseUrl: 'https://clouderrorreporting.googleapis.com/v1beta1',
       scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-      packageJson
+      packageJson,
+      // tslint:disable-next-line:no-any
+      requestModule: teenyRequest as any
     });
   }
 
