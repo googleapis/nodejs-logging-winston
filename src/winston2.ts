@@ -14,31 +14,33 @@
  * limitations under the License.
  */
 
-import * as is from '@sindresorhus/is';;
+import * as is from '@sindresorhus/is';
+
+import * as common from './common';
 import * as types from './types/core';
-import * as common from './common'
+
+console.log('LOADED WINSTON 2')
 
 // cant have type checking on winston because it may be version 2 or 3
 const winston = require('winston');
 
 type Callback = (err: Error, apiResponse: {}) => void;
 
-
 export class LoggingWinston extends winston.Transport {
   private common: common.LoggingCommon;
 
   static readonly LOGGING_TRACE_KEY = common.LOGGING_TRACE_KEY;
   constructor(options?: types.Options) {
-    options = options||{}
+    options = options || {};
 
     const logName = options.logName || 'winston_log';
+
     super({
       level: options.level,
       name: logName,
     });
 
-    this.common = new common.LoggingCommon(options)
-
+    this.common = new common.LoggingCommon(options);
   }
 
   log(levelName: string, msg: string, metadata: types.Metadata,
@@ -48,7 +50,7 @@ export class LoggingWinston extends winston.Transport {
       metadata = {};
     }
 
-    this.common.log(levelName,msg,metadata,callback)
+    this.common.log(levelName, msg, metadata, callback);
   }
 }
 

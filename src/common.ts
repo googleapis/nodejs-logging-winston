@@ -75,7 +75,6 @@ function getCurrentTraceFromAgent(): string|null {
 }
 
 export class LoggingCommon {
-
   private inspectMetadata: boolean;
   private levels: {[name: string]: number};
   private stackdriverLog:
@@ -87,7 +86,6 @@ export class LoggingCommon {
   static readonly LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
 
   constructor(options?: types.Options) {
-    
     options = Object.assign(
         {
           scopes: ['https://www.googleapis.com/auth/logging.write'],
@@ -105,10 +103,11 @@ export class LoggingCommon {
     this.labels = options.labels;
   }
 
-  log(level:string,message:string,metadata:MetadataArg|undefined, callback: Callback) {
-    metadata = metadata||{} as MetadataArg
+  log(level: string, message: string, metadata: MetadataArg|undefined,
+      callback: Callback) {
+    metadata = metadata || {} as MetadataArg;
     message = message || '';
-    const hasMetadata = Object.keys(metadata).length
+    const hasMetadata = Object.keys(metadata).length;
 
     if (this.levels[level] === undefined) {
       throw new Error('Unknown log level: ' + level);
@@ -118,7 +117,7 @@ export class LoggingCommon {
     const stackdriverLevel = STACKDRIVER_LOGGING_LEVEL_CODE_TO_NAME[levelCode];
 
     const data: types.StackdriverData = {};
-    
+
     // Stackdriver Logs Viewer picks up the summary line from the `message`
     // property of the jsonPayload.
     // https://cloud.google.com/logging/docs/view/logs_viewer_v2#expanding.
@@ -140,7 +139,7 @@ export class LoggingCommon {
     data.message += message;
 
     const entryMetadata: types.StackdriverEntryMetadata = {
-        resource: this.resource,
+      resource: this.resource,
     };
 
     // If the metadata contains a httpRequest property, promote it to the
@@ -150,28 +149,34 @@ export class LoggingCommon {
     // proto message, or the log entry would be rejected by the API. We no do
     // validation here.
     if (metadata.httpRequest) {
-        entryMetadata.httpRequest = metadata.httpRequest;
+      entryMetadata.httpRequest = metadata.httpRequest;
     }
 
     // If the metadata contains a labels property, promote it to the entry
     // metadata.
     // https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry
-    if(this.labels || metadata.labels) {
-      entryMetadata.labels = !this.labels?metadata.labels:Object.assign({}, this.labels, metadata.labels)
+    if (this.labels || metadata.labels) {
+      entryMetadata.labels = !this.labels ?
+          metadata.labels :
+          Object.assign({}, this.labels, metadata.labels);
     }
 
-    const trace = metadata[LOGGING_TRACE_KEY] || getCurrentTraceFromAgent()
-    if(trace) {
-        entryMetadata.trace = trace;
+    const trace = metadata[LOGGING_TRACE_KEY] || getCurrentTraceFromAgent();
+    if (trace) {
+      entryMetadata.trace = trace;
     }
+
+    // we have tests that assert that metadata is always passed.
+    // not sure if its correct but for now we always set it even if it has
+    // nothing in it
+    data.metadata =
+        this.inspectMetadata ? mapValues(metadata, util.inspect) : metadata;
 
     if (hasMetadata) {
-        data.metadata =
-            this.inspectMetadata ? mapValues(metadata, util.inspect) : metadata;
-        // clean entryMetadata props
-        delete data.metadata![LOGGING_TRACE_KEY];
-        delete data.metadata!.httpRequest;
-        delete data.metadata!.labels
+      // clean entryMetadata props
+      delete data.metadata![LOGGING_TRACE_KEY];
+      delete data.metadata!.httpRequest;
+      delete data.metadata!.labels;
     }
 
     const entry = this.stackdriverLog.entry(entryMetadata, data);
@@ -180,10 +185,10 @@ export class LoggingCommon {
 }
 
 type MetadataArg = {
-    stack?:{},
-    /**
-     * set httpRequest to a http.clientRequest object to log it
-     */
-    httpRequest?:types.HttpRequest,
-    labels?:{}
-} & {[key:string]:string}
+  stack?: {},
+  /**
+   * set httpRequest to a http.clientRequest object to log it
+   */
+  httpRequest?: types.HttpRequest,
+  labels?: {}
+}&{[key: string]: string};

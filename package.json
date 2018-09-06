@@ -70,13 +70,16 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "posttest": "npm run check"
+    "posttest": "npm run check",
+    "postinstall": "cd test/winston-2 && npm install"
   },
   "dependencies": {
     "@google-cloud/logging": "^3.0.2",
     "@sindresorhus/is": "^0.10.0",
     "lodash.mapvalues": "^4.6.0",
     "logform": "^1.9.1",
+    "require-inject": "^1.4.3",
+    "semver": "^5.5.1",
     "winston-transport": "^4.2.0"
   },
   "devDependencies": {
@@ -119,7 +122,7 @@
     "teeny-request": "^3.6.0",
     "tmp": "0.0.33",
     "typescript": "^3.0.0",
-    "winston": "^2.2.0"
+    "winston": "^3.1.0"
   },
   "peerDependencies": {
     "winston": "^3.x"

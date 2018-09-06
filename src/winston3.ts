@@ -15,49 +15,50 @@
  */
 
 import * as TransportStream from 'winston-transport';
+
+import {LoggingCommon} from './common';
 import * as types from './types/core';
-import { LoggingCommon } from './common';
 
 type Callback = (err: Error, apiResponse: {}) => void;
 
+console.log('LOADED WINSTON 3')
+
 export class LoggingWinston extends TransportStream {
-  private common:LoggingCommon;
+  private common: LoggingCommon;
   constructor(options?: types.Options) {
-    options = options||{}
+    options = options || {};
 
     super({
       level: options.level,
     });
 
-    this.common = new LoggingCommon(options)
+    this.common = new LoggingCommon(options);
   }
 
-  log({message,level,splat,...metadata}:LogArg, callback: Callback) {
-    
-    this.common.log(level,message,metadata,callback)
+  log({message, level, splat, ...metadata}: LogArg, callback: Callback) {
+    this.common.log(level, message, metadata, callback);
   }
 }
 
 type LogArg = {
-    /**
-     * the logging message
-     */
-    message:string,
-    /**
-     * the log level defined in NPM_LEVEL_NAME_TO_CODE
-     */
-    level:string,
-    /**
-     * the stack for an error
-     */
-    stack?:{},
-    /**
-     * not used but should not be passed through to common
-     */
-    splat?:{},
-    /**
-     * set httpRequest to a http.clientRequest object to log it
-     */
-    httpRequest?:types.HttpRequest,
-    labels:{}
-} & {[key:string]:string}
+  /**
+   * the logging message
+   */
+  message: string,
+  /**
+   * the log level defined in NPM_LEVEL_NAME_TO_CODE
+   */
+  level: string,
+  /**
+   * the stack for an error
+   */
+  stack?: {},
+  /**
+   * not used but should not be passed through to common
+   */
+  splat?: {},
+  /**
+   * set httpRequest to a http.clientRequest object to log it
+   */
+  httpRequest?: types.HttpRequest, labels: {}
+}&{[key: string]: string};

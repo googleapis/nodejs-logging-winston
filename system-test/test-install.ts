@@ -70,6 +70,20 @@ new LoggingWinston({
     description: 'imports the module with a prefix and labels specified',
     dependencies: ['winston@2'],
     devDependencies: ['@types/winston@2']
+  },
+  {
+    code: `import {LoggingWinston} from '@google-cloud/logging-winston';
+new LoggingWinston({
+  prefix: 'some-prefix',
+  labels: {
+    env: 'local',
+    name: 'some-name',
+    version: 'some-version'
+  }
+});`,
+    description: 'winston3: imports the module with a prefix and labels specified',
+    dependencies: ['winston@3'],
+    devDependencies: []
   }
 ];
 
@@ -123,6 +137,21 @@ new LoggingWinston({
 });`,
     description: 'imports the module with a prefix and labels specified',
     dependencies: ['winston@2'],
+    devDependencies: []
+  },
+  {
+    code:
+        `const LoggingWinston = require('@google-cloud/logging-winston').LoggingWinston;
+new LoggingWinston({
+  prefix: 'some-prefix',
+  labels: {
+    env: 'local',
+    name: 'some-name',
+    version: 'some-version'
+  }
+});`,
+    description: 'winston 3: imports the module with a prefix and labels specified',
+    dependencies: ['winston@3'],
     devDependencies: []
   }
 ];
