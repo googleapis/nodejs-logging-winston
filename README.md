@@ -139,7 +139,7 @@ winston.info(`${req.url} endpoint hit`, {
 });
 ```
 
-The `httpRequest` proprety must be a properly formatted [`HttpRequest`][http-request-message] message. (Note: the linked protobuf documentation shows `snake_case` property names, but in JavaScript one needs to provide property names in `camelCase`.)
+The `httpRequest` property must be a properly formatted [`HttpRequest`][http-request-message] message. (Note: the linked protobuf documentation shows `snake_case` property names, but in JavaScript one needs to provide property names in `camelCase`.)
 
 ### Correlating Logs with Traces
 

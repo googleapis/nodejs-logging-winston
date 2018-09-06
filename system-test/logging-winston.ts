@@ -16,11 +16,10 @@
 
 import * as assert from 'assert';
 import delay from 'delay';
-import * as winston from 'winston';
-
 import * as types from '../src/types/core';
-
 import {ErrorsApiTransport} from './errors-transport';
+
+const winston = require('winston')
 
 const logging = require('@google-cloud/logging')();
 const LoggingWinston = require('../src/index').LoggingWinston;
