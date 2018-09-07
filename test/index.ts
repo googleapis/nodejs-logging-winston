@@ -245,6 +245,88 @@ describe('logging-winston', () => {
       loggingWinston.log(LEVEL, MESSAGE, METADATA, assert.ifError);
     });
 
+    it('should append a nonempty object metadata to the message', (done) => {
+      loggingWinston.stackdriverLog.entry =
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
+            assert.deepStrictEqual(entryMetadata, {
+              resource: loggingWinston.resource,
+            });
+            assert.deepStrictEqual(data, {
+              message: MESSAGE + ' {"key1":"value1","key2":2}',
+              metadata: {key1: 'value1', key2: 2},
+            });
+            done();
+          };
+
+      loggingWinston.log(
+          LEVEL, MESSAGE, {key1: 'value1', key2: 2}, assert.ifError);
+    });
+
+    it('should not append an empty object metadata to the message', (done) => {
+      loggingWinston.stackdriverLog.entry =
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
+            assert.deepStrictEqual(entryMetadata, {
+              resource: loggingWinston.resource,
+            });
+            assert.deepStrictEqual(data, {
+              message: MESSAGE,
+              metadata: {},
+            });
+            done();
+          };
+
+      loggingWinston.log(LEVEL, MESSAGE, {}, assert.ifError);
+    });
+
+    it('should append an array metadata to the message', (done) => {
+      loggingWinston.stackdriverLog.entry =
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
+            assert.deepStrictEqual(entryMetadata, {
+              resource: loggingWinston.resource,
+            });
+            assert.deepStrictEqual(data, {
+              message: MESSAGE + ' ["some text",42,{"key1":"value1","key2":2}]',
+              metadata: ['some text', 42, {key1: 'value1', key2: 2}],
+            });
+            done();
+          };
+
+      loggingWinston.log(
+          LEVEL, MESSAGE, ['some text', 42, {key1: 'value1', key2: 2}],
+          assert.ifError);
+    });
+
+    it('should append a metadata number to the message', (done) => {
+      loggingWinston.stackdriverLog.entry =
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
+            assert.deepStrictEqual(entryMetadata, {
+              resource: loggingWinston.resource,
+            });
+            assert.deepStrictEqual(data, {message: MESSAGE + ' 42'});
+            done();
+          };
+
+      loggingWinston.log(LEVEL, MESSAGE, 42, assert.ifError);
+    });
+
+    it('should append a metadata string to the message', (done) => {
+      loggingWinston.stackdriverLog.entry =
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
+            assert.deepStrictEqual(entryMetadata, {
+              resource: loggingWinston.resource,
+            });
+            assert.deepStrictEqual(data, {message: MESSAGE + ' "some text"'});
+            done();
+          };
+
+      loggingWinston.log(LEVEL, MESSAGE, 'some text', assert.ifError);
+    });
+
     it('should append stack when metadata is an error', (done) => {
       const error = {
         stack: 'the stack',

@@ -202,6 +202,21 @@ export class LoggingWinston extends winston.Transport {
       }
     }
 
+    // Consider the following:
+    //   logger.info('some message', {key1: 'value1', key2: 2})
+    // without the check below that appends the metadata to the
+    // message, the data `{key1: 'value1', key2: 2}` would be
+    // missing in the logs in the Stackdriver Logging console.
+    const jsonMetadata = JSON.stringify(metadata);
+    if (typeof metadata !== 'object' ||
+        (!metadata.stack && jsonMetadata !== '{}')) {
+      // append non-objects and interesting non-Error metadata
+      // objects to the message.  The use of JSON.stringify
+      // matches how winston converts objects to strings in its
+      // logs.
+      data.message += ` ${jsonMetadata}`;
+    }
+
     const entry = this.stackdriverLog.entry(entryMetadata, data);
     this.stackdriverLog[stackdriverLevel](entry, callback);
   }
