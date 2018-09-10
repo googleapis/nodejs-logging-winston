@@ -121,7 +121,7 @@ describe('LoggingWinston', () => {
 
 
   describe('log winston 3', () => {
-    const testTimestamp = new Date()
+    const testTimestamp = new Date();
     const testData = [
       {
         args: ['first'],
@@ -174,7 +174,6 @@ describe('LoggingWinston', () => {
         }],
         level: 'log',
         verify: (entry: types.StackdriverEntry) => {
-          console.log(entry.data);
           assert((entry.data as {
                    message: string
                  }).message.startsWith('fifth message'));
@@ -216,6 +215,10 @@ describe('LoggingWinston', () => {
 
 
   describe('ErrorReporting', () => {
+    const LoggingWinston = inject('../src/index', {
+                             winston: winston2,
+                             'winston/package.json': {version: '2.2.0'}
+                           }).LoggingWinston;
 
     const logger = new winston2.Logger({
       transports: [new LoggingWinston({
@@ -224,30 +227,35 @@ describe('LoggingWinston', () => {
             {service: 'logging-winston-system-test', version: 'none'}
       })],
     });
-  
+
     const ERROR_REPORTING_DELAY_MS = 10 * 1000;
     const errorsTransport = new ErrorsApiTransport();
 
     beforeEach(async function() {
       this.timeout(2 * ERROR_REPORTING_DELAY_MS);
+
       await errorsTransport.deleteAllEvents();
       await new Promise((resolve, reject) => {
         setTimeout(resolve, ERROR_REPORTING_DELAY_MS);
-      })
-    })
-
-    afterEach(async () => {
-      await errorsTransport.deleteAllEvents();
+      });
     });
+
+    afterEach(
+        async () => {
+            // await errorsTransport.deleteAllEvents();
+        });
 
     it('reports errors when logging errors', async function() {
       this.timeout(2 * ERROR_REPORTING_DELAY_MS);
       const message = `an error at ${Date.now()}`;
       // logger does not have index signature.
       // tslint:disable-next-line:no-any
-      (logger as any)['error'].apply(logger, ['an error', new Error(message)]);
+      (logger as any)['error']('an error', new Error(message));
       await delay(ERROR_REPORTING_DELAY_MS);
+
       const errors = await errorsTransport.getAllGroups();
+
+
       assert.strictEqual(errors.length, 1);
       const errEvent = errors[0];
       assert.strictEqual(errEvent.count, '1');
@@ -257,7 +265,7 @@ describe('LoggingWinston', () => {
       assert(errEvent.representative.message.startsWith(
           `an error Error: ${message}`));
     });
-  })
+  });
 });
 
 

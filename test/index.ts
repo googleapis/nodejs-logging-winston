@@ -135,7 +135,6 @@ describe('logging-winston', () => {
         level: OPTIONS.level,
         name: OPTIONS.logName,
       });
-
     });
 
     it('should assign itself to winston.transports', () => {

@@ -43,7 +43,7 @@ export class LoggingWinston extends TransportStream {
       message = message + ' ' + stack;
     }
 
-    this.common.log(level, message, metadata||{}, callback);
+    this.common.log(level, message, metadata || {}, callback);
   }
 }
 
