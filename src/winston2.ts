@@ -52,6 +52,8 @@ export class LoggingWinston extends winston.Transport {
   }
 }
 
+export const LOGGING_TRACE_KEY = common.LOGGING_TRACE_KEY;
+
 // We need to add StackdriverLogging to winston.transport which does not
 // contain this type.
 // tslint:disable-next-line:no-any

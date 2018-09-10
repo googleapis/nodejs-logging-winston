@@ -125,6 +125,6 @@
     "winston": "^3.1.0"
   },
   "peerDependencies": {
-    "winston": "^3.x"
+    "winston": ">=2.x <=3.x"
   }
 }

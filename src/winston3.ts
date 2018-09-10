@@ -16,7 +16,7 @@
 
 import * as TransportStream from 'winston-transport';
 
-import {LoggingCommon} from './common';
+import {LOGGING_TRACE_KEY as COMMON_TRACE_KEY, LoggingCommon} from './common';
 import * as types from './types/core';
 
 type Callback = (err: Error, apiResponse: {}) => void;
@@ -46,6 +46,8 @@ export class LoggingWinston extends TransportStream {
     this.common.log(level, message, metadata||{}, callback);
   }
 }
+
+export const LOGGING_TRACE_KEY = COMMON_TRACE_KEY;
 
 type LogArg = {
   /**

@@ -65,6 +65,7 @@ For a more detailed Stackdriver Logging setup guide, see https://cloud.google.co
 ### Using the client library
 
 ```javascript
+// winston 2 or winston3
 const winston = require('winston');
 const Logger = winston.Logger;
 const Console = winston.transports.Console;
