@@ -191,4 +191,4 @@ type MetadataArg = {
    */
   httpRequest?: types.HttpRequest,
   labels?: {}
-}&{[key: string]: string};
+}&{[key: string]: string | {}};

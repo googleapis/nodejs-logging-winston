@@ -21,8 +21,6 @@ import * as types from './types/core';
 
 type Callback = (err: Error, apiResponse: {}) => void;
 
-console.log('LOADED WINSTON 3')
-
 export class LoggingWinston extends TransportStream {
   private common: LoggingCommon;
   constructor(options?: types.Options) {
@@ -35,8 +33,17 @@ export class LoggingWinston extends TransportStream {
     this.common = new LoggingCommon(options);
   }
 
-  log({message, level, splat, ...metadata}: LogArg, callback: Callback) {
-    this.common.log(level, message, metadata, callback);
+  log({message, level, splat, stack, ...metadata}: LogArg, callback: Callback) {
+    if (stack) {
+      // this happens if someone calls.
+      // logger.error(new Error('boop'))
+      // winston 3 console logging produces this output which is astoundingly
+      // less useful
+      //   {"level":"error"}
+      message = message + ' ' + stack;
+    }
+
+    this.common.log(level, message, metadata||{}, callback);
   }
 }
 
@@ -52,7 +59,7 @@ type LogArg = {
   /**
    * the stack for an error
    */
-  stack?: {},
+  stack?: string,
   /**
    * not used but should not be passed through to common
    */
@@ -61,4 +68,4 @@ type LogArg = {
    * set httpRequest to a http.clientRequest object to log it
    */
   httpRequest?: types.HttpRequest, labels: {}
-}&{[key: string]: string};
+}&{[key: string]: string | {}};

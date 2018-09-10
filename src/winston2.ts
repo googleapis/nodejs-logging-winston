@@ -19,8 +19,6 @@ import * as is from '@sindresorhus/is';
 import * as common from './common';
 import * as types from './types/core';
 
-console.log('LOADED WINSTON 2')
-
 // cant have type checking on winston because it may be version 2 or 3
 const winston = require('winston');
 

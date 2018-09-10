@@ -193,6 +193,7 @@ export interface StackdriverEntry {
        data?: {message: string}|string) => StackdriverEntry;
   data?: {message: string}|string;
   metadata?: StackdriverEntryMetadata;
+  jsonPayload?:{[key: string]:any};
 }
 type LogWriteResponse = Array<{}>;
 

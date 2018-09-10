@@ -19,7 +19,10 @@ import delay from 'delay';
 import * as types from '../src/types/core';
 import {ErrorsApiTransport} from './errors-transport';
 
-const winston = require('winston')
+const inject = require('require-inject');
+
+const winston3 = require('winston');
+const winston2 = require('../../test/winston-2/node_modules/winston');
 
 const logging = require('@google-cloud/logging')();
 const LoggingWinston = require('../src/index').LoggingWinston;
@@ -27,18 +30,8 @@ const LOG_NAME = 'winston_log_system_tests';
 
 describe('LoggingWinston', () => {
   const WRITE_CONSISTENCY_DELAY_MS = 90000;
-
-  const logger = new winston.Logger({
-    transports: [new LoggingWinston({
-      logName: LOG_NAME,
-      serviceContext:
-          {service: 'logging-winston-system-test', version: 'none'}
-    })],
-  });
-
-  describe('log', () => {
+  describe('log winston 2', () => {
     const testTimestamp = new Date();
-
     const testData = [
       {
         args: ['first'],
@@ -74,7 +67,6 @@ describe('LoggingWinston', () => {
           });
         },
       },
-
       {
         args: [new Error('forth')],
         level: 'error',
@@ -96,32 +88,143 @@ describe('LoggingWinston', () => {
       },
     ];
 
+    const LOG_NAME = 'logging_winston_2_system_tests';
+    const LoggingWinston = inject('../src/index', {
+                             winston: winston2,
+                             'winston/package.json': {version: '2.2.0'}
+                           }).LoggingWinston;
+
+    const logger = new winston2.Logger({
+      transports: [new LoggingWinston({logName: LOG_NAME})],
+    });
+
     it('should properly write log entries', (done) => {
+      const start = Date.now();
       testData.forEach((test) => {
         // logger does not have index signature.
         // tslint:disable-next-line:no-any
         (logger as any)[test.level].apply(logger, test.args);
       });
-      setTimeout(() => {
-        logging.log(LOG_NAME).getEntries(
-            {
-              pageSize: testData.length,
-            },
-            (err: Error, entries: types.StackdriverEntry[]) => {
-              assert.ifError(err);
-              assert.strictEqual(entries.length, testData.length);
-              entries.reverse().forEach((entry, index) => {
-                const test = testData[index];
-                test.verify(entry);
-              });
 
-              done();
+      pollLogs(LOG_NAME, start, testData.length, WRITE_CONSISTENCY_DELAY_MS)
+          .then((entries) => {
+            assert.strictEqual(entries.length, testData.length);
+            entries.reverse().forEach((entry, index) => {
+              const test = testData[index];
+              test.verify(entry);
             });
-      }, WRITE_CONSISTENCY_DELAY_MS);
+
+            done();
+          });
     });
   });
 
+
+  describe('log winston 3', () => {
+    const testTimestamp = new Date()
+    const testData = [
+      {
+        args: ['first'],
+        level: 'info',
+        verify: (entry: types.StackdriverEntry) => {
+          assert.deepStrictEqual(entry.data, {
+            message: 'first',
+            metadata: {},
+          });
+        },
+      },
+
+      {
+        args: ['second'],
+        level: 'info',
+        verify: (entry: types.StackdriverEntry) => {
+          assert.deepStrictEqual(entry.data, {
+            message: 'second',
+            metadata: {},
+          });
+        },
+      },
+
+      {
+        args: ['third', {testTimestamp}],
+        level: 'info',
+        verify: (entry: types.StackdriverEntry) => {
+          assert.deepStrictEqual(entry.data, {
+            message: 'third',
+            metadata: {
+              testTimestamp: String(testTimestamp),
+            },
+          });
+        },
+      },
+      {
+        args: [new Error('forth')],
+        level: 'error',
+        verify: (entry: types.StackdriverEntry) => {
+          assert((entry.data as {
+                   message: string
+                 }).message.startsWith('forth Error:'));
+        },
+      },
+      {
+        args: [{
+          level: 'error',
+          message: 'fifth message',
+          error: new Error('fifth')
+        }],
+        level: 'log',
+        verify: (entry: types.StackdriverEntry) => {
+          console.log(entry.data);
+          assert((entry.data as {
+                   message: string
+                 }).message.startsWith('fifth message'));
+
+          // assert(entry!.data!.metadata!.error,'Error: fifth Error:'
+        },
+      },
+    ];
+
+    const LOG_NAME = 'logging_winston_3_system_tests';
+    const LoggingWinston = inject('../src/index', {
+                             winston: winston3,
+                             'winston/package.json': {version: '3.0.0'}
+                           }).LoggingWinston;
+
+    const logger = winston3.createLogger({
+      transports: [new LoggingWinston({logName: LOG_NAME})],
+    });
+
+    it('should properly write log entries', (done) => {
+      const start = Date.now();
+      testData.forEach((test) => {
+        // logger does not have index signature.
+        // tslint:disable-next-line:no-any
+        (logger as any)[test.level].apply(logger, test.args);
+      });
+
+      pollLogs(LOG_NAME, start, testData.length, WRITE_CONSISTENCY_DELAY_MS)
+          .then((entries) => {
+            assert.strictEqual(entries.length, testData.length);
+            entries.reverse().forEach((entry, index) => {
+              const test = testData[index];
+              test.verify(entry);
+            });
+            done();
+          });
+    });
+  });
+
+
   describe('ErrorReporting', () => {
+
+    const logger = new winston2.Logger({
+      transports: [new LoggingWinston({
+        logName: LOG_NAME,
+        serviceContext:
+            {service: 'logging-winston-system-test', version: 'none'}
+      })],
+    });
+  
     const ERROR_REPORTING_DELAY_MS = 10 * 1000;
     const errorsTransport = new ErrorsApiTransport();
 
@@ -130,8 +233,8 @@ describe('LoggingWinston', () => {
       await errorsTransport.deleteAllEvents();
       await new Promise((resolve, reject) => {
         setTimeout(resolve, ERROR_REPORTING_DELAY_MS);
-      });
-    });
+      })
+    })
 
     afterEach(async () => {
       await errorsTransport.deleteAllEvents();
@@ -154,5 +257,43 @@ describe('LoggingWinston', () => {
       assert(errEvent.representative.message.startsWith(
           `an error Error: ${message}`));
     });
-  });
+  })
 });
+
+
+
+// polls for the entire array of entries to be greater than logTime.
+function pollLogs(logName: string, logTime: number, size = 1, timeout = 90000):
+    Promise<types.StackdriverEntry[]> {
+  const p = new Promise((resolve, reject) => {
+    const end = Date.now() + timeout;
+    loop();
+
+    function loop() {
+      setTimeout(() => {
+        logging.log(logName).getEntries(
+            {
+              pageSize: size,
+            },
+            (err: Error, entries: types.StackdriverEntry[]) => {
+              const {receiveTimestamp} =
+                  (entries[entries.length - 1].metadata || {}) as
+                  {receiveTimestamp: {seconds: number, nanos: number}};
+              const time = (receiveTimestamp.seconds * 1000) +
+                  (receiveTimestamp.nanos * 1e-6);
+
+              if (time >= logTime) {
+                return resolve(entries);
+              }
+
+              if (Date.now() > end) {
+                return reject(new Error('timeout'));
+              }
+              loop();
+            });
+      }, 500);
+    }
+  });
+
+  return p as Promise<types.StackdriverEntry[]>;
+}

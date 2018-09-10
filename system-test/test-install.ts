@@ -81,7 +81,8 @@ new LoggingWinston({
     version: 'some-version'
   }
 });`,
-    description: 'winston3: imports the module with a prefix and labels specified',
+    description:
+        'winston3: imports the module with a prefix and labels specified',
     dependencies: ['winston@3'],
     devDependencies: []
   }
@@ -150,7 +151,8 @@ new LoggingWinston({
     version: 'some-version'
   }
 });`,
-    description: 'winston 3: imports the module with a prefix and labels specified',
+    description:
+        'winston 3: imports the module with a prefix and labels specified',
     dependencies: ['winston@3'],
     devDependencies: []
   }
