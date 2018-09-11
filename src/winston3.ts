@@ -22,6 +22,8 @@ import * as types from './types/core';
 type Callback = (err: Error, apiResponse: {}) => void;
 
 export class LoggingWinston extends TransportStream {
+  static readonly LOGGING_TRACE_KEY = COMMON_TRACE_KEY;
+
   private common: LoggingCommon;
   constructor(options?: types.Options) {
     options = options || {};
@@ -50,8 +52,6 @@ export class LoggingWinston extends TransportStream {
     this.common.log(level, message, metadata || {}, callback);
   }
 }
-
-export const LOGGING_TRACE_KEY = COMMON_TRACE_KEY;
 
 type LogArg = {
   /**

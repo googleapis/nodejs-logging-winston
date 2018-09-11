@@ -16,7 +16,7 @@
 
 import * as is from '@sindresorhus/is';
 
-import * as common from './common';
+import {LOGGING_TRACE_KEY as COMMON_TRACE_KEY, LoggingCommon} from './common';
 import * as types from './types/core';
 
 // cant have type checking on winston because it may be version 2 or 3
@@ -26,9 +26,10 @@ const winston: {transports: {}, Transport: WinstonTransport} =
 type Callback = (err: Error, apiResponse: {}) => void;
 
 export class LoggingWinston extends winston.Transport {
-  private common: common.LoggingCommon;
+  private common: LoggingCommon;
 
-  static readonly LOGGING_TRACE_KEY = common.LOGGING_TRACE_KEY;
+  static readonly LOGGING_TRACE_KEY = COMMON_TRACE_KEY;
+
   constructor(options?: types.Options) {
     options = options || {};
 
@@ -39,7 +40,7 @@ export class LoggingWinston extends winston.Transport {
       name: logName,
     });
 
-    this.common = new common.LoggingCommon(options);
+    this.common = new LoggingCommon(options);
   }
 
   log(levelName: string, msg: string, metadata: types.Metadata,
@@ -53,10 +54,9 @@ export class LoggingWinston extends winston.Transport {
   }
 }
 
-export const LOGGING_TRACE_KEY = common.LOGGING_TRACE_KEY;
-
 // We need to add StackdriverLogging to winston.transport which does not
 // contain this type.
+
 // tslint:disable-next-line:no-any
 (winston.transports as any).StackdriverLogging = LoggingWinston;
 
