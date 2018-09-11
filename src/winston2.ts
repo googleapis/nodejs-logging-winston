@@ -16,7 +16,7 @@
 
 import * as is from '@sindresorhus/is';
 
-import {LOGGING_TRACE_KEY as COMMON_TRACE_KEY, LoggingCommon} from './common';
+import {LOGGING_TRACE_KEY, LoggingCommon} from './common';
 import * as types from './types/core';
 
 // cant have type checking on winston because it may be version 2 or 3
@@ -28,7 +28,7 @@ type Callback = (err: Error, apiResponse: {}) => void;
 export class LoggingWinston extends winston.Transport {
   private common: LoggingCommon;
 
-  static readonly LOGGING_TRACE_KEY = COMMON_TRACE_KEY;
+  static readonly LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
 
   constructor(options?: types.Options) {
     options = options || {};

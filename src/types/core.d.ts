@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 export interface Options {
   /**
    * The default log level. Winston will filter messages with a severity lower
@@ -215,3 +216,31 @@ export interface HttpRequest {
   protocol: string;
 }
 
+export type Winston3LogArg = {
+  /**
+   * the logging message
+   */
+  message: string,
+  /**
+   * the log level defined in NPM_LEVEL_NAME_TO_CODE
+   */
+  level: string,
+  /**
+   * the stack for an error
+   */
+  stack?: string,
+  /**
+   * not used but should not be passed through to common
+   */
+  splat?: {},
+  /**
+   * set httpRequest to a http.clientRequest object to log it
+   */
+  httpRequest?: HttpRequest, labels: {}
+}&{[key: string]: string | {}};
+
+
+export type Logger = {
+  constructor (options?: Options):void;
+  LOGGGING_TRACE_KEY:string;
+}

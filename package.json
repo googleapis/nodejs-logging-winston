@@ -69,7 +69,7 @@
     "postcompile": "cpy ./src/types/* ./build/src/types",
     "fix": "gts fix",
     "prepare": "npm run compile",
-    "pretest": "npm run compile && ./bin/install-winston2.js",
+    "pretest": "npm run compile && node ./bin/install-winston2.js",
     "posttest": "npm run check"
   },
   "dependencies": {
