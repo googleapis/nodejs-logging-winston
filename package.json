@@ -77,7 +77,6 @@
     "@sindresorhus/is": "^0.10.0",
     "lodash.mapvalues": "^4.6.0",
     "logform": "^1.9.1",
-    "require-inject": "^1.4.3",
     "semver": "^5.5.1",
     "winston-transport": "^4.2.0"
   },
@@ -114,7 +113,7 @@
     "pify": "^4.0.0",
     "post-install-check": "0.0.1",
     "prettier": "^1.13.6",
-    "proxyquire": "^2.0.1",
+    "require-inject": "^1.4.3",
     "request": "^2.88.0",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.6",
