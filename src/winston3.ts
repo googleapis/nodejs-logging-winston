@@ -37,9 +37,13 @@ export class LoggingWinston extends TransportStream {
     if (stack) {
       // this happens if someone calls.
       // logger.error(new Error('boop'))
-      // winston 3 console logging produces this output which is astoundingly
-      // less useful
+      // winston 3 console logging produces this output
       //   {"level":"error"}
+      // whereas this logging transport will generate
+      //   {"level":"error","message":error.message +' '+error.stack}
+      //
+      // this should make the errors appear in the stack driver error reporting
+      // console.
       message = message + ' ' + stack;
     }
 

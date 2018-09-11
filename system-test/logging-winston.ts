@@ -30,43 +30,53 @@ const LOG_NAME = 'winston_log_system_tests';
 
 describe('LoggingWinston', () => {
   const WRITE_CONSISTENCY_DELAY_MS = 90000;
+  const testTimestamp = new Date();
+
+  // type TestData
+
+  const commonTestData = [
+    {
+      args: ['first'],
+      level: 'info',
+      verify: (entry: types.StackdriverEntry) => {
+        assert.deepStrictEqual(entry.data, {
+          message: 'first',
+          metadata: {},
+        });
+      },
+    },
+
+    {
+      args: ['second'],
+      level: 'info',
+      verify: (entry: types.StackdriverEntry) => {
+        assert.deepStrictEqual(entry.data, {
+          message: 'second',
+          metadata: {},
+        });
+      },
+    },
+    {
+      args: ['third', {testTimestamp}],
+      level: 'info',
+      verify: (entry: types.StackdriverEntry) => {
+        assert.deepStrictEqual(entry.data, {
+          message: 'third',
+          metadata: {
+            testTimestamp: String(testTimestamp),
+          },
+        });
+      },
+    }
+  ] as TestData[];
+
+  type TestData = {
+    // tslint:disable-next-line:no-any
+    args: any[]; level: string; verify: (entry: types.StackdriverEntry) => void;
+  };
+
   describe('log winston 2', () => {
-    const testTimestamp = new Date();
-    const testData = [
-      {
-        args: ['first'],
-        level: 'info',
-        verify: (entry: types.StackdriverEntry) => {
-          assert.deepStrictEqual(entry.data, {
-            message: 'first',
-            metadata: {},
-          });
-        },
-      },
-
-      {
-        args: ['second'],
-        level: 'info',
-        verify: (entry: types.StackdriverEntry) => {
-          assert.deepStrictEqual(entry.data, {
-            message: 'second',
-            metadata: {},
-          });
-        },
-      },
-
-      {
-        args: ['third', {testTimestamp}],
-        level: 'info',
-        verify: (entry: types.StackdriverEntry) => {
-          assert.deepStrictEqual(entry.data, {
-            message: 'third',
-            metadata: {
-              testTimestamp: String(testTimestamp),
-            },
-          });
-        },
-      },
+    const testData = commonTestData.concat([
       {
         args: [new Error('forth')],
         level: 'error',
@@ -76,7 +86,6 @@ describe('LoggingWinston', () => {
                  }).message.startsWith('Error: forth'));
         },
       },
-
       {
         args: ['fifth message', new Error('fifth')],
         level: 'error',
@@ -86,7 +95,7 @@ describe('LoggingWinston', () => {
                  }).message.startsWith('fifth message Error: fifth'));
         },
       },
-    ];
+    ] as typeof commonTestData);
 
     const LOG_NAME = 'logging_winston_2_system_tests';
     const LoggingWinston = inject('../src/index', {
@@ -121,42 +130,7 @@ describe('LoggingWinston', () => {
 
 
   describe('log winston 3', () => {
-    const testTimestamp = new Date();
-    const testData = [
-      {
-        args: ['first'],
-        level: 'info',
-        verify: (entry: types.StackdriverEntry) => {
-          assert.deepStrictEqual(entry.data, {
-            message: 'first',
-            metadata: {},
-          });
-        },
-      },
-
-      {
-        args: ['second'],
-        level: 'info',
-        verify: (entry: types.StackdriverEntry) => {
-          assert.deepStrictEqual(entry.data, {
-            message: 'second',
-            metadata: {},
-          });
-        },
-      },
-
-      {
-        args: ['third', {testTimestamp}],
-        level: 'info',
-        verify: (entry: types.StackdriverEntry) => {
-          assert.deepStrictEqual(entry.data, {
-            message: 'third',
-            metadata: {
-              testTimestamp: String(testTimestamp),
-            },
-          });
-        },
-      },
+    const testData = commonTestData.concat([
       {
         args: [new Error('forth')],
         level: 'error',
@@ -181,7 +155,7 @@ describe('LoggingWinston', () => {
           // assert(entry!.data!.metadata!.error,'Error: fifth Error:'
         },
       },
-    ];
+    ] as TestData[]);
 
     const LOG_NAME = 'logging_winston_3_system_tests';
     const LoggingWinston = inject('../src/index', {
@@ -213,21 +187,7 @@ describe('LoggingWinston', () => {
     });
   });
 
-
   describe('ErrorReporting', () => {
-    const LoggingWinston = inject('../src/index', {
-                             winston: winston2,
-                             'winston/package.json': {version: '2.2.0'}
-                           }).LoggingWinston;
-
-    const logger = new winston2.Logger({
-      transports: [new LoggingWinston({
-        logName: LOG_NAME,
-        serviceContext:
-            {service: 'logging-winston-system-test', version: 'none'}
-      })],
-    });
-
     const ERROR_REPORTING_DELAY_MS = 10 * 1000;
     const errorsTransport = new ErrorsApiTransport();
 
@@ -240,12 +200,24 @@ describe('LoggingWinston', () => {
       });
     });
 
-    afterEach(
-        async () => {
-            // await errorsTransport.deleteAllEvents();
-        });
+    after(async () => {
+      await errorsTransport.deleteAllEvents();
+    });
 
     it('reports errors when logging errors', async function() {
+      const LoggingWinston = inject('../src/index', {
+                               winston: winston2,
+                               'winston/package.json': {version: '2.2.0'}
+                             }).LoggingWinston;
+
+      const logger = new winston2.Logger({
+        transports: [new LoggingWinston({
+          logName: LOG_NAME,
+          serviceContext:
+              {service: 'logging-winston-system-test', version: 'none'}
+        })],
+      });
+
       this.timeout(2 * ERROR_REPORTING_DELAY_MS);
       const message = `an error at ${Date.now()}`;
       // logger does not have index signature.

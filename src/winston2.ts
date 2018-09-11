@@ -20,7 +20,8 @@ import * as common from './common';
 import * as types from './types/core';
 
 // cant have type checking on winston because it may be version 2 or 3
-const winston = require('winston');
+const winston: {transports: {}, Transport: WinstonTransport} =
+    require('winston');
 
 type Callback = (err: Error, apiResponse: {}) => void;
 
@@ -58,3 +59,8 @@ export const LOGGING_TRACE_KEY = common.LOGGING_TRACE_KEY;
 // contain this type.
 // tslint:disable-next-line:no-any
 (winston.transports as any).StackdriverLogging = LoggingWinston;
+
+// Minimal definition for winston 2's Transport class.
+type WinstonTransport = {
+  new (options: {level?: string; name?: string;}): {};
+};

@@ -152,7 +152,7 @@ new LoggingWinston({
   }
 });`,
     description:
-        'winston 3: imports the module with a prefix and labels specified',
+        'winston3: imports the module with a prefix and labels specified',
     dependencies: ['winston@3'],
     devDependencies: []
   }
