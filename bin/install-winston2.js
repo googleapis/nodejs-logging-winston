@@ -3,6 +3,8 @@ const fs = require('fs')
 const path = require('path')
 const spawn = require('child_process').spawn
 
+console.log(process.env)
+
 if(fs.existsSync(path.join(__dirname,'..','test','winston-2','node_modules','winston'))){
   process.exit(0)
 }
