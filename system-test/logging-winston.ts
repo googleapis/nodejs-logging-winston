@@ -34,7 +34,7 @@ describe('LoggingWinston', () => {
 
   // type TestData
 
-  const commonTestData = [
+  const commonTestData: TestData[] = [
     {
       args: ['first'],
       level: 'info',
@@ -68,7 +68,7 @@ describe('LoggingWinston', () => {
         });
       },
     }
-  ] as TestData[];
+  ];
 
   type TestData = {
     // tslint:disable-next-line:no-any
@@ -240,12 +240,9 @@ describe('LoggingWinston', () => {
   });
 });
 
-
-
 // polls for the entire array of entries to be greater than logTime.
-function pollLogs(logName: string, logTime: number, size = 1, timeout = 90000):
-    Promise<types.StackdriverEntry[]> {
-  const p = new Promise((resolve, reject) => {
+function pollLogs(logName: string, logTime: number, size = 1, timeout = 90000) {
+  const p = new Promise<types.StackdriverEntry[]>((resolve, reject) => {
     const end = Date.now() + timeout;
     loop();
 
@@ -275,5 +272,5 @@ function pollLogs(logName: string, logTime: number, size = 1, timeout = 90000):
     }
   });
 
-  return p as Promise<types.StackdriverEntry[]>;
+  return p;
 }
