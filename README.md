@@ -64,7 +64,7 @@ For a more detailed Stackdriver Logging setup guide, see https://cloud.google.co
 
 ### Using the client library
 
-#### winston@3.x
+#### `winston@3.x`
 
 ```javascript
 const winston = require('winston');
@@ -87,7 +87,7 @@ Creates a Winston logger that streams to Stackdriver Logging
 
 Logs will be written to: "projects/YOUR_PROJECT_ID/logs/winston_log"
 
-#### winston@2.x
+#### `winston@2.x`
 
 ```javascript
 const winston = require('winston');
