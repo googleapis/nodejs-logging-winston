@@ -78,12 +78,12 @@ describe('LoggingWinston', () => {
   describe('log winston 2', () => {
     const testData = commonTestData.concat([
       {
-        args: [new Error('forth')],
+        args: [new Error('fourth')],
         level: 'error',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith('Error: forth'));
+                 }).message.startsWith('Error: fourth'));
         },
       },
       {
@@ -132,12 +132,12 @@ describe('LoggingWinston', () => {
   describe('log winston 3', () => {
     const testData = commonTestData.concat([
       {
-        args: [new Error('forth')],
+        args: [new Error('fourth')],
         level: 'error',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith('forth Error:'));
+                 }).message.startsWith('fourth Error:'));
         },
       },
       {
