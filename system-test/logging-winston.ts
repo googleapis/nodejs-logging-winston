@@ -246,10 +246,10 @@ function pollLogs(logName: string, logTime: number, size = 1, timeout = 90000) {
               const {receiveTimestamp} =
                   (entries[entries.length - 1].metadata || {}) as
                   {receiveTimestamp: {seconds: number, nanos: number}};
-              const time = (receiveTimestamp.seconds * 1000) +
+              const timeMilliseconds = (receiveTimestamp.seconds * 1000) +
                   (receiveTimestamp.nanos * 1e-6);
 
-              if (time >= logTime) {
+              if (timeMilliseconds >= logTime) {
                 return resolve(entries);
               }
 
