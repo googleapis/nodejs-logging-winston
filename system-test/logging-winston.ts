@@ -151,8 +151,6 @@ describe('LoggingWinston', () => {
           assert((entry.data as {
                    message: string
                  }).message.startsWith('fifth message'));
-
-          // assert(entry!.data!.metadata!.error,'Error: fifth Error:'
         },
       },
     ] as TestData[]);
@@ -188,54 +186,46 @@ describe('LoggingWinston', () => {
   });
 
   describe('ErrorReporting', () => {
-    const ERROR_REPORTING_DELAY_MS = 10 * 1000;
+    const ERROR_REPORTING_POLL_TIMEOUT = 30 * 1000;
     const errorsTransport = new ErrorsApiTransport();
 
     beforeEach(async function() {
-      this.timeout(2 * ERROR_REPORTING_DELAY_MS);
-
-      await errorsTransport.deleteAllEvents();
-      await new Promise((resolve, reject) => {
-        setTimeout(resolve, ERROR_REPORTING_DELAY_MS);
-      });
+      this.timeout(ERROR_REPORTING_POLL_TIMEOUT);
     });
 
-    after(async () => {
-      await errorsTransport.deleteAllEvents();
-    });
+    after(
+        async () => {
+            await errorsTransport.deleteAllEvents();
+        });
 
-    it('reports errors when logging errors', async function() {
+    it('reports errors when logging errors', async () => {
+      const start = Date.now();
+      const service = 'logging-winston-system-test';
       const LoggingWinston = inject('../src/index', {
                                winston: winston2,
                                'winston/package.json': {version: '2.2.0'}
                              }).LoggingWinston;
 
       const logger = new winston2.Logger({
-        transports: [new LoggingWinston({
-          logName: LOG_NAME,
-          serviceContext:
-              {service: 'logging-winston-system-test', version: 'none'}
-        })],
+        transports: [new LoggingWinston(
+            {logName: LOG_NAME, serviceContext: {service, version: 'none'}})],
       });
 
-      this.timeout(2 * ERROR_REPORTING_DELAY_MS);
       const message = `an error at ${Date.now()}`;
+
       // logger does not have index signature.
       // tslint:disable-next-line:no-any
       (logger as any)['error']('an error', new Error(message));
-      await delay(ERROR_REPORTING_DELAY_MS);
 
-      const errors = await errorsTransport.getAllGroups();
-
+      const errors = await errorsTransport.pollForNewEvents(
+          service, start, ERROR_REPORTING_POLL_TIMEOUT);
 
       assert.strictEqual(errors.length, 1);
       const errEvent = errors[0];
-      assert.strictEqual(errEvent.count, '1');
+
       assert.strictEqual(
-          errEvent.representative.serviceContext.service,
-          'logging-winston-system-test');
-      assert(errEvent.representative.message.startsWith(
-          `an error Error: ${message}`));
+          errEvent.serviceContext.service, 'logging-winston-system-test');
+      assert(errEvent.message.startsWith(`an error Error: ${message}`));
     });
   });
 });

@@ -241,6 +241,6 @@ export type Winston3LogArg = {
 
 
 export type Logger = {
-  constructor (options?: Options):void;
+  new(options?: Options):void;
   LOGGGING_TRACE_KEY:string;
 }
