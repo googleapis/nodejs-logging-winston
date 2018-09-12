@@ -80,8 +80,10 @@ export class ErrorsApiTransport extends common.Service {
   async getGroupEvents(groupId: string): Promise<ErrorEvent[]> {
     const projectId = await this.getProjectId();
     const options = {
-      uri: [API, projectId, 'events?groupId=' + groupId + '&pageSize=10&'+ONE_HOUR_API].join(
-          '/'),
+      uri: [
+        API, projectId,
+        'events?groupId=' + groupId + '&pageSize=10&' + ONE_HOUR_API
+      ].join('/'),
       method: 'GET'
     };
 
@@ -97,7 +99,7 @@ export class ErrorsApiTransport extends common.Service {
     // wait for a group
     while (Date.now() < timeLimit) {
       await delay(1000);
-      
+
       if (!groupId) {
         const groups = await this.getAllGroups();
         if (!groups.length) continue;
@@ -123,7 +125,7 @@ export class ErrorsApiTransport extends common.Service {
           filteredEvents.push(event);
         }
       });
-      if(filteredEvents.length) break;
+      if (filteredEvents.length) break;
     }
     return filteredEvents;
   }

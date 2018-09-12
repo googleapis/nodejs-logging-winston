@@ -193,10 +193,9 @@ describe('LoggingWinston', () => {
       this.timeout(ERROR_REPORTING_POLL_TIMEOUT);
     });
 
-    after(
-        async () => {
-            await errorsTransport.deleteAllEvents();
-        });
+    after(async () => {
+      await errorsTransport.deleteAllEvents();
+    });
 
     it('reports errors when logging errors', async () => {
       const start = Date.now();
