@@ -3,6 +3,7 @@ import * as semver from 'semver';
 import {LOGGING_TRACE_KEY as COMMON_TRACE_KEY} from './common';
 import * as types from './types/core';
 
+
 require('winston');
 const winstonVersion = require('winston/package.json').version;
 

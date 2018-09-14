@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import * as TransportStream from "winston-transport";
+
 
 export interface Options {
   /**
@@ -240,7 +242,7 @@ export type Winston3LogArg = {
 }&{[key: string]: string | {}};
 
 
-export type Logger = {
-  new(options?: Options):void;
-  LOGGGING_TRACE_KEY:string;
+export interface Logger extends TransportStream {
+  new(options?: Options):any;
+  LOGGING_TRACE_KEY:string;
 }
