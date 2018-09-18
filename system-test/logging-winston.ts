@@ -241,8 +241,7 @@ function pollLogs(logName: string, logTime: number, size = 1, timeout = 90000) {
               pageSize: size,
             },
             (err: Error, entries: types.StackdriverEntry[]) => {
-
-              if(!entries || !entries.length) return loop();
+              if (!entries || !entries.length) return loop();
 
               const {receiveTimestamp} =
                   (entries[entries.length - 1].metadata || {}) as
