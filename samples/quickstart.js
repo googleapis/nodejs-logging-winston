@@ -19,7 +19,7 @@
 const winston = require('winston');
 
 // Imports the Google Cloud client library for Winston
-const {LoggingWinston} = require('@google-cloud/logging-winston')
+const {LoggingWinston} = require('@google-cloud/logging-winston');
 
 const loggingWinston = new LoggingWinston();
 
@@ -31,7 +31,7 @@ const logger = winston.createLogger({
     new winston.transports.Console(),
     // Add Stackdriver Logging
     loggingWinston,
-  ]
+  ],
 });
 
 // Writes some log entries
