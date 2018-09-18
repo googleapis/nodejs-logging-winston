@@ -16,6 +16,7 @@
 'use strict';
 
 // [START logging_winston_quickstart]
+// winston 3 example.
 const winston = require('winston');
 
 // Imports the Google Cloud client library for Winston
