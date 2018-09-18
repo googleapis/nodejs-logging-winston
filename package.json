@@ -60,7 +60,7 @@
     "prettier": "prettier --write samples/*.js samples/*/*.js",
     "presamples-test": "npm run compile",
     "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
-    "presystem-test": "npm run compile",
+    "presystem-test": "npm run pretest",
     "system-test": "mocha build/system-test --timeout 600000",
     "test": "mocha build/test",
     "check": "gts check",
@@ -81,7 +81,7 @@
     "winston-transport": "^4.2.0"
   },
   "devDependencies": {
-    "@google-cloud/common": "^0.23.0",
+    "@google-cloud/common": "^0.25.0",
     "@google-cloud/nodejs-repo-tools": "^2.3.0",
     "@types/glob": "^5.0.35",
     "@types/is": "0.0.20",
