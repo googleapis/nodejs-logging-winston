@@ -88,30 +88,5 @@ describe('LoggingWinston', () => {
         },
       },
     ];
-
-    it('should properly write log entries', (done) => {
-      testData.forEach((test) => {
-        // logger does not have index signature.
-        // tslint:disable-next-line:no-any
-        (logger as any)[test.level].apply(logger, test.args);
-      });
-      setTimeout(() => {
-        logging.log('winston_log')
-            .getEntries(
-                {
-                  pageSize: testData.length,
-                },
-                (err: Error, entries: types.StackdriverEntry[]) => {
-                  assert.ifError(err);
-                  assert.strictEqual(entries.length, testData.length);
-                  entries.reverse().forEach((entry, index) => {
-                    const test = testData[index];
-                    test.verify(entry);
-                  });
-
-                  done();
-                });
-      }, WRITE_CONSISTENCY_DELAY_MS);
-    });
   });
 });
