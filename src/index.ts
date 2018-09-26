@@ -98,11 +98,14 @@ function getCurrentTraceFromAgent(): string|null {
  *     corresponds to. On Google Cloud Platform, this is detected automatically,
  *     but you may optionally specify a specific monitored resource. For more
  *     information see the
- *     [official documentation]{@link https://cloud.google.com/logging/docs/api/reference/rest/v2/MonitoredResource}.
+ *     [official documentation]{@link
+ * https://cloud.google.com/logging/docs/api/reference/rest/v2/MonitoredResource}.
  * @param {object} [options.serviceContext] For logged errors, we provide this
  *     as the service context. For more information see
- *     [this guide]{@link https://cloud.google.com/error-reporting/docs/formatting-error-messages}
- *     and the [official documentation]{@link https://cloud.google.com/error-reporting/reference/rest/v1beta1/ServiceContext}.
+ *     [this guide]{@link
+ * https://cloud.google.com/error-reporting/docs/formatting-error-messages} and
+ * the [official documentation]{@link
+ * https://cloud.google.com/error-reporting/reference/rest/v1beta1/ServiceContext}.
  * @param {string} [options.serviceContext.service] An identifier of the
  *     service, such as the name of the executable, job, or Google App Engine
  *     service name.
@@ -111,8 +114,10 @@ function getCurrentTraceFromAgent(): string|null {
  * @param {string} [options.projectId] The project ID from the Google Cloud
  *     Console, e.g. 'grape-spaceship-123'. We will also check the environment
  *     variable `GCLOUD_PROJECT` for your project ID. If your app is running in
- *     an environment which supports {@link https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application Application Default Credentials},
- *     your project ID will be detected automatically.
+ *     an environment which supports {@link
+ * https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application
+ * Application Default Credentials}, your project ID will be detected
+ * automatically.
  * @param {string} [options.keyFilename] Full path to the a .json, .pem, or .p12
  *     key downloaded from the Google Cloud Console. If you provide a path
  *     to a JSON file, the `projectId` option above is not necessary. NOTE: .pem
@@ -133,11 +138,14 @@ function getCurrentTraceFromAgent(): string|null {
  * @example <caption>Import the client library</caption>
  * const {LoggingWinston} = require('@google-cloud/logging-winston');
  *
- * @example <caption>Create a client that uses <a href="https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application">Application Default Credentials (ADC)</a>:</caption>
- * const loggingWinston = new LoggingWinston();
+ * @example <caption>Create a client that uses <a
+ * href="https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application">Application
+ * Default Credentials (ADC)</a>:</caption> const loggingWinston = new
+ * LoggingWinston();
  *
- * @example <caption>Create a client with <a href="https://cloud.google.com/docs/authentication/production#obtaining_and_providing_service_account_credentials_manually">explicit credentials</a>:</caption>
- * const loggingWinston = new LoggingWinston({
+ * @example <caption>Create a client with <a
+ * href="https://cloud.google.com/docs/authentication/production#obtaining_and_providing_service_account_credentials_manually">explicit
+ * credentials</a>:</caption> const loggingWinston = new LoggingWinston({
  *   projectId: 'your-project-id',
  *   keyFilename: '/path/to/keyfile.json'
  * });
