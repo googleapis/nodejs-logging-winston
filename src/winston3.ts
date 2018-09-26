@@ -37,11 +37,9 @@ export class LoggingWinston extends TransportStream {
 
   log({message, level, splat, stack, ...metadata}: types.Winston3LogArg,
       callback: Callback) {
-    // if the whole message is an error we have to manually copy the stack into metadata.
-    // it destructures explicitly but its own properties never go into rest
-    // something about this in the spec here i guess? very weird.
-    // https://www.ecma-international.org/ecma-262/9.0/index.html#sec-runtime-semantics-restdestructuringassignmentevaluation
-    if(stack) metadata.stack = stack
+    // if the whole message is an error we have to manually copy the stack into
+    // metadata. errors dont have enumerable properties so they dont destructure.
+    if (stack) metadata.stack = stack;
 
     this.common.log(level, message, metadata || {}, callback);
   }

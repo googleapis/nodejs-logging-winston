@@ -197,7 +197,7 @@ describe('LoggingWinston', () => {
       await errorsTransport.deleteAllEvents();
     });
 
-    it('reports errors when logging errors', async () => {
+    it('reports errors when logging errors with winston2', async () => {
       const start = Date.now();
       const service = 'logging-winston-system-test';
       const LoggingWinston = inject('../src/index', {
@@ -225,6 +225,38 @@ describe('LoggingWinston', () => {
       assert.strictEqual(
           errEvent.serviceContext.service, 'logging-winston-system-test');
       assert(errEvent.message.startsWith(`an error Error: ${message}`));
+    });
+
+    it('reports errors when logging errors with winston3', async () => {
+      const start = Date.now();
+      const service = 'logging-winston-system-test-winston3';
+      const LoggingWinston = inject('../src/index', {
+                               winston: winston3,
+                               'winston/package.json': {version: '3.0.0'}
+                             }).LoggingWinston;
+
+      const logger = winston3.createLogger({
+        transports: [new LoggingWinston(
+            {logName: LOG_NAME, serviceContext: {service, version: 'none'}})],
+      });
+
+      const message = `an error at ${Date.now()}`;
+
+      // logger does not have index signature.
+      // tslint:disable-next-line:no-any
+      (logger as any)['error'](new Error(message));
+
+      const errors = await errorsTransport.pollForNewEvents(
+          service, start, ERROR_REPORTING_POLL_TIMEOUT);
+
+      assert.strictEqual(errors.length, 1);
+      const errEvent = errors[0];
+
+      assert.strictEqual(
+          errEvent.serviceContext.service,
+          'logging-winston-system-test-winston3');
+
+      assert(errEvent.message.startsWith(message));
     });
   });
 });
