@@ -37,8 +37,8 @@ export class LoggingWinston extends TransportStream {
 
   log({message, level, splat, stack, ...metadata}: types.Winston3LogArg,
       callback: Callback) {
-    // if the whole message is an error we have to manually copy the stack into
-    // metadata. errors dont have enumerable properties so they dont
+    // If the whole message is an error we have to manually copy the stack into
+    // metadata. Errors dont have enumerable properties so they don't
     // destructure.
     if (stack) metadata.stack = stack;
 

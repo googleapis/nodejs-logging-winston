@@ -212,9 +212,7 @@ describe('LoggingWinston', () => {
 
       const message = `an error at ${Date.now()}`;
 
-      // logger does not have index signature.
-      // tslint:disable-next-line:no-any
-      (logger as any)['error']('an error', new Error(message));
+      logger.error('an error',new Error(message));
 
       const errors = await errorsTransport.pollForNewEvents(
           service, start, ERROR_REPORTING_POLL_TIMEOUT);
@@ -242,9 +240,7 @@ describe('LoggingWinston', () => {
 
       const message = `an error at ${Date.now()}`;
 
-      // logger does not have index signature.
-      // tslint:disable-next-line:no-any
-      (logger as any)['error'](new Error(message));
+      logger.error(new Error(message));
 
       const errors = await errorsTransport.pollForNewEvents(
           service, start, ERROR_REPORTING_POLL_TIMEOUT);
