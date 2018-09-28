@@ -186,7 +186,7 @@ describe('LoggingWinston', () => {
   });
 
   describe('ErrorReporting', () => {
-    const ERROR_REPORTING_POLL_TIMEOUT = 30 * 1000;
+    const ERROR_REPORTING_POLL_TIMEOUT = 60 * 1000;
     const errorsTransport = new ErrorsApiTransport();
 
     beforeEach(async function() {
