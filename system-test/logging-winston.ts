@@ -212,7 +212,7 @@ describe('LoggingWinston', () => {
 
       const message = `an error at ${Date.now()}`;
 
-      logger.error('an error',new Error(message));
+      logger.error('an error', new Error(message));
 
       const errors = await errorsTransport.pollForNewEvents(
           service, start, ERROR_REPORTING_POLL_TIMEOUT);
