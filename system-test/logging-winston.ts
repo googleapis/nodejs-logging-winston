@@ -15,7 +15,10 @@
  */
 
 import * as assert from 'assert';
+import * as uuid from 'uuid';
+
 import * as types from '../src/types/core';
+
 import {ErrorsApiTransport} from './errors-transport';
 
 const inject = require('require-inject');
@@ -28,6 +31,17 @@ const logging = new Logging();
 const LoggingWinston = require('../src/index').LoggingWinston;
 const LOG_NAME = 'winston_log_system_tests';
 
+const UUID = uuid.v4();
+function message(text: string) {
+  return `${UUID}: ${text}`;
+}
+
+const FIRST = message('first');
+const SECOND = message('second');
+const THIRD = message('third');
+const FOURTH = message('fourth');
+const FIFTH = message('fifth');
+
 describe('LoggingWinston', () => {
   const WRITE_CONSISTENCY_DELAY_MS = 90000;
   const testTimestamp = new Date();
@@ -36,32 +50,32 @@ describe('LoggingWinston', () => {
 
   const commonTestData: TestData[] = [
     {
-      args: ['first'],
+      args: [FIRST],
       level: 'info',
       verify: (entry: types.StackdriverEntry) => {
         assert.deepStrictEqual(entry.data, {
-          message: 'first',
+          message: FIRST,
           metadata: {},
         });
       },
     },
 
     {
-      args: ['second'],
+      args: [SECOND],
       level: 'info',
       verify: (entry: types.StackdriverEntry) => {
         assert.deepStrictEqual(entry.data, {
-          message: 'second',
+          message: SECOND,
           metadata: {},
         });
       },
     },
     {
-      args: ['third', {testTimestamp}],
+      args: [THIRD, {testTimestamp}],
       level: 'info',
       verify: (entry: types.StackdriverEntry) => {
         assert.deepStrictEqual(entry.data, {
-          message: 'third',
+          message: THIRD,
           metadata: {
             testTimestamp: String(testTimestamp),
           },
@@ -78,21 +92,21 @@ describe('LoggingWinston', () => {
   describe('log winston 2', () => {
     const testData = commonTestData.concat([
       {
-        args: [new Error('fourth')],
+        args: [new Error(FOURTH)],
         level: 'error',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith('Error: fourth'));
+                 }).message.startsWith(`Error: ${FOURTH}`));
         },
       },
       {
-        args: ['fifth message', new Error('fifth')],
+        args: [`${FIFTH} message`, new Error(FIFTH)],
         level: 'error',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith('fifth message Error: fifth'));
+                 }).message.startsWith(`${FIFTH} message Error: ${FIFTH}`));
         },
       },
     ] as typeof commonTestData);
@@ -132,25 +146,25 @@ describe('LoggingWinston', () => {
   describe('log winston 3', () => {
     const testData = commonTestData.concat([
       {
-        args: [new Error('fourth')],
+        args: [new Error(FOURTH)],
         level: 'error',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith('fourth Error:'));
+                 }).message.startsWith(`${FOURTH} Error:`));
         },
       },
       {
         args: [{
           level: 'error',
-          message: 'fifth message',
-          error: new Error('fifth')
+          message: `${FIFTH} message`,
+          error: new Error(FIFTH)
         }],
         level: 'log',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith('fifth message'));
+                 }).message.startsWith(`${FIFTH} message`));
         },
       },
     ] as TestData[]);
