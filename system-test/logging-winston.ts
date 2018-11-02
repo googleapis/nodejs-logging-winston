@@ -29,18 +29,11 @@ const winston2 = require('../../test/winston-2/node_modules/winston');
 const {Logging} = require('@google-cloud/logging');
 const logging = new Logging();
 const LoggingWinston = require('../src/index').LoggingWinston;
-const LOG_NAME = 'winston_log_system_tests';
 
 const UUID = uuid.v4();
-function message(text: string) {
-  return `${UUID}: ${text}`;
+function logName(name: string) {
+  return `${UUID}: ${name}`;
 }
-
-const FIRST = message('first');
-const SECOND = message('second');
-const THIRD = message('third');
-const FOURTH = message('fourth');
-const FIFTH = message('fifth');
 
 describe('LoggingWinston', () => {
   const WRITE_CONSISTENCY_DELAY_MS = 90000;
@@ -50,32 +43,32 @@ describe('LoggingWinston', () => {
 
   const commonTestData: TestData[] = [
     {
-      args: [FIRST],
+      args: ['first'],
       level: 'info',
       verify: (entry: types.StackdriverEntry) => {
         assert.deepStrictEqual(entry.data, {
-          message: FIRST,
+          message: 'first',
           metadata: {},
         });
       },
     },
 
     {
-      args: [SECOND],
+      args: ['second'],
       level: 'info',
       verify: (entry: types.StackdriverEntry) => {
         assert.deepStrictEqual(entry.data, {
-          message: SECOND,
+          message: 'second',
           metadata: {},
         });
       },
     },
     {
-      args: [THIRD, {testTimestamp}],
+      args: ['third', {testTimestamp}],
       level: 'info',
       verify: (entry: types.StackdriverEntry) => {
         assert.deepStrictEqual(entry.data, {
-          message: THIRD,
+          message: 'third',
           metadata: {
             testTimestamp: String(testTimestamp),
           },
@@ -92,26 +85,26 @@ describe('LoggingWinston', () => {
   describe('log winston 2', () => {
     const testData = commonTestData.concat([
       {
-        args: [new Error(FOURTH)],
+        args: [new Error('fourth')],
         level: 'error',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith(`Error: ${FOURTH}`));
+                 }).message.startsWith(`Error: fourth`));
         },
       },
       {
-        args: [`${FIFTH} message`, new Error(FIFTH)],
+        args: [`fifth message`, new Error('fifth')],
         level: 'error',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith(`${FIFTH} message Error: ${FIFTH}`));
+                 }).message.startsWith(`fifth message Error: fifth`));
         },
       },
     ] as typeof commonTestData);
 
-    const LOG_NAME = 'logging_winston_2_system_tests';
+    const LOG_NAME = logName('logging_winston_2_system_tests');
     const LoggingWinston = inject('../src/index', {
                              winston: winston2,
                              'winston/package.json': {version: '2.2.0'}
@@ -146,30 +139,30 @@ describe('LoggingWinston', () => {
   describe('log winston 3', () => {
     const testData = commonTestData.concat([
       {
-        args: [new Error(FOURTH)],
+        args: [new Error('fourth')],
         level: 'error',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith(`${FOURTH} Error:`));
+                 }).message.startsWith(`fourth Error:`));
         },
       },
       {
         args: [{
           level: 'error',
-          message: `${FIFTH} message`,
-          error: new Error(FIFTH)
+          message: `fifth message`,
+          error: new Error('fifth')
         }],
         level: 'log',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith(`${FIFTH} message`));
+                 }).message.startsWith(`fifth message`));
         },
       },
     ] as TestData[]);
 
-    const LOG_NAME = 'logging_winston_3_system_tests';
+    const LOG_NAME = logName('logging_winston_3_system_tests');
     const LoggingWinston = inject('../src/index', {
                              winston: winston3,
                              'winston/package.json': {version: '3.0.0'}
@@ -200,6 +193,7 @@ describe('LoggingWinston', () => {
   });
 
   describe('ErrorReporting', () => {
+    const LOG_NAME = logName('logging_winston_error_reporting_system_tests');
     const ERROR_REPORTING_POLL_TIMEOUT = WRITE_CONSISTENCY_DELAY_MS;
     const errorsTransport = new ErrorsApiTransport();
 
