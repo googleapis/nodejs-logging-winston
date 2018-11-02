@@ -90,16 +90,16 @@ describe('LoggingWinston', () => {
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith(`Error: fourth`));
+                 }).message.startsWith('Error: fourth'));
         },
       },
       {
-        args: [`fifth message`, new Error('fifth')],
+        args: ['fifth message', new Error('fifth')],
         level: 'error',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith(`fifth message Error: fifth`));
+                 }).message.startsWith('fifth message Error: fifth'));
         },
       },
     ] as typeof commonTestData);
@@ -144,20 +144,20 @@ describe('LoggingWinston', () => {
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith(`fourth Error:`));
+                 }).message.startsWith('fourth Error:'));
         },
       },
       {
         args: [{
           level: 'error',
-          message: `fifth message`,
+          message: 'fifth message',
           error: new Error('fifth')
         }],
         level: 'log',
         verify: (entry: types.StackdriverEntry) => {
           assert((entry.data as {
                    message: string
-                 }).message.startsWith(`fifth message`));
+                 }).message.startsWith('fifth message'));
         },
       },
     ] as TestData[]);
