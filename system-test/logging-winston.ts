@@ -114,7 +114,7 @@ describe('LoggingWinston', () => {
       transports: [new LoggingWinston({logName: LOG_NAME})],
     });
 
-    it('should properly write log entries', (done) => {
+    it('should properly write log entries', async () => {
       const start = Date.now();
       testData.forEach((test) => {
         // logger does not have index signature.
@@ -122,16 +122,13 @@ describe('LoggingWinston', () => {
         (logger as any)[test.level].apply(logger, test.args);
       });
 
-      pollLogs(LOG_NAME, start, testData.length, WRITE_CONSISTENCY_DELAY_MS)
-          .then((entries) => {
-            assert.strictEqual(entries.length, testData.length);
-            entries.reverse().forEach((entry, index) => {
-              const test = testData[index];
-              test.verify(entry);
-            });
-
-            done();
-          });
+      const entries = await pollLogs(
+          LOG_NAME, start, testData.length, WRITE_CONSISTENCY_DELAY_MS);
+      assert.strictEqual(entries.length, testData.length);
+      entries.reverse().forEach((entry, index) => {
+        const test = testData[index];
+        test.verify(entry);
+      });
     });
   });
 
@@ -172,7 +169,7 @@ describe('LoggingWinston', () => {
       transports: [new LoggingWinston({logName: LOG_NAME})],
     });
 
-    it('should properly write log entries', (done) => {
+    it('should properly write log entries', async () => {
       const start = Date.now();
       testData.forEach((test) => {
         // logger does not have index signature.
@@ -180,15 +177,13 @@ describe('LoggingWinston', () => {
         (logger as any)[test.level].apply(logger, test.args);
       });
 
-      pollLogs(LOG_NAME, start, testData.length, WRITE_CONSISTENCY_DELAY_MS)
-          .then((entries) => {
-            assert.strictEqual(entries.length, testData.length);
-            entries.reverse().forEach((entry, index) => {
-              const test = testData[index];
-              test.verify(entry);
-            });
-            done();
-          });
+      const entries = await pollLogs(
+          LOG_NAME, start, testData.length, WRITE_CONSISTENCY_DELAY_MS);
+      assert.strictEqual(entries.length, testData.length);
+      entries.reverse().forEach((entry, index) => {
+        const test = testData[index];
+        test.verify(entry);
+      });
     });
   });
 
