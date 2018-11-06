@@ -30,13 +30,14 @@ const {Logging} = require('@google-cloud/logging');
 const logging = new Logging();
 const LoggingWinston = require('../src/index').LoggingWinston;
 
+const WRITE_CONSISTENCY_DELAY_MS = 90000;
+
 const UUID = uuid.v4();
 function logName(name: string) {
-  return `${UUID}: ${name}`;
+  return `${UUID}_${name}`;
 }
 
 describe('LoggingWinston', () => {
-  const WRITE_CONSISTENCY_DELAY_MS = 90000;
   const testTimestamp = new Date();
 
   // type TestData
@@ -261,7 +262,7 @@ describe('LoggingWinston', () => {
 });
 
 // polls for the entire array of entries to be greater than logTime.
-function pollLogs(logName: string, logTime: number, size = 1, timeout = 90000) {
+function pollLogs(logName: string, logTime: number, size: number, timeout: number) {
   const p = new Promise<types.StackdriverEntry[]>((resolve, reject) => {
     const end = Date.now() + timeout;
     loop();
@@ -273,7 +274,7 @@ function pollLogs(logName: string, logTime: number, size = 1, timeout = 90000) {
               pageSize: size,
             },
             (err: Error, entries: types.StackdriverEntry[]) => {
-              if (!entries || !entries.length) return loop();
+              if (!entries || entries.length < size) return loop();
 
               const {receiveTimestamp} =
                   (entries[entries.length - 1].metadata || {}) as
