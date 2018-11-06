@@ -262,7 +262,8 @@ describe('LoggingWinston', () => {
 });
 
 // polls for the entire array of entries to be greater than logTime.
-function pollLogs(logName: string, logTime: number, size: number, timeout: number) {
+function pollLogs(
+    logName: string, logTime: number, size: number, timeout: number) {
   const p = new Promise<types.StackdriverEntry[]>((resolve, reject) => {
     const end = Date.now() + timeout;
     loop();
