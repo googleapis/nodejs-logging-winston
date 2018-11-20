@@ -104,7 +104,8 @@
     "tmp": "0.0.33",
     "typescript": "^3.0.0",
     "uuid": "^3.3.2",
-    "winston": "^3.1.0"
+    "winston": "^3.1.0",
+    "@types/sinon": "5.0.5"
   },
   "peerDependencies": {
     "winston": ">=2.x <=3.x"
