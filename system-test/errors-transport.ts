@@ -18,6 +18,7 @@ import * as common from '@google-cloud/common';
 import delay from 'delay';
 import * as request from 'request';  // types only
 import {teenyRequest} from 'teeny-request';
+import * as util from 'util';
 
 const packageJson = require('../../package.json');
 
@@ -62,7 +63,7 @@ export class ErrorsApiTransport extends common.Service {
       uri: [API, projectId, 'events'].join('/'),
       method: 'DELETE'
     };
-    await this.request(options);
+    await util.promisify(this.request)(options);
   }
 
   async getAllGroups(): Promise<ErrorGroupStats[]> {
@@ -73,7 +74,7 @@ export class ErrorsApiTransport extends common.Service {
     };
 
 
-    const response = await this.request(options);
+    const [response] = await util.promisify(this.request)(options);
     return response.body.errorGroupStats || [];
   }
 
@@ -87,8 +88,8 @@ export class ErrorsApiTransport extends common.Service {
       method: 'GET'
     };
 
-    const response = await this.request(options);
-    return response.body.errorEvents || [];
+    const body = await util.promisify(this.request)(options);
+    return body.errorEvents || [];
   }
 
   async pollForNewEvents(service: string, time: number, timeout: number):
