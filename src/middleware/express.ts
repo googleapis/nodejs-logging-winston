@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
+import {HttpRequest, middleware as commonMiddleware} from '@google-cloud/logging';
+import {GCPEnv} from 'google-auth-library';
 import * as winston from 'winston';
-import {middleware as commonMiddleware, HttpRequest} from '@google-cloud/logging';
+
+import {LOGGING_TRACE_KEY} from '../common';
 import {LoggingWinston} from '../index';
 import * as types from '../types/core';
 
 import {makeChildLogger} from './make-child-logger';
-import { GCPEnv } from 'google-auth-library';
-import { LOGGING_TRACE_KEY } from '../common';
 
 export const APP_LOG_SUFFIX = 'applog';
 
@@ -38,17 +39,15 @@ export async function middleware(options?: MiddlewareOptions) {
   };
   options = Object.assign({}, defaultOptions, options);
 
-  const loggingWinstonApp = new LoggingWinston({
-    ...options,
-    logName: `${options.logName}_${APP_LOG_SUFFIX}`
-  });
+  const loggingWinstonApp = new LoggingWinston(
+      {...options, logName: `${options.logName}_${APP_LOG_SUFFIX}`});
   const logger = winston.createLogger({
     level: options.level,
     levels: options.levels,
     transports: [loggingWinstonApp]
   });
 
-  const auth = loggingWinstonApp.stackdriverLog.logging.auth;
+  const auth = loggingWinstonApp.common.stackdriverLog.logging.auth;
   const [env, projectId] =
       await Promise.all([auth.getEnv(), auth.getProjectId()]);
 
@@ -72,8 +71,10 @@ export async function middleware(options?: MiddlewareOptions) {
   return {
     logger,
     mw: commonMiddleware.express.makeMiddleware(
-      projectId, (trace: string) => {
-        return makeChildLogger(logger, trace);
-      }, emitRequestLog)
+        projectId,
+        (trace: string) => {
+          return makeChildLogger(logger, trace);
+        },
+        emitRequestLog)
   };
 }

@@ -52,7 +52,7 @@
     "predocs-test": "npm run docs"
   },
   "dependencies": {
-    "@google-cloud/logging": "^4.0.1",
+    "@google-cloud/logging": "^4.4.0",
     "lodash.mapvalues": "^4.6.0",
     "logform": "^2.0.0",
     "semver": "^5.5.1",

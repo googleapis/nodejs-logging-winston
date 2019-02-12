@@ -15,9 +15,9 @@
  */
 
 import * as assert from 'assert';
+import {GCPEnv} from 'google-auth-library';
 import {LogEntry} from 'winston';
 import * as TransportStream from 'winston-transport';
-import {GCPEnv} from 'google-auth-library';
 
 const inject = require('require-inject');
 
@@ -45,6 +45,9 @@ class FakeLoggingWinston extends TransportStream {
           auth: {
             async getProjectId() {
               return FAKE_PROJECT_ID;
+            },
+            async getEnv() {
+              return authEnvironment;
             }
           }
         }
@@ -70,7 +73,7 @@ function fakeMakeMiddleware(
 
 const {middleware, APP_LOG_SUFFIX} = inject('../../src/middleware/express', {
   '../../src/index': {LoggingWinston: FakeLoggingWinston},
-  '@google-cloud/logging': 
+  '@google-cloud/logging':
       {middleware: {express: {makeMiddleware: fakeMakeMiddleware}}}
 });
 
@@ -116,15 +119,14 @@ describe('middleware/express', () => {
     assert.strictEqual(passedProjectId, FAKE_PROJECT_ID);
   });
 
-  [GCPEnv.APP_ENGINE, GCPEnv.CLOUD_FUNCTIONS].forEach(
-      env => {
-        it(`should not generate the request logger on ${env}`, async () => {
-          authEnvironment = env;
-          await middleware();
-          assert.ok(passedOptions);
-          assert.strictEqual(passedOptions.length, 1);
-          // emitRequestLog parameter to makeChildLogger should be undefined.
-          assert.strictEqual(passedEmitRequestLog, undefined);
-        });
-      });
+  [GCPEnv.APP_ENGINE, GCPEnv.CLOUD_FUNCTIONS].forEach(env => {
+    it(`should not generate the request logger on ${env}`, async () => {
+      authEnvironment = env;
+      await middleware();
+      assert.ok(passedOptions);
+      assert.strictEqual(passedOptions.length, 1);
+      // emitRequestLog parameter to makeChildLogger should be undefined.
+      assert.strictEqual(passedEmitRequestLog, undefined);
+    });
+  });
 });
