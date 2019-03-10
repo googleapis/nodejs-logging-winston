@@ -154,13 +154,25 @@ export class LoggingCommon {
       entryMetadata.httpRequest = metadata.httpRequest;
     }
 
+    // If running on Google Cloud Functions, add labels for the function
+    // name, project, and region.
+    const functionName = process.env.K_SERVICE || process.env.FUNCTION_NAME;
+    if (functionName) {
+      entryMetadata.labels = {
+        function_name: functionName,
+        project: process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT,
+        region: process.env.GOOGLE_CLOUD_REGION || process.env.FUNCTION_REGION
+      };
+    }
+
     // If the metadata contains a labels property, promote it to the entry
     // metadata.
     // https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry
     if (this.labels || metadata.labels) {
-      entryMetadata.labels = !this.labels ?
+      const labels = !this.labels ?
           metadata.labels :
           Object.assign({}, this.labels, metadata.labels);
+      entryMetadata.labels = Object.assign(entryMetadata.labels || {}, labels);
     }
 
     const trace = metadata[LOGGING_TRACE_KEY] || getCurrentTraceFromAgent();

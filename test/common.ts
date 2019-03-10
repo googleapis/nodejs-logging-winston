@@ -504,4 +504,124 @@ describe('logging-common', () => {
          loggingCommon.log(LEVEL, MESSAGE, METADATA, assert.ifError);
        });
   });
+
+  describe('autopopulates GCF metdata', () => {
+    const LEVEL = Object.keys(OPTIONS.levels as {[name: string]: number})[0];
+    const STACKDRIVER_LEVEL = 'alert';  // (code 1)
+    const MESSAGE = 'some message';
+    const INITIAL_ENV = {
+      FUNCTION_NAME: process.env.FUNCTION_NAME,
+      K_SERVICE: process.env.K_SERVICE,
+      GOOGLE_CLOUD_PROJECT: process.env.GOOGLE_CLOUD_PROJECT,
+      GCLOUD_PROJECT: process.env.GCLOUD_PROJECT,
+      GOOGLE_CLOUD_REGION: process.env.GOOGLE_CLOUD_REGION,
+      FUNCTION_REGION: process.env.FUNCTION_REGION
+    };
+    let originalLogFunction: Function;
+
+    before(() => {
+      originalLogFunction = loggingCommon.stackdriverLog[STACKDRIVER_LEVEL];
+      loggingCommon.stackdriverLog[STACKDRIVER_LEVEL] = () => {};
+    });
+
+    after(() => {
+      loggingCommon.stackdriverLog[STACKDRIVER_LEVEL] = originalLogFunction;
+    });
+
+    beforeEach(() => {
+      for (const key of Object.keys(INITIAL_ENV)) {
+        delete process.env[key];
+      }
+    });
+
+    afterEach(() => {
+      for (const key of Object.keys(INITIAL_ENV)) {
+        const val = (INITIAL_ENV as {
+          [key: string]: string|undefined;
+        })[key];
+        if (val === undefined) {
+          delete process.env[key];
+        } else {
+          process.env[key] = val;
+        }
+      }
+    });
+
+    it('should include GCF metadata when only FUNCTION_NAME is defined',
+       (done) => {
+         process.env.FUNCTION_NAME = 'some-function';
+         delete process.env.K_SERVICE;
+
+         process.env.GOOGLE_CLOUD_PROJECT = 'some-project';
+         process.env.GOOGLE_CLOUD_REGION = 'some-region';
+
+         loggingCommon.stackdriverLog.entry =
+             (entryMetadata: types.StackdriverEntryMetadata,
+              data: types.StackdriverData) => {
+               const labels = entryMetadata.labels as {
+                 [key: string]: string;
+               }
+               |undefined;
+               assert(labels);
+               assert.strictEqual(labels!.function_name, 'some-function');
+               assert.strictEqual(labels!.project, 'some-project');
+               assert.strictEqual(labels!.region, 'some-region');
+               done();
+             };
+         loggingCommon.log(LEVEL, MESSAGE);
+       });
+
+    it('should include GCF metadata when only K_SERVICE is defined', (done) => {
+      process.env.K_SERVICE = 'some-function';
+      delete process.env.FUNCTION_NAME;
+
+      process.env.GOOGLE_CLOUD_PROJECT = 'some-project';
+      process.env.GOOGLE_CLOUD_REGION = 'some-region';
+
+      loggingCommon.stackdriverLog.entry =
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
+            const labels = entryMetadata.labels as {
+              [key: string]: string;
+            }
+            |undefined;
+            assert(labels);
+            assert.strictEqual(labels!.function_name, 'some-function');
+            assert.strictEqual(labels!.project, 'some-project');
+            assert.strictEqual(labels!.region, 'some-region');
+            done();
+          };
+      loggingCommon.log(LEVEL, MESSAGE);
+    });
+
+    it('should allow overriding GCF metadata', (done) => {
+      process.env.FUNCTION_NAME = 'some-function';
+      delete process.env.K_SERVICE;
+
+      process.env.GOOGLE_CLOUD_PROJECT = 'some-project';
+      process.env.GOOGLE_CLOUD_REGION = 'some-region';
+
+      loggingCommon.stackdriverLog.entry =
+          (entryMetadata: types.StackdriverEntryMetadata,
+           data: types.StackdriverData) => {
+            const labels = entryMetadata.labels as {
+              [key: string]: string;
+            }
+            |undefined;
+            assert(labels);
+            assert.strictEqual(
+                labels!.function_name, 'some-custom-function-name');
+            assert.strictEqual(labels!.project, 'some-custom-project');
+            assert.strictEqual(labels!.region, 'some-region');
+            done();
+          };
+      loggingCommon.log(LEVEL, MESSAGE, {
+        labels: {
+          // don't override `region` to ensure its value is still set
+          function_name: 'some-custom-function-name',
+          project: 'some-custom-project'
+        }
+      });
+    });
+  });
 });
