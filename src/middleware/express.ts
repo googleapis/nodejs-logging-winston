@@ -28,7 +28,12 @@ export const APP_LOG_SUFFIX = 'applog';
 
 export interface MiddlewareOptions extends types.Options {
   level?: string;
-  levels?: winston.config.AbstractConfigSetLevels;
+  // winston@2 and winston@3 use different types for this the levels concept.
+  // winston@2: winston.AbstractConfigSetLevels.
+  // winston@3: winston.config.AbstractConfigSetLevels.
+  // Since we want to support both, we cannot depend on either type. Instead
+  // inline the definition here.
+  levels?: {[key: string]: number};
 }
 
 export async function middleware(options?: MiddlewareOptions) {
