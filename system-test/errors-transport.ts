@@ -36,6 +36,7 @@ export interface ErrorEvent {
 
 export interface ErrorGroupStats {
   group: {groupId: string};
+  affectedServices: ServiceContext[];
   representative: ErrorEvent;
   count: string;
   // other fields not used in the tests have been omitted
@@ -64,15 +65,6 @@ export class ErrorsApiTransport extends common.Service {
     return new Promise<ApiResponse>((resolve, reject) => {
       super.request(options, (err, _, res) => err ? reject(err) : resolve(res));
     });
-  }
-
-  async deleteAllEvents(): Promise<void> {
-    const projectId = await this.getProjectId();
-    const options = {
-      uri: [API, projectId, 'events'].join('/'),
-      method: 'DELETE'
-    };
-    await this.request(options);
   }
 
   async getAllGroups(): Promise<ErrorGroupStats[]> {
@@ -115,13 +107,10 @@ export class ErrorsApiTransport extends common.Service {
         if (!groups.length) continue;
         // find an error group that matches the service
         groups.forEach((group) => {
-          try {
-            // example value: logging-winston-system-test
-            if (group.representative.serviceContext.service === service) {
-              groupId = group.group.groupId;
-            }
-          } catch (e) {
-            // keep looking
+          const match = group.affectedServices.find(
+              context => context.service === service);
+          if (match) {
+            groupId = group.group.groupId;
           }
         });
       }
