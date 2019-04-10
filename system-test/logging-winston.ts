@@ -110,7 +110,7 @@ describe('LoggingWinston', function() {
 
     const LOG_NAME = logName('logging_winston_system_tests');
     const LoggingWinston = inject('../src/index', {
-                             winston: winston,
+                             winston,
                            }).LoggingWinston;
 
     const logger = winston.createLogger({
@@ -144,7 +144,7 @@ describe('LoggingWinston', function() {
       const start = Date.now();
       const service = `logging-winston-system-test-winston3-${UUID}`;
       const LoggingWinston = inject('../src/index', {
-                               winston: winston,
+                               winston,
                              }).LoggingWinston;
 
       const logger = winston.createLogger({
