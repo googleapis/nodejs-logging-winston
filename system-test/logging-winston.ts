@@ -23,7 +23,7 @@ import {ErrorsApiTransport} from './errors-transport';
 
 const inject = require('require-inject');
 
-const winston3 = require('winston');
+const winston = require('winston');
 
 const {Logging} = require('@google-cloud/logging');
 const logging = new Logging();
@@ -110,10 +110,10 @@ describe('LoggingWinston', function() {
 
     const LOG_NAME = logName('logging_winston_system_tests');
     const LoggingWinston = inject('../src/index', {
-                             winston: winston3,
+                             winston: winston,
                            }).LoggingWinston;
 
-    const logger = winston3.createLogger({
+    const logger = winston.createLogger({
       transports: [new LoggingWinston({logName: LOG_NAME})],
     });
 
@@ -144,10 +144,10 @@ describe('LoggingWinston', function() {
       const start = Date.now();
       const service = `logging-winston-system-test-winston3-${UUID}`;
       const LoggingWinston = inject('../src/index', {
-                               winston: winston3,
+                               winston: winston,
                              }).LoggingWinston;
 
-      const logger = winston3.createLogger({
+      const logger = winston.createLogger({
         transports: [new LoggingWinston(
             {logName: LOG_NAME, serviceContext: {service, version: 'none'}})],
       });
