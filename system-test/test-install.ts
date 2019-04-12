@@ -72,8 +72,7 @@ const loggingWinston = new LoggingWinston({
 
 winston.createLogger({transports:[loggingWinston]})
 `,
-    description:
-        'imports the module with a prefix and labels specified',
+    description: 'imports the module with a prefix and labels specified',
     dependencies: ['winston'],
     devDependencies: ['typescript@3']
   }
