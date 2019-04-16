@@ -75,9 +75,6 @@ describe('logging-winston', () => {
   });
 
   describe('instantiation/options', () => {
-    const loggingWinstonLib =
-        inject('../src/index', {'../src/common': {LoggingCommon: FakeLogging}});
-
     it('should inherit from winston-transport.TransportStream', () => {
       const loggingWinston = new loggingWinstonLib.LoggingWinston(OPTIONS);
       assert.ok(loggingWinston instanceof TransportStream);
@@ -134,10 +131,6 @@ describe('logging-winston', () => {
     const LEVEL = Object.keys(OPTIONS.levels as {[name: string]: number})[0];
     const MESSAGE = 'message';
     const METADATA = {a: 1};
-
-    const loggingWinstonLib = inject(
-        '../src/index',
-        {'../src/common': {LoggingCommon: FakeLogging}, winston: fakeWinston});
 
     const loggingWinston = new loggingWinstonLib.LoggingWinston();
 
