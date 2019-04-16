@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import * as TransportStream from "winston-transport";
+import * as TransportStream from 'winston-transport';
+import {GoogleAuth} from 'google-auth-library';
 
 
 export interface Options {
@@ -137,6 +138,7 @@ export interface StackdriverEntryMetadata {
   httpRequest?: HttpRequest;
   labels?: {};
   trace?: {};
+  timestamp?: Date;
 }
 
 export enum STACKDRIVER_LOGGING_LEVELS {
@@ -167,6 +169,7 @@ interface StackdriverOtherFunctions {
        callback?:
            (err: Error, apiResponse: {}) => void) => Promise<LogWriteResponse>;
   entry: (metadata: {}, data: {}|string) => StackdriverEntry;
+  logging: { auth: GoogleAuth };
 }
 
 export type StackdriverLog = StackdriverLogFunctions&StackdriverOtherFunctions;

@@ -17,11 +17,13 @@
 
 const path = require('path');
 const {assert} = require('chai');
-const execa = require('execa');
+const cp = require('child_process');
+
+const execSync = cmd => cp.execSync(cmd, {encoding: 'utf-8'});
 
 describe('QuickStart', () => {
   it('should write using winston', async () => {
-    const {stdout} = await execa.shell('node quickstart.js', {
+    const stdout = execSync('node quickstart.js', {
       cwd: path.join(__dirname, '..'),
     });
     assert.match(stdout, /99%/);
