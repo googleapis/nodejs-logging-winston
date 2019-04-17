@@ -19,7 +19,7 @@ import * as TransportStream from 'winston-transport';
 
 import * as types from '../src/types/core';
 
-const inject = require('require-inject');
+const proxyquire = require('proxyquire');
 
 describe('logging-winston', () => {
   let fakeLoggingOptions_: types.Options|null;
@@ -51,9 +51,9 @@ describe('logging-winston', () => {
     Transport: FakeTransport,
   };
 
-  const loggingWinstonLib = inject(
+  const loggingWinstonLib = proxyquire(
       '../src/index',
-      {'../src/common': {LoggingCommon: FakeLogging}, winston: fakeWinston});
+      {'./common': {LoggingCommon: FakeLogging}, 'winston': fakeWinston});
   // loggingWinston is LoggingWinston namespace which cannot be determined type.
   // tslint:disable-next-line:no-any
   let loggingWinston: any;
