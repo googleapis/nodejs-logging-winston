@@ -141,9 +141,8 @@ describe('LoggingWinston', function() {
     it('reports errors', async () => {
       const start = Date.now();
       const service = `logging-winston-system-test-winston3-${UUID}`;
-      const LoggingWinston = inject('../src/index', {
-                               winston,
-                             }).LoggingWinston;
+      const LoggingWinston =
+          proxyquire('../src/index', {winston}).LoggingWinston;
 
       const logger = winston.createLogger({
         transports: [new LoggingWinston(
