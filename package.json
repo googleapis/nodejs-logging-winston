@@ -78,6 +78,7 @@
     "intelli-espower-loader": "^1.0.1",
     "linkinator": "^1.1.2",
     "mocha": "^6.1.4",
+    "nyc": "^14.0.0",
     "post-install-check": "0.0.1",
     "prettier": "^1.13.6",
     "proxyquire": "^2.1.0",
