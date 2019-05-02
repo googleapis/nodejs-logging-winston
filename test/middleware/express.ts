@@ -48,10 +48,10 @@ class FakeLoggingWinston extends TransportStream {
             },
             async getEnv() {
               return authEnvironment;
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     };
   }
 
@@ -75,7 +75,7 @@ const {middleware, APP_LOG_SUFFIX} =
     proxyquire('../../src/middleware/express', {
       '../index': {LoggingWinston: FakeLoggingWinston},
       '@google-cloud/logging':
-          {middleware: {express: {makeMiddleware: fakeMakeMiddleware}}}
+          {middleware: {express: {makeMiddleware: fakeMakeMiddleware}}},
     });
 
 describe('middleware/express', () => {

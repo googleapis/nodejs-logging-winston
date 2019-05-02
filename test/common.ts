@@ -55,7 +55,7 @@ describe('logging-common', () => {
     '@google-cloud/logging': {
       Logging: fakeLogging,
     },
-    winston: fakeWinston
+    winston: fakeWinston,
   });
 
 
@@ -496,7 +496,7 @@ describe('logging-common', () => {
                  labels: {
                    label1: 'value1',
                    label2: 'value2',
-                 }
+                 },
                });
                assert.deepStrictEqual(data1, {
                  message: `[${PREFIX}] ${MESSAGE}`,
@@ -512,7 +512,7 @@ describe('logging-common', () => {
                      console.log(entryMetadata2.labels);
                      assert.deepEqual(entryMetadata2, {
                        resource: loggingCommon.resource,
-                       labels: {label1: 'value1'}
+                       labels: {label1: 'value1'},
                      });
                      assert.deepStrictEqual(data2, {
                        message: `[${PREFIX}] ${MESSAGE}`,

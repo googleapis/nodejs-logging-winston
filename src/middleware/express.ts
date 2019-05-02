@@ -35,7 +35,7 @@ export async function middleware(options?: MiddlewareOptions) {
   const defaultOptions = {
     logName: 'winston_log',
     level: 'info',
-    levels: winston.config.npm.levels
+    levels: winston.config.npm.levels,
   };
   options = Object.assign({}, defaultOptions, options);
 
@@ -44,7 +44,7 @@ export async function middleware(options?: MiddlewareOptions) {
   const logger = winston.createLogger({
     level: options.level,
     levels: options.levels,
-    transports: [loggingWinstonApp]
+    transports: [loggingWinstonApp],
   });
 
   const auth = loggingWinstonApp.common.stackdriverLog.logging.auth;
@@ -61,7 +61,7 @@ export async function middleware(options?: MiddlewareOptions) {
     const requestLogger = winston.createLogger({
       level: options.level,
       levels: options.levels,
-      transports: [loggingWinstonReq]
+      transports: [loggingWinstonReq],
     });
     emitRequestLog = (httpRequest: HttpRequest, trace: string) => {
       requestLogger.info({[LOGGING_TRACE_KEY]: trace, httpRequest});
@@ -75,6 +75,6 @@ export async function middleware(options?: MiddlewareOptions) {
         (trace: string) => {
           return makeChildLogger(logger, trace);
         },
-        emitRequestLog)
+        emitRequestLog),
   };
 }

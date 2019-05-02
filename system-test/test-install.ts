@@ -22,14 +22,14 @@ const TS_CODE_SAMPLES: check.CodeSample[] = [
 new loggingWinston.LoggingWinston();`,
     description: 'imports the module using * syntax',
     dependencies: ['winston'],
-    devDependencies: ['@types/winston', 'typescript@3']
+    devDependencies: ['@types/winston', 'typescript@3'],
   },
   {
     code: `import {LoggingWinston} from '@google-cloud/logging-winston';
 new LoggingWinston();`,
     description: 'imports the module with {} syntax',
     dependencies: ['winston'],
-    devDependencies: ['@types/winston', 'typescript@3']
+    devDependencies: ['@types/winston', 'typescript@3'],
   },
   {
     code: `import {LoggingWinston} from '@google-cloud/logging-winston';
@@ -41,7 +41,7 @@ new LoggingWinston({
     description:
         'imports the module and starts with a partial `serviceContext`',
     dependencies: ['winston'],
-    devDependencies: ['@types/winston', 'typescript@3']
+    devDependencies: ['@types/winston', 'typescript@3'],
   },
   {
     code: `import {LoggingWinston} from '@google-cloud/logging-winston';
@@ -55,7 +55,7 @@ new LoggingWinston({
     description:
         'imports the module and starts with a complete `serviceContext`',
     dependencies: ['winston'],
-    devDependencies: ['@types/winston', 'typescript@3']
+    devDependencies: ['@types/winston', 'typescript@3'],
   },
 
   {
@@ -74,8 +74,8 @@ winston.createLogger({transports:[loggingWinston]})
 `,
     description: 'imports the module with a prefix and labels specified',
     dependencies: ['winston'],
-    devDependencies: ['typescript@3']
-  }
+    devDependencies: ['typescript@3'],
+  },
 ];
 
 const JS_CODE_SAMPLES: check.CodeSample[] = [
@@ -85,7 +85,7 @@ const JS_CODE_SAMPLES: check.CodeSample[] = [
 new LoggingWinston();`,
     description: 'requires the module using Node 4+ syntax',
     dependencies: ['winston'],
-    devDependencies: []
+    devDependencies: [],
   },
   {
     code:
@@ -98,7 +98,7 @@ new LoggingWinston({
     description:
         'requires the module and starts with a partial `serviceContext`',
     dependencies: ['winston'],
-    devDependencies: []
+    devDependencies: [],
   },
   {
     code:
@@ -113,7 +113,7 @@ new LoggingWinston({
     description:
         'requires the module and starts with a complete `serviceContext`',
     dependencies: ['winston'],
-    devDependencies: []
+    devDependencies: [],
   },
   {
     code:
@@ -128,7 +128,7 @@ new LoggingWinston({
 });`,
     description: 'imports the module with a prefix and labels specified',
     dependencies: ['winston'],
-    devDependencies: []
+    devDependencies: [],
   },
 ];
 

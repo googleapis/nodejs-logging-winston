@@ -56,7 +56,7 @@ export class ErrorsApiTransport extends common.Service {
     super({
       baseUrl: 'https://clouderrorreporting.googleapis.com/v1beta1',
       scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-      packageJson
+      packageJson,
     });
   }
 
@@ -70,7 +70,7 @@ export class ErrorsApiTransport extends common.Service {
     const projectId = await this.getProjectId();
     const options = {
       uri: [API, projectId, 'groupStats?' + ONE_HOUR_API].join('/'),
-      method: 'GET'
+      method: 'GET',
     };
 
 
@@ -83,9 +83,9 @@ export class ErrorsApiTransport extends common.Service {
     const options = {
       uri: [
         API, projectId,
-        'events?groupId=' + groupId + '&pageSize=10&' + ONE_HOUR_API
+        'events?groupId=' + groupId + '&pageSize=10&' + ONE_HOUR_API,
       ].join('/'),
-      method: 'GET'
+      method: 'GET',
     };
 
     const response = await this.request(options);

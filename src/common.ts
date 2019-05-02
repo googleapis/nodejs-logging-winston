@@ -41,7 +41,7 @@ const STACKDRIVER_LOGGING_LEVEL_CODE_TO_NAME:
       4: 'warning',
       5: 'notice',
       6: 'info',
-      7: 'debug'
+      7: 'debug',
     };
 
 /*!

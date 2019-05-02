@@ -74,13 +74,13 @@ describe('LoggingWinston', function() {
           },
         });
       },
-    }
+    },
   ];
 
-  type TestData = {
+  interface TestData {
     // tslint:disable-next-line:no-any
     args: any[]; level: string; verify: (entry: types.StackdriverEntry) => void;
-  };
+  }
 
   describe('log', () => {
     const testData = commonTestData.concat([
@@ -97,7 +97,7 @@ describe('LoggingWinston', function() {
         args: [{
           level: 'error',
           message: 'fifth message',
-          error: new Error('fifth')
+          error: new Error('fifth'),
         }],
         level: 'log',
         verify: (entry: types.StackdriverEntry) => {
