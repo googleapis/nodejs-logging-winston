@@ -143,6 +143,25 @@ describe('LoggingWinston', function() {
         test.verify(entry);
       });
     });
+
+    it('should work correctly with winston formats', async () => {
+      const MESSAGE = 'A message that should be colorized';
+      const start = Date.now();
+      logger.format = winston.format.combine(
+        winston.format.colorize(),
+        winston.format.padLevels()
+      );
+      logger.error(MESSAGE);
+
+      const [entry] = await pollLogs(
+        LOG_NAME,
+        start,
+        1,
+        WRITE_CONSISTENCY_DELAY_MS
+      );
+      const data = entry.data as {message: string};
+      assert.strictEqual(data.message, `   ${MESSAGE}`);
+    });
   });
 
   describe('ErrorReporting', () => {
