@@ -4,6 +4,37 @@
 
 [1]: https://www.npmjs.com/package/@google-cloud/logging-winston?activeTab=versions
 
+## [1.0.0](https://www.github.com/googleapis/nodejs-logging-winston/compare/v0.11.1...v1.0.0) (2019-05-17)
+
+
+### Bug Fixes
+
+* expose express middleware, add system-test ([#278](https://www.github.com/googleapis/nodejs-logging-winston/issues/278)) ([dc17ad7](https://www.github.com/googleapis/nodejs-logging-winston/commit/dc17ad7))
+* **deps:** update dependency google-auth-library to v4 ([#317](https://www.github.com/googleapis/nodejs-logging-winston/issues/317)) ([6182968](https://www.github.com/googleapis/nodejs-logging-winston/commit/6182968))
+* use immutable winston level ([#319](https://www.github.com/googleapis/nodejs-logging-winston/issues/319)) ([450295f](https://www.github.com/googleapis/nodejs-logging-winston/commit/450295f))
+
+
+### Build System
+
+* upgrade engines field to >=8.10.0 ([#308](https://www.github.com/googleapis/nodejs-logging-winston/issues/308)) ([c777689](https://www.github.com/googleapis/nodejs-logging-winston/commit/c777689))
+
+
+### Code Refactoring
+
+* only support winston3 ([#297](https://www.github.com/googleapis/nodejs-logging-winston/issues/297)) ([9d3911b](https://www.github.com/googleapis/nodejs-logging-winston/commit/9d3911b))
+
+
+### Miscellaneous Chores
+
+* drop node 6 support ([#307](https://www.github.com/googleapis/nodejs-logging-winston/issues/307)) ([08631b7](https://www.github.com/googleapis/nodejs-logging-winston/commit/08631b7))
+
+
+### BREAKING CHANGES
+
+* upgrade engines field to >=8.10.0 (#308)
+* Node 6 is no longer tested.
+* only support winston3 (#297)
+
 ## v0.11.1
 
 04-09-2019 17:34 PDT
@@ -200,4 +231,3 @@
 - chore: lock files maintenance ([#79](https://github.com/googleapis/nodejs-logging-winston/pull/79))
 - chore: test on node10 ([#77](https://github.com/googleapis/nodejs-logging-winston/pull/77))
 - chore: lock files maintenance ([#75](https://github.com/googleapis/nodejs-logging-winston/pull/75))
-
