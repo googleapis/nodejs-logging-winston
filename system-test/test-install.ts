@@ -88,7 +88,7 @@ winston.createLogger({transports:[loggingWinston]})
     description: 'imports transport-stream correctly',
     dependencies: ['winston', 'winston-transport'],
     devDependencies: [],
-  }
+  },
 ];
 
 const JS_CODE_SAMPLES: check.CodeSample[] = [
