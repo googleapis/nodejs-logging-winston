@@ -72,10 +72,15 @@ describe(__filename, () => {
         assert.strictEqual(appLogEntry.metadata.severity, 'INFO');
 
         const requestLog = logging.log(LOG_NAME);
-        const requestLogEntries = (await requestLog.getEntries({pageSize: 1}))[0];
+        const requestLogEntries = (await requestLog.getEntries({
+          pageSize: 1,
+        }))[0];
         assert.strictEqual(requestLogEntries.length, 1);
         const [requestLogEntry] = requestLogEntries;
-        assert.strictEqual(requestLogEntry.metadata.trace, appLogEntry.metadata.trace);
+        assert.strictEqual(
+          requestLogEntry.metadata.trace,
+          appLogEntry.metadata.trace
+        );
 
         done();
       };
