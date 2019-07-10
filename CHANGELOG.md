@@ -4,6 +4,13 @@
 
 [1]: https://www.npmjs.com/package/@google-cloud/logging-winston?activeTab=versions
 
+### [1.1.2](https://www.github.com/googleapis/nodejs-logging-winston/compare/v1.1.1...v1.1.2) (2019-07-10)
+
+
+### Bug Fixes
+
+* **middleware:** use winston provided child logger api ([#359](https://www.github.com/googleapis/nodejs-logging-winston/issues/359)) ([5d83565](https://www.github.com/googleapis/nodejs-logging-winston/commit/5d83565))
+
 ### [1.1.1](https://www.github.com/googleapis/nodejs-logging-winston/compare/v1.1.0...v1.1.1) (2019-06-26)
 
 
