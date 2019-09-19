@@ -40,9 +40,13 @@ describe('Stackdriver Trace Log Correlation', () => {
     }
     // Stub entry to record the incoming trace context ID.
     entry(metadata: {trace: string}) {
-      const traceId = metadata.trace.split('/')[3];
-      assert.ok(traceId);
-      seenContextIds.push(traceId);
+      if (metadata.trace) {
+        const traceId = metadata.trace.split('/')[3];
+        assert.ok(traceId);
+        seenContextIds.push(traceId);
+      } else {
+        seenContextIds.push('');
+      }
       return {};
     }
     info(data: never, callback: () => void) {
@@ -120,6 +124,55 @@ describe('Stackdriver Trace Log Correlation', () => {
         assert.deepStrictEqual(seenContextIds, ['1', '2']);
       });
       done();
+    });
+  });
+
+  [null, {}, {getWriterProjectId: () => 'project1'}].forEach(testCase => {
+    it(`Doesn't crash when a non-compatible Trace Agent is present: ${testCase}`, done => {
+      global._google_trace_agent = testCase;
+      const transport = new loggingWinstonLib.LoggingWinston();
+      const logger = winston.createLogger({
+        transports: [transport],
+        defaultMeta: loggingWinstonLib.getDefaultMetadataForTracing(),
+      });
+      setCurrentContextId('1');
+      logger.log({level: 'info', message: 'hello'});
+      setCurrentContextId('2');
+      logger.log({level: 'info', message: 'hello'});
+      setCurrentContextId('3');
+      setImmediate(() => {
+        assert.strictEqual(seenContextIds.length, 2);
+        done();
+      });
+    });
+  });
+
+  [
+    {
+      getCurrentContextId: () => 'trace1',
+      getWriterProjectId: () => null,
+    },
+    {
+      getCurrentContextId: () => null,
+      getWriterProjectId: () => 'project1',
+    },
+  ].forEach(testCase => {
+    it(`Doesn't crash when a Trace Agent field is not present: ${testCase}`, done => {
+      global._google_trace_agent = testCase;
+      const transport = new loggingWinstonLib.LoggingWinston();
+      const logger = winston.createLogger({
+        transports: [transport],
+        defaultMeta: loggingWinstonLib.getDefaultMetadataForTracing(),
+      });
+      setCurrentContextId('1');
+      logger.log({level: 'info', message: 'hello'});
+      setCurrentContextId('2');
+      logger.log({level: 'info', message: 'hello'});
+      setCurrentContextId('3');
+      setImmediate(() => {
+        assert.strictEqual(seenContextIds.length, 2);
+        done();
+      });
     });
   });
 });
