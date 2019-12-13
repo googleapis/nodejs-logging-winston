@@ -1,5 +1,5 @@
 {
-  "updateTime": "2019-10-30T22:20:55.049565Z",
+  "updateTime": "2019-12-13T12:19:09.428963Z",
   "sources": [
     {
       "template": {
@@ -7,6 +7,380 @@
         "origin": "synthtool.gcp",
         "version": "2019.10.17"
       }
+    }
+  ],
+  "newFiles": [
+    {
+      "path": "codecov.yaml"
+    },
+    {
+      "path": "tsconfig.json"
+    },
+    {
+      "path": "CONTRIBUTING.md"
+    },
+    {
+      "path": ".readme-partials.yaml"
+    },
+    {
+      "path": "renovate.json"
+    },
+    {
+      "path": ".prettierrc"
+    },
+    {
+      "path": "linkinator.config.json"
+    },
+    {
+      "path": ".repo-metadata.json"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md"
+    },
+    {
+      "path": ".eslintrc.yml"
+    },
+    {
+      "path": "synth.metadata"
+    },
+    {
+      "path": ".nycrc"
+    },
+    {
+      "path": "LICENSE"
+    },
+    {
+      "path": "CHANGELOG.md"
+    },
+    {
+      "path": "synth.py"
+    },
+    {
+      "path": ".eslintignore"
+    },
+    {
+      "path": ".jsdoc.js"
+    },
+    {
+      "path": ".prettierignore"
+    },
+    {
+      "path": "package.json"
+    },
+    {
+      "path": "README.md"
+    },
+    {
+      "path": ".gitignore"
+    },
+    {
+      "path": ".compodocrc"
+    },
+    {
+      "path": ".git/HEAD"
+    },
+    {
+      "path": ".git/description"
+    },
+    {
+      "path": ".git/shallow"
+    },
+    {
+      "path": ".git/config"
+    },
+    {
+      "path": ".git/index"
+    },
+    {
+      "path": ".git/packed-refs"
+    },
+    {
+      "path": ".git/logs/HEAD"
+    },
+    {
+      "path": ".git/logs/refs/remotes/origin/HEAD"
+    },
+    {
+      "path": ".git/logs/refs/heads/autosynth"
+    },
+    {
+      "path": ".git/logs/refs/heads/master"
+    },
+    {
+      "path": ".git/info/exclude"
+    },
+    {
+      "path": ".git/hooks/pre-applypatch.sample"
+    },
+    {
+      "path": ".git/hooks/commit-msg.sample"
+    },
+    {
+      "path": ".git/hooks/pre-push.sample"
+    },
+    {
+      "path": ".git/hooks/post-update.sample"
+    },
+    {
+      "path": ".git/hooks/update.sample"
+    },
+    {
+      "path": ".git/hooks/pre-commit.sample"
+    },
+    {
+      "path": ".git/hooks/pre-rebase.sample"
+    },
+    {
+      "path": ".git/hooks/prepare-commit-msg.sample"
+    },
+    {
+      "path": ".git/hooks/applypatch-msg.sample"
+    },
+    {
+      "path": ".git/hooks/pre-receive.sample"
+    },
+    {
+      "path": ".git/hooks/fsmonitor-watchman.sample"
+    },
+    {
+      "path": ".git/refs/tags/v3.0.2"
+    },
+    {
+      "path": ".git/refs/remotes/origin/HEAD"
+    },
+    {
+      "path": ".git/refs/heads/autosynth"
+    },
+    {
+      "path": ".git/refs/heads/master"
+    },
+    {
+      "path": ".git/objects/pack/pack-02f71e5aacd02326ae21b2991c7d88aea3ea9f51.pack"
+    },
+    {
+      "path": ".git/objects/pack/pack-02f71e5aacd02326ae21b2991c7d88aea3ea9f51.idx"
+    },
+    {
+      "path": "bin/.eslintrc.yml"
+    },
+    {
+      "path": ".kokoro/docs.sh"
+    },
+    {
+      "path": ".kokoro/system-test.sh"
+    },
+    {
+      "path": ".kokoro/common.cfg"
+    },
+    {
+      "path": ".kokoro/publish.sh"
+    },
+    {
+      "path": ".kokoro/.gitattributes"
+    },
+    {
+      "path": ".kokoro/trampoline.sh"
+    },
+    {
+      "path": ".kokoro/samples-test.sh"
+    },
+    {
+      "path": ".kokoro/lint.sh"
+    },
+    {
+      "path": ".kokoro/test.bat"
+    },
+    {
+      "path": ".kokoro/test.sh"
+    },
+    {
+      "path": ".kokoro/presubmit/node8/common.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/node8/test.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/node12/common.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/node12/test.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/node10/common.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/node10/samples-test.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/node10/docs.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/node10/lint.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/node10/test.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/node10/system-test.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/windows/common.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/windows/test.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/node8/common.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/node8/test.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/node12/common.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/node12/test.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/node10/common.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/node10/samples-test.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/node10/docs.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/node10/lint.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/node10/test.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/node10/system-test.cfg"
+    },
+    {
+      "path": ".kokoro/release/docs.sh"
+    },
+    {
+      "path": ".kokoro/release/common.cfg"
+    },
+    {
+      "path": ".kokoro/release/docs.cfg"
+    },
+    {
+      "path": ".kokoro/release/publish.cfg"
+    },
+    {
+      "path": "doc/images/request-log-with-prefix.png"
+    },
+    {
+      "path": "doc/images/request-bundling.png"
+    },
+    {
+      "path": "doc/images/winston-logs-in-trace.png"
+    },
+    {
+      "path": "doc/images/request-log-with-labels.png"
+    },
+    {
+      "path": "doc/images/request-log.png"
+    },
+    {
+      "path": "test/index.ts"
+    },
+    {
+      "path": "test/.eslintrc.yml"
+    },
+    {
+      "path": "test/stackdriver-trace-integration.ts"
+    },
+    {
+      "path": "test/common.ts"
+    },
+    {
+      "path": "test/mocha.opts"
+    },
+    {
+      "path": "test/middleware/express.ts"
+    },
+    {
+      "path": "test/middleware/make-child-logger.ts"
+    },
+    {
+      "path": "__pycache__/synth.cpython-36.pyc"
+    },
+    {
+      "path": "samples/setup_explicit.js"
+    },
+    {
+      "path": "samples/.eslintrc.yml"
+    },
+    {
+      "path": "samples/package.json"
+    },
+    {
+      "path": "samples/README.md"
+    },
+    {
+      "path": "samples/quickstart.js"
+    },
+    {
+      "path": "samples/system-test/.eslintrc.yml"
+    },
+    {
+      "path": "samples/system-test/quickstart.test.js"
+    },
+    {
+      "path": ".github/release-please.yml"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/support_request.md"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md"
+    },
+    {
+      "path": "system-test/.eslintrc.yml"
+    },
+    {
+      "path": "system-test/logging-winston.ts"
+    },
+    {
+      "path": "system-test/errors-transport.ts"
+    },
+    {
+      "path": "system-test/test-middleware-express.ts"
+    },
+    {
+      "path": "system-test/test-install.ts"
+    },
+    {
+      "path": "src/index.ts"
+    },
+    {
+      "path": "src/default-metadata.ts"
+    },
+    {
+      "path": "src/common.ts"
+    },
+    {
+      "path": "src/middleware/express.ts"
+    },
+    {
+      "path": "src/middleware/make-child-logger.ts"
+    },
+    {
+      "path": "src/types/core.d.ts"
+    },
+    {
+      "path": "src/types/global.d.ts"
     }
   ]
 }
