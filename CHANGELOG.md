@@ -4,6 +4,21 @@
 
 [1]: https://www.npmjs.com/package/@google-cloud/logging-winston?activeTab=versions
 
+### [3.0.2](https://www.github.com/googleapis/nodejs-logging-winston/compare/v3.0.1...v3.0.2) (2019-12-12)
+
+
+### Bug Fixes
+
+* **docs:** link to Stackdriver Error Reporting ([#424](https://www.github.com/googleapis/nodejs-logging-winston/issues/424)) ([19ba68f](https://www.github.com/googleapis/nodejs-logging-winston/commit/19ba68f2b0cb3eb1ef314dd156ef3995a0a0faaa))
+
+### [3.0.1](https://www.github.com/googleapis/nodejs-logging-winston/compare/v3.0.0...v3.0.1) (2019-12-05)
+
+
+### Bug Fixes
+
+* **deps:** pin TypeScript below 3.7.0 ([cf58882](https://www.github.com/googleapis/nodejs-logging-winston/commit/cf58882c1345792b0b0309362769e6636342ceea))
+* **docs:** add jsdoc-region-tag plugin ([#408](https://www.github.com/googleapis/nodejs-logging-winston/issues/408)) ([973ab56](https://www.github.com/googleapis/nodejs-logging-winston/commit/973ab56ddaadcdb76a930c9f6bd4662023b714e3))
+
 ## [3.0.0](https://www.github.com/googleapis/nodejs-logging-winston/compare/v2.1.0...v3.0.0) (2019-10-18)
 
 
