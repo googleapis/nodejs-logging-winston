@@ -179,7 +179,7 @@ You may also want to see the [@google-cloud/error-reporting][@google-cloud/error
 
 **NOTE: The express middleware provided by this library handles this automatically for you. These instructions are for there case where you may want to handle this manually.**
 
-To format your request logs you can provide a `httpRequest` property as part of the log metadata you provide to winston. We will treat this as the [`HttpRequest`][http-request-message] message and Stackdriver logging will show this as a request log. Example:
+To format your request logs you can provide a `httpRequest` property as part of the log metadata you provide to winston. We will treat this as the [`HttpRequest`](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#HttpRequest) message and Stackdriver logging will show this as a request log. Example:
 
 ![Request Log Example](https://raw.githubusercontent.com/googleapis/nodejs-logging-winston/master/doc/images/request-log.png)
 
@@ -195,7 +195,7 @@ httpRequest: {
 });
 ```
 
-The `httpRequest` property must be a properly formatted [`HttpRequest`][http-request-message] message. (Note: the linked protobuf documentation shows `snake_case` property names, but in JavaScript one needs to provide property names in `camelCase`.)
+The `httpRequest` property must be a properly formatted [`HttpRequest`](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#HttpRequest) message.
 
 ### Correlating Logs with Traces
 
