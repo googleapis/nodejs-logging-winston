@@ -4,6 +4,14 @@
 
 [1]: https://www.npmjs.com/package/@google-cloud/logging-winston?activeTab=versions
 
+### [3.0.7](https://www.github.com/googleapis/nodejs-logging-winston/compare/v3.0.6...v3.0.7) (2020-04-12)
+
+
+### Bug Fixes
+
+* apache license URL ([#468](https://www.github.com/googleapis/nodejs-logging-winston/issues/468)) ([#491](https://www.github.com/googleapis/nodejs-logging-winston/issues/491)) ([db70cc4](https://www.github.com/googleapis/nodejs-logging-winston/commit/db70cc4aa103aea292f16313b564f67d479b481d))
+* **deps:** update dependency google-auth-library to v6 ([#485](https://www.github.com/googleapis/nodejs-logging-winston/issues/485)) ([7b16a7b](https://www.github.com/googleapis/nodejs-logging-winston/commit/7b16a7b184ba9ec0ac8a1a103feac84c0374cfa6))
+
 ### [3.0.6](https://www.github.com/googleapis/nodejs-logging-winston/compare/v3.0.5...v3.0.6) (2020-03-02)
 
 
