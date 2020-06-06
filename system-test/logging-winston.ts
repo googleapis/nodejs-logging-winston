@@ -47,7 +47,7 @@ describe('LoggingWinston', function () {
           // TODO: investigate why this behavior has changed
           // in @google-cloud/logging, see:
           // https://github.com/googleapis/nodejs-logging/issues/818
-          metadata: null,
+          metadata: [null],
         });
       },
     },
