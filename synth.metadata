@@ -4,7 +4,7 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/nodejs-logging-winston.git",
-        "sha": "2447b4696b9fde2db0b08a618377aa11cff0fbb6"
+        "sha": "0998ad0d51887e637a8791a27d2a4fdb8ff1d394"
       }
     },
     {
