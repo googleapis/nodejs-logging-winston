@@ -75,7 +75,7 @@
     "codecov": "^3.5.0",
     "cpy-cli": "^3.0.0",
     "delay": "^4.2.0",
-    "gts": "^2.0.0",
+    "gts": "^3.0.0",
     "linkinator": "^2.0.0",
     "mocha": "^8.0.0",
     "post-install-check": "0.0.1",
