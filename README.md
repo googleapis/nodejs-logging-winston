@@ -13,6 +13,8 @@ This module provides a higher-level layer for working with
 [Winston](https://www.npmjs.com/package/winston). Simply attach this as a
 transport to your existing Winston loggers.
 
+A comprehensive list of changes in each version may be found in
+[the CHANGELOG](https://github.com/googleapis/nodejs-logging-winston/blob/master/CHANGELOG.md).
 
 * [Cloud Logging for Winston Node.js Client API Reference][client-docs]
 * [Cloud Logging for Winston Documentation][product-docs]
