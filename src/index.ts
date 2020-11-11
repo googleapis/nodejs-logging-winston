@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {LEVEL} from 'triple-beam';
+import {LEVEL, MESSAGE} from 'triple-beam';
 import TransportStream = require('winston-transport');
 
 import {LOGGING_TRACE_KEY as COMMON_TRACE_KEY, LoggingCommon} from './common';
@@ -174,12 +174,18 @@ export class LoggingWinston extends TransportStream {
   log(info: any, callback: Callback) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {message, level, splat, stack, ...metadata} = info;
+    const formattedMessage = info[MESSAGE] ?? message;
 
     // If the whole message is an error we have to manually copy the stack into
     // metadata. Errors dont have enumerable properties so they don't
     // destructure.
     if (stack) metadata.stack = stack;
-    this.common.log(info[LEVEL] || level, message, metadata || {}, callback);
+    this.common.log(
+      info[LEVEL] || level,
+      formattedMessage,
+      metadata || {},
+      callback
+    );
   }
 }
 
