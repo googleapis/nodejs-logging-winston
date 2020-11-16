@@ -14,6 +14,7 @@
 
 import {LEVEL, MESSAGE} from 'triple-beam';
 import TransportStream = require('winston-transport');
+import logform = require('logform');
 
 import {LOGGING_TRACE_KEY as COMMON_TRACE_KEY, LoggingCommon} from './common';
 import * as express from './middleware/express';
@@ -77,6 +78,8 @@ export interface Options extends LoggingOptions {
 
   // An attempt will be made to truncate messages larger than maxEntrySize.
   maxEntrySize?: number;
+
+  format?: logform.Format;
 }
 
 /**
@@ -164,8 +167,12 @@ export class LoggingWinston extends TransportStream {
 
   constructor(options?: Options) {
     options = options || {};
+    if (!options.format) {
+      options.format = logform.format.printf(info => `${info.message}`);
+    }
     super({
       level: options.level,
+      format: options.format,
     });
     this.common = new LoggingCommon(options);
   }
