@@ -42,27 +42,22 @@ export async function makeMiddleware(
 ): Promise<Middleware> {
   let transport: LoggingWinston;
 
+  // If no custom transports are provided, use default or instantiate one.
+  const cloudTransport = logger.transports.find(
+    t => t instanceof LoggingWinston
+  );
+
   // If user provides a custom transport, always add it to the logger.
-  if (optionsOrTransport) {
-    if (optionsOrTransport instanceof LoggingWinston) {
-      transport = optionsOrTransport;
-    } else {
-      const options = {logName: 'winston_log', ...optionsOrTransport};
-      transport = new LoggingWinston(options);
-    }
+  if (optionsOrTransport instanceof LoggingWinston) {
+    transport = optionsOrTransport;
     logger.add(transport);
-  } else {
-    // If no custom transports are provided, use default or instantiate one.
-    const cloudTransport = logger.transports.find(
-        t => t instanceof LoggingWinston
-    );
+  } else if (cloudTransport && !optionsOrTransport) {
     // Check if logger already contains a Cloud transport
-    if (cloudTransport) {
-      transport = cloudTransport as LoggingWinston;
-    } else {
-      transport = new LoggingWinston({logName: 'winston_log'});
-      logger.add(transport);
-    }
+    transport = cloudTransport as LoggingWinston;
+  } else {
+    const options = {logName: 'winston_log', ...optionsOrTransport};
+    transport = new LoggingWinston(options);
+    logger.add(transport);
   }
 
   const auth = transport.common.stackdriverLog.logging.auth;
