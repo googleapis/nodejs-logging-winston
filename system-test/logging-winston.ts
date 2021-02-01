@@ -170,6 +170,36 @@ describe('LoggingWinston', function () {
       const data = entry.data as {message: string};
       assert.strictEqual(data.message, `   ${MESSAGE}`);
     });
+
+    it('should be able to override loggingWinston print format', async () => {
+      const MESSAGE =
+        "A message that be able to override LoggingWinston's default printf format";
+      const start = Date.now();
+      const LOG_NAME = logName('logging_winston_system_tests_2');
+      const logger = winston.createLogger({
+        transports: [
+          new LoggingWinston({
+            logName: LOG_NAME,
+            format: winston.format.printf(info => `TEST123:${info.message}`),
+          }),
+        ],
+        format: winston.format.combine(
+          winston.format.colorize(),
+          winston.format.padLevels()
+        ),
+      });
+
+      logger.error(MESSAGE);
+
+      const [entry] = await pollLogs(
+        LOG_NAME,
+        start,
+        1,
+        WRITE_CONSISTENCY_DELAY_MS
+      );
+      const data = entry.data as {message: string};
+      assert.strictEqual(data.message, `TEST123:   ${MESSAGE}`);
+    });
   });
 
   describe('ErrorReporting', () => {
