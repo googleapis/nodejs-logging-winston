@@ -48,7 +48,7 @@ const API = 'https://clouderrorreporting.googleapis.com/v1beta1/projects';
 const ONE_HOUR_API = 'timeRange.period=PERIOD_1_HOUR';
 
 function delay(ms: number) {
-  return new Promise( resolve => setTimeout(resolve, ms) );
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export class ErrorsApiTransport extends common.Service {

@@ -29,7 +29,7 @@ const TEST_TIMEOUT = WRITE_CONSISTENCY_DELAY_MS + 10 * 1000;
 const LOG_NAME = `winston-system-test-${uuid.v4()}`;
 
 function delay(ms: number) {
-  return new Promise( resolve => setTimeout(resolve, ms) );
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 describe(__filename, () => {
