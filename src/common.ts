@@ -20,7 +20,6 @@ import {
   SeverityNames,
   Log,
 } from '@google-cloud/logging';
-import mapValues = require('lodash.mapvalues');
 import {Options} from '.';
 import {LogEntry} from '@google-cloud/logging/build/src/entry';
 
@@ -217,7 +216,12 @@ export class LoggingCommon {
     // not sure if its correct but for now we always set it even if it has
     // nothing in it
     data.metadata = this.inspectMetadata
-      ? mapValues(metadata, util.inspect)
+      ? Object.fromEntries(
+          Object.entries(metadata).map(([key, value]) => [
+            key,
+            util.inspect(value),
+          ])
+        )
       : metadata;
 
     if (hasMetadata) {
