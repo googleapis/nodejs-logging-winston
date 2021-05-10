@@ -96,11 +96,9 @@ describe('LoggingWinston', function () {
           level: 'error',
           verify: (entry: Entry) => {
             assert(
-              (
-                entry.data as {
-                  message: string;
-                }
-              ).message.startsWith('fourth Error:')
+              (entry.data as {
+                message: string;
+              }).message.startsWith('fourth Error:')
             );
           },
         },
@@ -115,11 +113,9 @@ describe('LoggingWinston', function () {
           level: 'log',
           verify: (entry: Entry) => {
             assert(
-              (
-                entry.data as {
-                  message: string;
-                }
-              ).message.startsWith('fifth message')
+              (entry.data as {
+                message: string;
+              }).message.startsWith('fifth message')
             );
           },
         },
@@ -147,7 +143,7 @@ describe('LoggingWinston', function () {
       assert.strictEqual(entries.length, testData.length);
       entries.reverse().forEach((entry, index) => {
         const test = testData[index];
-        test.verify(entry as {} as Entry);
+        test.verify((entry as {}) as Entry);
       });
     });
 
