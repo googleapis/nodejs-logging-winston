@@ -96,6 +96,7 @@ describe(__filename, () => {
           assert.strictEqual(LOG_MESSAGE, appLogEntry.data.message);
           assert(appLogEntry.metadata.trace, 'should have a trace property');
           assert(appLogEntry.metadata.trace!.match(/projects\/.*\/traces\/.*/));
+          // TODO(nicolezhu): assert spanId as well after nodejs-logging 9.4.0 release.
           assert.strictEqual(appLogEntry.metadata.severity, 'INFO');
 
           const requestLog = logging.log(`${LOG_NAME}${REQUEST_LOG_SUFFIX}`);
