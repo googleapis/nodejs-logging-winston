@@ -55,7 +55,7 @@ describe(__filename, () => {
   });
 
   describe('request logging middleware', () => {
-    it('should write request correlated log entries', function () {
+    it.only('should write request correlated log entries', function () {
       this.timeout(TEST_TIMEOUT);
       // eslint-disable-next-line no-async-promise-executor
       return new Promise(async resolve => {

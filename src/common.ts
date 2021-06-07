@@ -70,6 +70,10 @@ const STACKDRIVER_LOGGING_LEVEL_CODE_TO_NAME: {
  * Log entry data key to allow users to indicate a trace for the request.
  */
 export const LOGGING_TRACE_KEY = 'logging.googleapis.com/trace';
+/*!
+ * Log entry data key to allow users to indicate a spanId for the request.
+ */
+export const LOGGING_SPAN_KEY = 'logging.googleapis.com/spanId';
 
 /*!
  * Gets the current fully qualified trace ID when available from the
@@ -96,6 +100,27 @@ function getCurrentTraceFromAgent(): string | null {
   return `projects/${traceProjectId}/traces/${traceId}`;
 }
 
+/*!
+ * Gets the current fully qualified span ID when available from the
+ * @google-cloud/trace-agent library in the LogEntry.span field, e.g.:
+ * "000000000000004a".
+ */
+function getCurrentSpanFromAgent(): string | null {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const agent = (global as any)._google_trace_agent;
+  if (!agent || !agent.getCurrentRootSpan) {
+    return null;
+  }
+
+  const spanId = agent.getCurrentRootSpan();
+  if (!spanId) {
+    return null;
+  }
+  console.log(spanId);
+
+  return 'fake span';
+}
+
 export class LoggingCommon {
   readonly logName: string;
   private inspectMetadata: boolean;
@@ -106,6 +131,7 @@ export class LoggingCommon {
   private prefix: string | undefined;
   private labels: object | undefined;
   static readonly LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
+  static readonly LOGGING_SPAN_KEY = LOGGING_SPAN_KEY;
 
   constructor(options?: Options) {
     options = Object.assign(
@@ -211,6 +237,11 @@ export class LoggingCommon {
     const trace = metadata[LOGGING_TRACE_KEY] || getCurrentTraceFromAgent();
     if (trace) {
       entryMetadata.trace = trace as string;
+    }
+
+    const spanId = metadata[LOGGING_SPAN_KEY] || getCurrentSpanFromAgent();
+    if (spanId) {
+      entryMetadata.spanId = spanId as string;
     }
 
     // we have tests that assert that metadata is always passed.
