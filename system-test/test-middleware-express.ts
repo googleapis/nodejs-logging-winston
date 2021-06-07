@@ -55,7 +55,7 @@ describe(__filename, () => {
   });
 
   describe('request logging middleware', () => {
-    it.only('should write request correlated log entries', function () {
+    it('should write request correlated log entries', function () {
       this.timeout(TEST_TIMEOUT);
       // eslint-disable-next-line no-async-promise-executor
       return new Promise(async resolve => {
@@ -71,7 +71,7 @@ describe(__filename, () => {
             'user-agent': 'Mocha/test-case',
           },
           statusCode: 200,
-          originalUrl: '/foo/bar',
+          originalUrl: 'http://google.com',
           method: 'PUSH',
         };
         const fakeResponse = {

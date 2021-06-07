@@ -100,27 +100,6 @@ function getCurrentTraceFromAgent(): string | null {
   return `projects/${traceProjectId}/traces/${traceId}`;
 }
 
-/*!
- * Gets the current fully qualified span ID when available from the
- * @google-cloud/trace-agent library in the LogEntry.span field, e.g.:
- * "000000000000004a".
- */
-function getCurrentSpanFromAgent(): string | null {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const agent = (global as any)._google_trace_agent;
-  if (!agent || !agent.getCurrentRootSpan) {
-    return null;
-  }
-
-  const spanId = agent.getCurrentRootSpan();
-  if (!spanId) {
-    return null;
-  }
-  console.log(spanId);
-
-  return 'fake span';
-}
-
 export class LoggingCommon {
   readonly logName: string;
   private inspectMetadata: boolean;
@@ -239,7 +218,7 @@ export class LoggingCommon {
       entryMetadata.trace = trace as string;
     }
 
-    const spanId = metadata[LOGGING_SPAN_KEY] || getCurrentSpanFromAgent();
+    const spanId = metadata[LOGGING_SPAN_KEY];
     if (spanId) {
       entryMetadata.spanId = spanId as string;
     }
@@ -254,6 +233,7 @@ export class LoggingCommon {
     if (hasMetadata) {
       // clean entryMetadata props
       delete data.metadata![LOGGING_TRACE_KEY];
+      delete data.metadata![LOGGING_SPAN_KEY];
       delete data.metadata!.httpRequest;
       delete data.metadata!.labels;
       delete data.metadata!.timestamp;

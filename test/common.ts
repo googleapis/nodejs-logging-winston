@@ -345,17 +345,20 @@ describe('logging-common', () => {
       loggingCommon.log(LEVEL, MESSAGE, metadataWithLabels, assert.ifError);
     });
 
-    it('should promote prefixed trace property to metadata', done => {
+    it('should promote prefixed trace and span properties to metadata', done => {
       const metadataWithTrace = Object.assign({}, METADATA);
       const loggingTraceKey = loggingCommonLib.LOGGING_TRACE_KEY;
+      const loggingSpanKey = loggingCommonLib.LOGGING_SPAN_KEY;
       // metadataWithTrace does not have index signature.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (metadataWithTrace as any)[loggingTraceKey] = 'trace1';
+      (metadataWithTrace as any)[loggingSpanKey] = 'span1';
 
       loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
         assert.deepStrictEqual(entryMetadata, {
           resource: loggingCommon.resource,
           trace: 'trace1',
+          spanId: 'span1',
         });
         assert.deepStrictEqual(data, {
           message: MESSAGE,
