@@ -14,7 +14,11 @@
 
 import TransportStream = require('winston-transport');
 
-import {LOGGING_TRACE_KEY as COMMON_TRACE_KEY, LoggingCommon} from './common';
+import {
+  LOGGING_TRACE_KEY as COMMON_TRACE_KEY,
+  LOGGING_SPAN_KEY as COMMON_SPAN_KEY,
+  LoggingCommon,
+} from './common';
 import * as express from './middleware/express';
 import {getDefaultMetadataForTracing} from './default-metadata';
 import {
@@ -160,6 +164,7 @@ export interface Options extends LoggingOptions {
  */
 export class LoggingWinston extends TransportStream {
   static readonly LOGGING_TRACE_KEY = COMMON_TRACE_KEY;
+  static readonly LOGGING_SPAN_KEY = COMMON_SPAN_KEY;
 
   common: LoggingCommon;
 
@@ -185,3 +190,4 @@ export class LoggingWinston extends TransportStream {
 }
 
 export const LOGGING_TRACE_KEY = COMMON_TRACE_KEY;
+export const LOGGING_SPAN_KEY = COMMON_SPAN_KEY;

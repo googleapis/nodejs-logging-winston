@@ -21,6 +21,7 @@ import {GCPEnv} from 'google-auth-library';
 import * as winston from 'winston';
 
 import {LOGGING_TRACE_KEY} from '../common';
+import {LOGGING_SPAN_KEY} from '../common';
 import {LoggingWinston, Options} from '../index';
 import {makeChildLogger} from './make-child-logger';
 
@@ -77,12 +78,17 @@ export async function makeMiddleware(
       `${transport.common.logName}${REQUEST_LOG_SUFFIX}`
     );
 
-    emitRequestLogEntry = (httpRequest: HttpRequest, trace: string) => {
+    emitRequestLogEntry = (
+      httpRequest: HttpRequest,
+      trace: string,
+      span?: string
+    ) => {
       logger.info({
         // The request logs must have a log name distinct from the app logs
         // for log correlation to work.
         logName: requestLogName,
         [LOGGING_TRACE_KEY]: trace,
+        [LOGGING_SPAN_KEY]: span,
         httpRequest,
         message: httpRequest.requestUrl || 'http request',
       });
@@ -91,7 +97,7 @@ export async function makeMiddleware(
 
   return commonMiddleware.express.makeMiddleware(
     projectId,
-    (trace: string) => makeChildLogger(logger, trace),
+    (trace: string, span?: string) => makeChildLogger(logger, trace, span),
     emitRequestLogEntry
   );
 }

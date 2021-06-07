@@ -14,7 +14,12 @@
 
 import * as winston from 'winston';
 import {LOGGING_TRACE_KEY} from '../index';
+import {LOGGING_SPAN_KEY} from '../index';
 
-export function makeChildLogger(logger: winston.Logger, trace: string) {
-  return logger.child({[LOGGING_TRACE_KEY]: trace});
+export function makeChildLogger(
+  logger: winston.Logger,
+  trace: string,
+  span?: string
+) {
+  return logger.child({[LOGGING_TRACE_KEY]: trace, [LOGGING_SPAN_KEY]: span});
 }
