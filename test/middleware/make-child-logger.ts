@@ -15,13 +15,14 @@
 import * as assert from 'assert';
 import {describe, it, afterEach} from 'mocha';
 import * as winston from 'winston';
-import {LOGGING_TRACE_KEY, LOGGING_SPAN_KEY} from '../../src/common';
+import {LOGGING_TRACE_KEY, LOGGING_SPAN_KEY, LOGGING_SAMPLED_KEY} from '../../src/common';
 
 import {makeChildLogger} from '../../src/middleware/make-child-logger';
 
 describe('makeChildLogger', () => {
   const FAKE_TRACE = '🤥';
   const FAKE_SPAN = '☂️';
+  const FAKE_SAMPLE = true;
   const LOGGER = winston.createLogger({
     transports: [new winston.transports.Console({silent: true})],
   });
@@ -88,19 +89,37 @@ describe('makeChildLogger', () => {
     assert.strictEqual(span, FAKE_SPAN);
   });
 
-  it('should not overwrite existing LOGGING_TRACE_KEY or LOGGING_SPAN_KEY values', () => {
-    const child = makeChildLogger(LOGGER, FAKE_TRACE, FAKE_SPAN);
-    let trace, span;
+  it('should inject the LOGGING_SAMPLED_KEY into the metadata', () => {
+    const child = makeChildLogger(LOGGER, FAKE_TRACE, FAKE_SPAN, FAKE_SAMPLE);
+    let trace, span, sample;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (LOGGER.write as any) = (info: winston.LogEntry) => {
       trace = info[LOGGING_TRACE_KEY];
       span = info[LOGGING_SPAN_KEY];
+      sample = info[LOGGING_SAMPLED_KEY];
+    };
+    child.debug('hello world');
+    assert.strictEqual(trace, FAKE_TRACE);
+    assert.strictEqual(span, FAKE_SPAN);
+    assert.strictEqual(sample, FAKE_SAMPLE);
+  });
+
+  it('should not overwrite existing LOGGING_X_KEY values', () => {
+    const child = makeChildLogger(LOGGER, FAKE_TRACE, FAKE_SPAN, FAKE_SAMPLE);
+    let trace, span, sample;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (LOGGER.write as any) = (info: winston.LogEntry) => {
+      trace = info[LOGGING_TRACE_KEY];
+      span = info[LOGGING_SPAN_KEY];
+      sample = info[LOGGING_SAMPLED_KEY];
     };
     child.debug('hello world', {
       [LOGGING_TRACE_KEY]: 'to-be-clobbered',
       [LOGGING_SPAN_KEY]: 'to-be-clobbered',
+      [LOGGING_SAMPLED_KEY]: '0',
     });
     assert.notStrictEqual(trace, FAKE_TRACE);
     assert.notStrictEqual(span, FAKE_SPAN);
+    assert.notStrictEqual(sample, FAKE_SAMPLE);
   });
 });
