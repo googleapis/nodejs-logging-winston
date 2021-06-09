@@ -77,7 +77,7 @@ export const LOGGING_TRACE_KEY = 'logging.googleapis.com/trace';
 export const LOGGING_SPAN_KEY = 'logging.googleapis.com/spanId';
 
 /*!
- * Log entry data key to allow users to indicate a spanId for the request.
+ * Log entry data key to allow users to indicate a traceSampled flag for the request.
  */
 export const LOGGING_SAMPLED_KEY = 'logging.googleapis.com/trace_sampled';
 
@@ -233,9 +233,9 @@ export class LoggingCommon {
       entryMetadata.spanId = spanId as string;
     }
 
-    const traceSampled = metadata[LOGGING_SAMPLED_KEY];
-    if (traceSampled) {
-      entryMetadata.traceSampled = traceSampled;
+    const sampled = metadata[LOGGING_SAMPLED_KEY];
+    if (sampled) {
+      entryMetadata.traceSampled = sampled === '1';
     }
 
     // we have tests that assert that metadata is always passed.
@@ -249,6 +249,7 @@ export class LoggingCommon {
       // clean entryMetadata props
       delete data.metadata![LOGGING_TRACE_KEY];
       delete data.metadata![LOGGING_SPAN_KEY];
+      delete data.metadata![LOGGING_SAMPLED_KEY];
       delete data.metadata!.httpRequest;
       delete data.metadata!.labels;
       delete data.metadata!.timestamp;
