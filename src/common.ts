@@ -70,10 +70,16 @@ const STACKDRIVER_LOGGING_LEVEL_CODE_TO_NAME: {
  * Log entry data key to allow users to indicate a trace for the request.
  */
 export const LOGGING_TRACE_KEY = 'logging.googleapis.com/trace';
+
 /*!
  * Log entry data key to allow users to indicate a spanId for the request.
  */
 export const LOGGING_SPAN_KEY = 'logging.googleapis.com/spanId';
+
+/*!
+ * Log entry data key to allow users to indicate a spanId for the request.
+ */
+export const LOGGING_SAMPLED_KEY = 'logging.googleapis.com/trace_sampled';
 
 /*!
  * Gets the current fully qualified trace ID when available from the
@@ -109,7 +115,11 @@ export class LoggingCommon {
   private serviceContext: ServiceContext | undefined;
   private prefix: string | undefined;
   private labels: object | undefined;
+  // LOGGING_TRACE_KEY is Cloud Logging specific and has the format:
+  // logging.googleapis.com/trace
   static readonly LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
+  // LOGGING_TRACE_KEY is Cloud Logging specific and has the format:
+  // logging.googleapis.com/spanId
   static readonly LOGGING_SPAN_KEY = LOGGING_SPAN_KEY;
 
   constructor(options?: Options) {
@@ -221,6 +231,11 @@ export class LoggingCommon {
     const spanId = metadata[LOGGING_SPAN_KEY];
     if (spanId) {
       entryMetadata.spanId = spanId as string;
+    }
+
+    const traceSampled = metadata[LOGGING_SAMPLED_KEY];
+    if (traceSampled) {
+      entryMetadata.traceSampled = traceSampled;
     }
 
     // we have tests that assert that metadata is always passed.

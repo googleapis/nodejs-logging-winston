@@ -13,13 +13,21 @@
 // limitations under the License.
 
 import * as winston from 'winston';
-import {LOGGING_TRACE_KEY} from '../index';
-import {LOGGING_SPAN_KEY} from '../index';
+import {
+  LOGGING_TRACE_KEY,
+  LOGGING_SPAN_KEY,
+  LOGGING_SAMPLED_KEY,
+} from '../index';
 
 export function makeChildLogger(
   logger: winston.Logger,
   trace: string,
-  span?: string
+  span?: string,
+  sampled?: boolean
 ) {
-  return logger.child({[LOGGING_TRACE_KEY]: trace, [LOGGING_SPAN_KEY]: span});
+  return logger.child({
+    [LOGGING_TRACE_KEY]: trace,
+    [LOGGING_SPAN_KEY]: span,
+    [LOGGING_SAMPLED_KEY]: sampled,
+  });
 }

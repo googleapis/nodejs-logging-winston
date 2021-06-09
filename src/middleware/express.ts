@@ -20,8 +20,11 @@ import {
 import {GCPEnv} from 'google-auth-library';
 import * as winston from 'winston';
 
-import {LOGGING_TRACE_KEY} from '../common';
-import {LOGGING_SPAN_KEY} from '../common';
+import {
+  LOGGING_TRACE_KEY,
+  LOGGING_SPAN_KEY,
+  LOGGING_SAMPLED_KEY,
+} from '../common';
 import {LoggingWinston, Options} from '../index';
 import {makeChildLogger} from './make-child-logger';
 
@@ -81,7 +84,8 @@ export async function makeMiddleware(
     emitRequestLogEntry = (
       httpRequest: HttpRequest,
       trace: string,
-      span?: string
+      span?: string,
+      sampled?: boolean
     ) => {
       logger.info({
         // The request logs must have a log name distinct from the app logs
@@ -89,6 +93,7 @@ export async function makeMiddleware(
         logName: requestLogName,
         [LOGGING_TRACE_KEY]: trace,
         [LOGGING_SPAN_KEY]: span,
+        [LOGGING_SAMPLED_KEY]: sampled,
         httpRequest,
         message: httpRequest.requestUrl || 'http request',
       });
@@ -97,7 +102,8 @@ export async function makeMiddleware(
 
   return commonMiddleware.express.makeMiddleware(
     projectId,
-    (trace: string, span?: string) => makeChildLogger(logger, trace, span),
+    (trace: string, span?: string, sampled?: boolean) =>
+      makeChildLogger(logger, trace, span, sampled),
     emitRequestLogEntry
   );
 }
