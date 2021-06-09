@@ -15,7 +15,11 @@
 import * as assert from 'assert';
 import {describe, it, afterEach} from 'mocha';
 import * as winston from 'winston';
-import {LOGGING_TRACE_KEY, LOGGING_SPAN_KEY, LOGGING_SAMPLED_KEY} from '../../src/common';
+import {
+  LOGGING_TRACE_KEY,
+  LOGGING_SPAN_KEY,
+  LOGGING_SAMPLED_KEY,
+} from '../../src/common';
 
 import {makeChildLogger} from '../../src/middleware/make-child-logger';
 
