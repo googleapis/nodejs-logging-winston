@@ -19,6 +19,7 @@ import {
   LOGGING_SPAN_KEY as COMMON_SPAN_KEY,
   LOGGING_SAMPLED_KEY as COMMON_SAMPLED_KEY,
   LoggingCommon,
+  getCurrentTraceFromAgent,
 } from './common';
 import * as express from './middleware/express';
 import {getDefaultMetadataForTracing} from './default-metadata';
@@ -33,6 +34,7 @@ const LEVEL = Symbol.for('level');
 // Export the express middleware as 'express'.
 export {express};
 export {getDefaultMetadataForTracing};
+export {getCurrentTraceFromAgent};
 
 type Callback = (err: Error | null, apiResponse?: {}) => void;
 
