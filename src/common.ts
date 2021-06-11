@@ -233,9 +233,8 @@ export class LoggingCommon {
       entryMetadata.spanId = spanId as string;
     }
 
-    const sampled = metadata[LOGGING_SAMPLED_KEY];
-    if (sampled) {
-      entryMetadata.traceSampled = sampled === '1';
+    if (LOGGING_SAMPLED_KEY in metadata) {
+      entryMetadata.traceSampled = metadata[LOGGING_SAMPLED_KEY] === '1';
     }
 
     // we have tests that assert that metadata is always passed.

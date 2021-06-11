@@ -374,6 +374,27 @@ describe('logging-common', () => {
       loggingCommon.log(LEVEL, MESSAGE, metadataWithTrace, assert.ifError);
     });
 
+    it('should promote a false traceSampled value to metadata', done => {
+      const metadataWithTrace = Object.assign({}, METADATA);
+      const loggingSampledKey = loggingCommonLib.LOGGING_SAMPLED_KEY;
+      // metadataWithTrace does not have index signature.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (metadataWithTrace as any)[loggingSampledKey] = '0';
+
+      loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
+        assert.deepStrictEqual(entryMetadata, {
+          resource: loggingCommon.resource,
+          traceSampled: false,
+        });
+        assert.deepStrictEqual(data, {
+          message: MESSAGE,
+          metadata: METADATA,
+        });
+        done();
+      };
+      loggingCommon.log(LEVEL, MESSAGE, metadataWithTrace, assert.ifError);
+    });
+
     it('should set trace metadata from agent if available', done => {
       const oldTraceAgent = global._google_trace_agent;
       global._google_trace_agent = {
