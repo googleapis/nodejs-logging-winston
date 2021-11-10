@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import TransportStream = require('winston-transport');
+import * as logform from 'logform';
 
 import {
   LOGGING_TRACE_KEY as COMMON_TRACE_KEY,
@@ -30,6 +31,7 @@ import {
 } from '@google-cloud/logging';
 
 const LEVEL = Symbol.for('level');
+const MESSAGE = Symbol.for('message');
 
 // Export the express middleware as 'express'.
 export {express};
@@ -85,6 +87,9 @@ export interface Options extends LoggingOptions {
 
   // An attempt will be made to truncate messages larger than maxEntrySize.
   maxEntrySize?: number;
+
+  // The format to be passed to TransportStream constructor
+  format?: logform.Format;
 }
 
 /**
@@ -176,12 +181,14 @@ export class LoggingWinston extends TransportStream {
     options = options || {};
     super({
       level: options.level,
+      format: options.format,
     });
     this.common = new LoggingCommon(options);
   }
 
   // eslint-disable-next-line
   log(info: any, callback: Callback) {
+    // setImmediate(() => this.emit('logged', info));
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {message, level, splat, stack, ...metadata} = info;
 
@@ -189,7 +196,10 @@ export class LoggingWinston extends TransportStream {
     // metadata. Errors dont have enumerable properties so they don't
     // destructure.
     if (stack) metadata.stack = stack;
-    this.common.log(info[LEVEL] || level, message, metadata || {}, callback);
+    this.common.log(info[LEVEL] || level, info[MESSAGE] || message, metadata || {}, callback);
+    // if (callback) {
+    //   callback(null); // eslint-disable-line callback-return
+    // }    
   }
 }
 
