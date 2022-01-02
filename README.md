@@ -6,7 +6,6 @@
 
 
 [![npm version](https://img.shields.io/npm/v/@google-cloud/logging-winston.svg)](https://www.npmjs.org/package/@google-cloud/logging-winston)
-[![codecov](https://img.shields.io/codecov/c/github/googleapis/nodejs-logging-winston/main.svg?style=flat)](https://codecov.io/gh/googleapis/nodejs-logging-winston)
 
 
 
