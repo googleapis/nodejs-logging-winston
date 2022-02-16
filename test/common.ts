@@ -162,7 +162,7 @@ describe('logging-common', () => {
       });
     });
 
-    it('should set defualt callback', () => {
+    it('should set default callback', () => {
       const optionsWithDefaultCallback = Object.assign({}, OPTIONS, {
         defaultCallback: () => {},
       });
