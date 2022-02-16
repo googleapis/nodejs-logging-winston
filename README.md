@@ -179,7 +179,7 @@ You may also want to see the [@google-cloud/error-reporting](https://github.com/
 
 ### Error handling with a default callback
 
-The `LoggingWinston` class creates an instance of `LoggingCommon` class which uses 'Log' class from `@google-cloud/logging` package to write log entries. 
+The `LoggingWinston` class creates an instance of `LoggingCommon` class which uses `Log` class from `@google-cloud/logging` package to write log entries. 
 The `Log` class writes logs asynchronously and there are cases when log entries cannot be written and the error is 
 thrown - if error is not handled properly, it could crash the application. One possible way to handle the error is to provide a default callback
 to `LoggingWinston` constructor which will be used to initialize `Log` object with that callback like in example below:
