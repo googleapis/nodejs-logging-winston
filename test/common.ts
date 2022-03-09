@@ -158,7 +158,6 @@ describe('logging-common', () => {
       assert.deepStrictEqual(fakeLogOptions_, {
         removeCircular: true,
         maxEntrySize: 250000,
-        defaultWriteDeleteCallback: undefined,
       });
     });
 
