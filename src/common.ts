@@ -19,10 +19,12 @@ import {
   ServiceContext,
   SeverityNames,
   Log,
+  LogSync,
 } from '@google-cloud/logging';
+import {LogSeverityFunctions} from '@google-cloud/logging/build/src/utils/log-common';
 import mapValues = require('lodash.mapvalues');
 import {Options} from '.';
-import {LogEntry} from '@google-cloud/logging/build/src/entry';
+import {Entry, LogEntry} from '@google-cloud/logging/build/src/entry';
 
 type Callback = (err: Error | null, apiResponse?: {}) => void;
 export type MonitoredResource = protos.google.api.MonitoredResource;
@@ -110,12 +112,13 @@ export class LoggingCommon {
   readonly logName: string;
   private inspectMetadata: boolean;
   private levels: {[name: string]: number};
-  stackdriverLog: Log;
+  stackdriverLog: LogSeverityFunctions;
   private resource: protos.google.api.IMonitoredResource | undefined;
   private serviceContext: ServiceContext | undefined;
   private prefix: string | undefined;
   private labels: object | undefined;
   private defaultCallback?: Callback;
+  redirectToStdout: boolean;
   // LOGGING_TRACE_KEY is Cloud Logging specific and has the format:
   // logging.googleapis.com/trace
   static readonly LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
@@ -134,13 +137,19 @@ export class LoggingCommon {
     this.logName = options.logName || 'winston_log';
     this.inspectMetadata = options.inspectMetadata === true;
     this.levels = options.levels || NPM_LEVEL_NAME_TO_CODE;
-    this.stackdriverLog = new Logging(options).log(this.logName, {
-      removeCircular: true,
-      // See: https://cloud.google.com/logging/quotas, a log size of
-      // 250,000 has been chosen to keep us comfortably within the
-      // 256,000 limit.
-      maxEntrySize: options.maxEntrySize || 250000,
-    });
+    this.redirectToStdout = options.redirectToStdout ?? false;
+
+    if (!this.redirectToStdout) {
+      this.stackdriverLog = new Logging(options).log(this.logName, {
+        removeCircular: true,
+        // See: https://cloud.google.com/logging/quotas, a log size of
+        // 250,000 has been chosen to keep us comfortably within the
+        // 256,000 limit.
+        maxEntrySize: options.maxEntrySize || 250000,
+      });
+    } else {
+      this.stackdriverLog = new Logging(options).logSync(this.logName);
+    }
     this.resource = options.resource;
     this.serviceContext = options.serviceContext;
     this.prefix = options.prefix;
@@ -256,11 +265,31 @@ export class LoggingCommon {
       delete data.metadata!.logName;
     }
 
-    const entry = this.stackdriverLog.entry(entryMetadata, data);
-    this.stackdriverLog[stackdriverLevel](
-      entry,
-      this.defaultCallback ?? callback
-    );
+    const entry = this.entry(entryMetadata, data);
+    // Make sure that both callbacks are called in case if provided
+    const newCallback: Callback = (err: Error | null, apiResponse?: {}) => {
+      if (callback) {
+        callback(err, apiResponse);
+      }
+      if (this.defaultCallback) {
+        this.defaultCallback(err, apiResponse);
+      }
+    };
+    this.stackdriverLog[stackdriverLevel](entry, newCallback);
+    // The LogSync class does not supports callback. However Writable class always
+    // provides onwrite() callback which needs to be called after each log is written,
+    // so the stream would remove writing state. Since this.defaultCallback can also be set, we
+    // should call it explicitly as well.
+    if (this.redirectToStdout) {
+      newCallback(null, undefined);
+    }
+  }
+
+  entry(metadata?: LogEntry, data?: string | {}): Entry {
+    if (this.redirectToStdout) {
+      return (this.stackdriverLog as LogSync).entry(metadata, data);
+    }
+    return (this.stackdriverLog as Log).entry(metadata, data);
   }
 }
 

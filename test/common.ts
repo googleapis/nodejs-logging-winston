@@ -17,7 +17,8 @@ import {describe, it, beforeEach} from 'mocha';
 import * as nodeutil from 'util';
 import * as proxyquire from 'proxyquire';
 import {Options} from '../src';
-import {Entry, Logging} from '@google-cloud/logging';
+import {Entry, Logging, LogSync, Log} from '@google-cloud/logging';
+import {LoggingCommon} from '../src/common';
 
 declare const global: {[index: string]: {} | null};
 
@@ -167,6 +168,19 @@ describe('logging-common', () => {
 
     it('should localize the provided service context', () => {
       assert.strictEqual(loggingCommon.serviceContext, OPTIONS.serviceContext);
+    });
+
+    it('should create LogCommon with LogSync', () => {
+      const optionsWithRedirectToStdout = Object.assign({}, OPTIONS, {
+        redirectToStdout: true,
+      });
+      const loggingCommon = new LoggingCommon(optionsWithRedirectToStdout);
+      assert.ok(loggingCommon.stackdriverLog instanceof LogSync);
+    });
+
+    it('should create LogCommon with Log', () => {
+      const loggingCommon = new LoggingCommon(OPTIONS);
+      assert.ok(loggingCommon.stackdriverLog instanceof Log);
     });
   });
 
