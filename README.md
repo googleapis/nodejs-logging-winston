@@ -298,13 +298,13 @@ Cloud Function or GKE. The logger agent installed on these environments can capt
 The agent can parse structured logs printed to `process.stdout` and capture additional log metadata beside the log payload.
 It is recommended to set `redirectToStdout: true` in serverless environments like Cloud Functions since it could 
 decrease logging record loss upon execution termination - since all logs are written to `process.stdout` those
-would be picked up by Cloud Logging Agent running in Google Cloud managed environment. 
+would be picked up by the Cloud Logging Agent running in Google Cloud managed environment. 
 
 ```js
 // Imports the Google Cloud client library for Winston
 const {LoggingWinston} = require('@google-cloud/logging-winston');
 
-// Creates a client
+// Creates a client that writes logs to stdout
 const loggingWinston = new LoggingWinston({
   projectId: 'your-project-id',
   keyFilename: '/path/to/key.json',
