@@ -195,8 +195,8 @@ describe('logging-common', () => {
     beforeEach(() => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fakeLogInstance.entry = (() => {}) as any;
-      loggingCommon.stackdriverLog.emergency = () => {};
-      loggingCommon.stackdriverLog[STACKDRIVER_LEVEL] = () => {};
+      loggingCommon.cloudLog.emergency = () => {};
+      loggingCommon.cloudLog[STACKDRIVER_LEVEL] = () => {};
     });
 
     it('should throw on a bad log level', () => {
@@ -223,7 +223,7 @@ describe('logging-common', () => {
     });
 
     it('should properly create an entry', done => {
-      loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
+      loggingCommon.cloudLog.entry = (entryMetadata: {}, data: {}) => {
         assert.deepStrictEqual(entryMetadata, {
           resource: loggingCommon.resource,
         });
@@ -242,7 +242,7 @@ describe('logging-common', () => {
         stack: 'the stack',
       };
 
-      loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
+      loggingCommon.cloudLog.entry = (entryMetadata: {}, data: {}) => {
         assert.deepStrictEqual(data, {
           message: MESSAGE + ' ' + error.stack,
           metadata: error,
@@ -259,7 +259,7 @@ describe('logging-common', () => {
         stack: 'the stack',
       };
 
-      loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
+      loggingCommon.cloudLog.entry = (entryMetadata: {}, data: {}) => {
         assert.deepStrictEqual(data, {
           message: error.stack,
           metadata: error,
@@ -274,7 +274,7 @@ describe('logging-common', () => {
     it('should inspect metadata when inspectMetadata is set', done => {
       loggingCommon.inspectMetadata = true;
 
-      loggingCommon.stackdriverLog.entry = (_: {}, data: {}) => {
+      loggingCommon.cloudLog.entry = (_: {}, data: {}) => {
         const expectedWinstonMetadata = {};
 
         for (const prop of Object.keys(METADATA)) {
@@ -304,7 +304,7 @@ describe('logging-common', () => {
         METADATA
       );
 
-      loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
+      loggingCommon.cloudLog.entry = (entryMetadata: {}, data: {}) => {
         assert.deepStrictEqual(entryMetadata, {
           resource: loggingCommon.resource,
           httpRequest: HTTP_REQUEST,
@@ -327,7 +327,7 @@ describe('logging-common', () => {
         METADATA
       );
 
-      loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
+      loggingCommon.cloudLog.entry = (entryMetadata: {}, data: {}) => {
         assert.deepStrictEqual(entryMetadata, {
           resource: loggingCommon.resource,
           timestamp: date,
@@ -345,7 +345,7 @@ describe('logging-common', () => {
       const LABELS = {labelKey: 'labelValue'};
       const metadataWithLabels = Object.assign({labels: LABELS}, METADATA);
 
-      loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
+      loggingCommon.cloudLog.entry = (entryMetadata: {}, data: {}) => {
         assert.deepStrictEqual(entryMetadata, {
           resource: loggingCommon.resource,
           labels: LABELS,
@@ -372,7 +372,7 @@ describe('logging-common', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (metadataWithTrace as any)[loggingSampledKey] = '1';
 
-      loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
+      loggingCommon.cloudLog.entry = (entryMetadata: {}, data: {}) => {
         assert.deepStrictEqual(entryMetadata, {
           resource: loggingCommon.resource,
           trace: 'trace1',
@@ -395,7 +395,7 @@ describe('logging-common', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (metadataWithTrace as any)[loggingSampledKey] = '0';
 
-      loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
+      loggingCommon.cloudLog.entry = (entryMetadata: {}, data: {}) => {
         assert.deepStrictEqual(entryMetadata, {
           resource: loggingCommon.resource,
           traceSampled: false,
@@ -419,7 +419,7 @@ describe('logging-common', () => {
           return 'project1';
         },
       };
-      loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
+      loggingCommon.cloudLog.entry = (entryMetadata: {}, data: {}) => {
         assert.deepStrictEqual(entryMetadata, {
           resource: loggingCommon.resource,
           trace: 'projects/project1/traces/trace1',
@@ -437,7 +437,7 @@ describe('logging-common', () => {
     });
 
     it('should leave out trace metadata if trace unavailable', () => {
-      loggingCommon.stackdriverLog.entry = (entryMetadata: {}, data: {}) => {
+      loggingCommon.cloudLog.entry = (entryMetadata: {}, data: {}) => {
         assert.deepStrictEqual(entryMetadata, {
           resource: loggingCommon.resource,
         });
@@ -487,11 +487,11 @@ describe('logging-common', () => {
     it('should write to the log', done => {
       const entry = {};
 
-      loggingCommon.stackdriverLog.entry = () => {
+      loggingCommon.cloudLog.entry = () => {
         return entry;
       };
 
-      loggingCommon.stackdriverLog[STACKDRIVER_LEVEL] = (
+      loggingCommon.cloudLog[STACKDRIVER_LEVEL] = (
         entry_: Entry,
         callback: () => void
       ) => {
@@ -520,7 +520,7 @@ describe('logging-common', () => {
     });
 
     it('should properly create an entry with labels and [prefix] message', done => {
-      loggingCommon.stackdriverLog.entry = (entryMetadata1: {}, data1: {}) => {
+      loggingCommon.cloudLog.entry = (entryMetadata1: {}, data1: {}) => {
         assert.deepStrictEqual(entryMetadata1, {
           resource: loggingCommon.resource,
           // labels should have been merged.
@@ -537,10 +537,7 @@ describe('logging-common', () => {
         const metadataWithoutLabels = Object.assign({}, METADATA);
         delete metadataWithoutLabels.labels;
 
-        loggingCommon.stackdriverLog.entry = (
-          entryMetadata2: {},
-          data2: {}
-        ) => {
+        loggingCommon.cloudLog.entry = (entryMetadata2: {}, data2: {}) => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           console.log((entryMetadata2 as any).labels);
           assert.deepStrictEqual(entryMetadata2, {
