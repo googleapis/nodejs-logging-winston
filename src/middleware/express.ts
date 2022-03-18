@@ -67,8 +67,8 @@ export async function makeMiddleware(
 
   const auth = (
     transport.common.redirectToStdout
-      ? (transport.common.stackdriverLog as LogSync)
-      : (transport.common.stackdriverLog as Log)
+      ? (transport.common.cloudLog as LogSync)
+      : (transport.common.cloudLog as Log)
   ).logging.auth;
   const [env, projectId] = await Promise.all([
     auth.getEnv(),

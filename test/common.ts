@@ -175,12 +175,12 @@ describe('logging-common', () => {
         redirectToStdout: true,
       });
       const loggingCommon = new LoggingCommon(optionsWithRedirectToStdout);
-      assert.ok(loggingCommon.stackdriverLog instanceof LogSync);
+      assert.ok(loggingCommon.cloudLog instanceof LogSync);
     });
 
     it('should create LogCommon with Log', () => {
       const loggingCommon = new LoggingCommon(OPTIONS);
-      assert.ok(loggingCommon.stackdriverLog instanceof Log);
+      assert.ok(loggingCommon.cloudLog instanceof Log);
     });
   });
 
