@@ -21,6 +21,6 @@ logging.basicConfig(level=logging.DEBUG)
 
 common_templates = gcp.CommonTemplates()
 templates = common_templates.node_library()
+s.move(templates, excludes=[".github/auto-label.yaml"]) 
 s.copy(templates)
 node.fix_hermetic()
-node.owlbot_main(templates_excludes=[".github/auto-label.yaml"])
