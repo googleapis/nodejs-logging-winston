@@ -21,5 +21,5 @@ logging.basicConfig(level=logging.DEBUG)
 
 common_templates = gcp.CommonTemplates()
 templates = common_templates.node_library()
-s.move(templates, excludes=[".github/auto-label.yaml"]) 
+s.copy(templates, excludes=[".github/auto-label.yaml"]) 
 node.fix_hermetic()
