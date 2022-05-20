@@ -21,10 +21,16 @@ import {
   Log,
   LogSync,
 } from '@google-cloud/logging';
+import {
+  getInstrumentationInfoStatus,
+  resetInstrumentationStatus,
+  createDiagnosticEntry,
+} from '@google-cloud/logging/build/src/utils/instrumentation';
 import {LogSeverityFunctions} from '@google-cloud/logging/build/src/utils/log-common';
 import mapValues = require('lodash.mapvalues');
 import {Options} from '.';
 import {Entry, LogEntry} from '@google-cloud/logging/build/src/entry';
+import path = require('path');
 
 type Callback = (err: Error | null, apiResponse?: {}) => void;
 export type MonitoredResource = protos.google.api.MonitoredResource;
@@ -82,6 +88,9 @@ export const LOGGING_SPAN_KEY = 'logging.googleapis.com/spanId';
  * Log entry data key to allow users to indicate a traceSampled flag for the request.
  */
 export const LOGGING_SAMPLED_KEY = 'logging.googleapis.com/trace_sampled';
+
+// The variable to hold cached library version
+let libraryVersion: string;
 
 /*!
  * Gets the current fully qualified trace ID when available from the
@@ -163,6 +172,8 @@ export class LoggingCommon {
     metadata: MetadataArg | undefined,
     callback: Callback
   ) {
+    // First save the flag indicating if instrumentation record already written or not
+    const isWritten = getInstrumentationInfoStatus();
     metadata = metadata || ({} as MetadataArg);
     message = message || '';
     const hasMetadata = Object.keys(metadata).length;
@@ -291,6 +302,18 @@ export class LoggingCommon {
     }
     return (this.cloudLog as Log).entry(metadata, data);
   }
+}
+
+export function getNodejsLibraryVersion() {
+  if (libraryVersion) {
+    return libraryVersion;
+  }
+  libraryVersion = require(path.resolve(
+    __dirname,
+    '../',
+    'package.json'
+  )).version;
+  return libraryVersion;
 }
 
 type MetadataArg = {
