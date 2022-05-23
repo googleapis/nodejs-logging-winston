@@ -162,7 +162,8 @@ describe('LoggingWinston', function () {
           winston.format.padLevels()
         ),
       });
-
+      // Make sure we logging below with error severity so the further query
+      // will not return additional diagnostic record which is always written with INFO severity
       logger.error(MESSAGE);
 
       const [entry] = await pollLogs(
