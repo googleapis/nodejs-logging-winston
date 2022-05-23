@@ -169,7 +169,8 @@ describe('LoggingWinston', function () {
         LOG_NAME,
         start,
         1,
-        WRITE_CONSISTENCY_DELAY_MS
+        WRITE_CONSISTENCY_DELAY_MS,
+        'severity:"ERROR"'
       );
       const data = entry.data as {message: string};
       assert.strictEqual(data.message, `   ${MESSAGE}`);
@@ -222,7 +223,8 @@ function pollLogs(
   logName: string,
   logTime: number,
   size: number,
-  timeout: number
+  timeout: number,
+  filter?: string
 ) {
   const p = new Promise<Entry[]>((resolve, reject) => {
     const end = Date.now() + timeout;
@@ -233,6 +235,7 @@ function pollLogs(
         logging.log(logName).getEntries(
           {
             pageSize: size,
+            filter: filter,
           },
           (err, entries) => {
             if (!entries || entries.length < size) return loop();
