@@ -22,8 +22,7 @@ import {
   LogSync,
 } from '@google-cloud/logging';
 import {
-  getInstrumentationInfoStatus,
-  resetInstrumentationStatus,
+  setInstrumentationStatus,
   createDiagnosticEntry,
 } from '@google-cloud/logging/build/src/utils/instrumentation';
 import {LogSeverityFunctions} from '@google-cloud/logging/build/src/utils/log-common';
@@ -173,7 +172,7 @@ export class LoggingCommon {
     callback: Callback
   ) {
     // First save the flag indicating if instrumentation record already written or not
-    const isWritten = getInstrumentationInfoStatus();
+    const isWritten = setInstrumentationStatus(true);
     metadata = metadata || ({} as MetadataArg);
     message = message || '';
     const hasMetadata = Object.keys(metadata).length;
