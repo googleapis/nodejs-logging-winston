@@ -4,6 +4,29 @@
 
 [1]: https://www.npmjs.com/package/@google-cloud/logging-winston?activeTab=versions
 
+## [5.0.0](https://github.com/googleapis/nodejs-logging-winston/compare/v4.2.4...v5.0.0) (2022-05-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* update library to use Node 12 (#706)
+
+### Bug Fixes
+
+* **deps:** update dependency @google-cloud/logging to v10 ([#709](https://github.com/googleapis/nodejs-logging-winston/issues/709)) ([1315964](https://github.com/googleapis/nodejs-logging-winston/commit/1315964fb1e93b9ca1ab41a407fed17ac34ad360))
+
+
+### Build System
+
+* update library to use Node 12 ([#706](https://github.com/googleapis/nodejs-logging-winston/issues/706)) ([63d6a93](https://github.com/googleapis/nodejs-logging-winston/commit/63d6a93d988f718acac2df507e4139b3b4ccf6b8))
+
+### [4.2.4](https://github.com/googleapis/nodejs-logging-winston/compare/v4.2.3...v4.2.4) (2022-05-23)
+
+
+### Bug Fixes
+
+* LoggingWinston log test 'should work correctly with winston formats' failed ([#710](https://github.com/googleapis/nodejs-logging-winston/issues/710)) ([9549b41](https://github.com/googleapis/nodejs-logging-winston/commit/9549b41614f3a0795f623c03755213c90520fb0f))
+
 ### [4.2.3](https://github.com/googleapis/nodejs-logging-winston/compare/v4.2.2...v4.2.3) (2022-04-21)
 
 
