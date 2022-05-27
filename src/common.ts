@@ -171,9 +171,19 @@ export class LoggingCommon {
     metadata: MetadataArg | undefined,
     callback: Callback
   ) {
-    // First save the flag indicating if instrumentation record already written or not
-    const isWritten = setInstrumentationStatus(true);
     metadata = metadata || ({} as MetadataArg);
+    // First create instrumentation record if it is never written before
+    let instrumentationEntry: Entry | undefined;
+    if (!setInstrumentationStatus(true)) {
+      instrumentationEntry = createDiagnosticEntry(
+        'nodejs-winston',
+        getNodejsLibraryVersion()
+      );
+      // Update instrumentation record resource, logName and timestamp
+      instrumentationEntry.metadata.resource = this.resource;
+      instrumentationEntry.metadata.logName = metadata.logName;
+      instrumentationEntry.metadata.timestamp = metadata.timestamp;
+    }
     message = message || '';
     const hasMetadata = Object.keys(metadata).length;
 
@@ -275,7 +285,22 @@ export class LoggingCommon {
       delete data.metadata!.logName;
     }
 
-    const entry = this.entry(entryMetadata, data);
+    const entries: Entry[] = [];
+    entries.push(this.entry(entryMetadata, data));
+    // Check if instrumentation entry needs to be added as well
+    if (instrumentationEntry) {
+      // Make sure instrumentation entry is updated by underlying logger
+      instrumentationEntry = this.entry(
+        instrumentationEntry.metadata,
+        instrumentationEntry.data
+      );
+      if (levelCode !== NPM_LEVEL_NAME_TO_CODE.info) {
+        // We using info level for diagnostic records
+        this.cloudLog[
+          CLOUD_LOGGING_LEVEL_CODE_TO_NAME[NPM_LEVEL_NAME_TO_CODE.info]
+        ]([instrumentationEntry], this.defaultCallback);
+      } else entries.push(instrumentationEntry);
+    }
     // Make sure that both callbacks are called in case if provided
     const newCallback: Callback = (err: Error | null, apiResponse?: {}) => {
       if (callback) {
@@ -285,7 +310,7 @@ export class LoggingCommon {
         this.defaultCallback(err, apiResponse);
       }
     };
-    this.cloudLog[cloudLevel](entry, newCallback);
+    this.cloudLog[cloudLevel](entries, newCallback);
     // The LogSync class does not supports callback. However Writable class always
     // provides onwrite() callback which needs to be called after each log is written,
     // so the stream would remove writing state. Since this.defaultCallback can also be set, we
@@ -309,7 +334,7 @@ export function getNodejsLibraryVersion() {
   }
   libraryVersion = require(path.resolve(
     __dirname,
-    '../',
+    '../../',
     'package.json'
   )).version;
   return libraryVersion;
