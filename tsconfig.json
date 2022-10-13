@@ -4,6 +4,7 @@
     "rootDir": ".",
     "outDir": "build",
     "lib": [
+      "es2018",
       "dom"
     ]
   },
