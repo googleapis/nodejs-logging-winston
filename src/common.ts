@@ -312,7 +312,16 @@ export class LoggingCommon {
     // Make sure that both callbacks are called in case if provided
     const newCallback: Callback = (err: Error | null, apiResponse?: {}) => {
       if (callback) {
-        callback(err, apiResponse);
+        try {
+          callback(err, apiResponse);
+        } catch (err) {
+          // We ignore here errors thrown from Writable.onwrite() calls since
+          // error could be temporary and following writes could succeed. We
+          // also want to make sure to call to defaultCallback
+          if (!this.defaultCallback) {
+            throw err;
+          }
+        }
       }
       if (this.defaultCallback) {
         this.defaultCallback(err, apiResponse);
