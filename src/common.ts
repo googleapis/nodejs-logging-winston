@@ -315,9 +315,10 @@ export class LoggingCommon {
         try {
           callback(err, apiResponse);
         } catch (error) {
-          // We ignore here errors thrown from Writable.onwrite() calls since
-          // error could be temporary and following writes could succeed. We
-          // also want to make sure to call to defaultCallback
+          // We ignore here errors thrown from a callback calls (which is actually Writable.onwrite())
+          // since error could be temporary and following writes could succeed. We
+          // also want to make sure to call to defaultCallback suplied by a user, so
+          // user can get any details regarding error happened in defaultCallback
           if (!this.defaultCallback) {
             throw error;
           }
