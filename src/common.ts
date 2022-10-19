@@ -311,21 +311,21 @@ export class LoggingCommon {
     }
     // Make sure that both callbacks are called in case if provided
     const newCallback: Callback = (err: Error | null, apiResponse?: {}) => {
+      let callbackError: unknown;
       if (callback) {
         try {
           callback(err, apiResponse);
         } catch (error) {
-          // We ignore here errors thrown from a callback calls (which is actually Writable.onwrite())
-          // since error could be temporary and following writes could succeed. We
-          // also want to make sure to call to defaultCallback suplied by a user, so
-          // user can get any details regarding error happened in defaultCallback
-          if (!this.defaultCallback) {
-            throw error;
-          }
+          callbackError = error;
         }
       }
       if (this.defaultCallback) {
         this.defaultCallback(err, apiResponse);
+      }
+      // In case if original error was null and callback thrown exception, rethrow it to make sure
+      // we do not swallow it since upon success the exceptions normally should not be thrown
+      if (err === null && callbackError) {
+        throw callbackError;
       }
     };
     this.cloudLog[cloudLevel](entries, newCallback);
