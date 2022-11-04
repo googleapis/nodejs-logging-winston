@@ -30,6 +30,7 @@ import mapValues = require('lodash.mapvalues');
 import {Options} from '.';
 import {Entry, LogEntry} from '@google-cloud/logging/build/src/entry';
 import path = require('path');
+import fs = require('fs');
 import {LogSyncOptions} from '@google-cloud/logging/build/src/log-sync';
 
 type Callback = (err: Error | null, apiResponse?: {}) => void;
@@ -358,11 +359,12 @@ export function getNodejsLibraryVersion() {
     return libraryVersion;
   }
   try {
-    libraryVersion = require(path.resolve(
+    const packageJson = fs.readFileSync(path.resolve(
       __dirname,
       '../../',
       'package.json'
-    )).version;
+    ));
+    libraryVersion = JSON.parse(packageJson).version;
   } catch (err) {
     libraryVersion = NODEJS_WINSTON_DEFAULT_LIBRARY_VERSION;
   }
