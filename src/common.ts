@@ -89,7 +89,7 @@ export const LOGGING_SPAN_KEY = 'logging.googleapis.com/spanId';
 export const LOGGING_SAMPLED_KEY = 'logging.googleapis.com/trace_sampled';
 
 /**
- * Default library version to be used if version retrieval fails
+ * Default library version to be used
  * Using release-please annotations to update DEFAULT_INSTRUMENTATION_VERSION with latest version.
  * See https://github.com/googleapis/release-please/blob/main/docs/customizing.md#updating-arbitrary-files
  */
