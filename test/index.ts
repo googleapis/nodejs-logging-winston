@@ -149,7 +149,9 @@ describe('logging-winston', () => {
         handleExceptions: true,
         handleRejections: false,
       });
-      new loggingWinstonLib.LoggingWinston(optionsWithTransportStreamparameters);
+      new loggingWinstonLib.LoggingWinston(
+        optionsWithTransportStreamparameters
+      );
       assert.strictEqual(fakeLoggingOptions_!.level, level);
       assert.strictEqual(fakeLoggingOptions_!.format, format);
       assert.strictEqual(fakeLoggingOptions_!.silent, true);
