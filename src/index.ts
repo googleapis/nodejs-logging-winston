@@ -108,7 +108,7 @@ export interface Options extends LoggingOptions {
 
   /**
    * Additional parameters for {@link TransportStream}. For more information on parameters,
-   * please see [winston-transport](https://github.com/winstonjs/winston-transport).
+   * please see [winston-transport](https://github.com/winstonjs/winston-transport/blob/0e5e4c0056188a74e24407ee066902fb113bd8de/index.js#L8).
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   format?: any;
