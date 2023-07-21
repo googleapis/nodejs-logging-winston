@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@google-cloud/logging": "^10.2.2",
-    "google-auth-library": "^8.0.2",
+    "google-auth-library": "^9.0.0",
     "lodash.mapvalues": "^4.6.0",
     "winston-transport": "^4.3.0"
   },
