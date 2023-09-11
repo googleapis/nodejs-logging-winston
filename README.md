@@ -325,7 +325,7 @@ Another possible way is to use a `setTimeout` with a desired interval in order t
 
 ## Samples
 
-Samples are in the [`samples/`](https://github.com/googleapis/nodejs-logging-winston/tree/main/samples) directory. Each sample's `README.md` has instructions for running its sample.
+Samples are in the [`samples/`](https://github.com/googleapis/nodejs-logging-winston/tree/main/packages/google-cloud-functions/samples) directory. Each sample's `README.md` has instructions for running its sample.
 
 | Sample                      | Source Code                       | Try it |
 | --------------------------- | --------------------------------- | ------ |
