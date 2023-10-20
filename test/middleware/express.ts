@@ -147,6 +147,7 @@ describe('middleware/express', () => {
   [GCPEnv.APP_ENGINE, GCPEnv.CLOUD_FUNCTIONS, GCPEnv.CLOUD_RUN].forEach(env => {
     it(`should not generate the request logger on ${env}`, async () => {
       authEnvironment = env;
+      const t = new FakeLoggingWinston({});
       if (env === GCPEnv.CLOUD_RUN) {
         // Cloud Run needs explicit set skipParentEntryForCloudRun flag to enable this behavior until we can make breaking change in next major version
         await makeMiddleware(logger, t, /*skipParentEntryForCloudRun=*/ true);
