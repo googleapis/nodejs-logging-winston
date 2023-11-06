@@ -253,7 +253,7 @@ export class LoggingCommon {
     // metadata. As Winston 3 buffers logs when a transport (such as this one)
     // invokes its log callback asynchronously, a timestamp assigned at log time
     // is more accurate than one assigned in a transport.
-    if (metadata.timestamp instanceof Date) {
+    if (metadata.timestamp) {
       entryMetadata.timestamp = metadata.timestamp;
     }
 
