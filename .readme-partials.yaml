@@ -127,7 +127,7 @@ body: |-
 
     **NOTE: The express middleware provided by this library handles this automatically for you. These instructions are for there case where you may want to handle this manually.**
 
-    To format your request logs you can provide a `httpRequest` property as part of the log metadata you provide to winston. We will treat this as the [`HttpRequest`](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#HttpRequest) message and Cloud Logging will show this as a request log. Example:
+    To format your request logs you can provide a `httpRequest` property as part of the log metadata you provide to winston. We will treat this as the [`HttpRequest`](https://cloud.google.com/logging/docs/reference/v2/rpc/google.logging.type#google.logging.type.HttpRequest) message and Cloud Logging will show this as a request log. Example:
 
     ![Request Log Example](https://raw.githubusercontent.com/googleapis/nodejs-logging-winston/master/doc/images/request-log.png)
 
@@ -143,7 +143,7 @@ body: |-
     });
     ```
 
-    The `httpRequest` property must be a properly formatted [`HttpRequest`](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#HttpRequest) message.
+    The `httpRequest` property must be a properly formatted [`HttpRequest`](https://cloud.google.com/logging/docs/reference/v2/rpc/google.logging.type#google.logging.type.HttpRequest) message.
 
     **NOTE: Due to a bug in [logform](https://github.com/winstonjs/logform/issues/125) some built in Winston formatters might not work properly with `LoggingWinston`. For more information about the problem and possible workaround please see [540](https://github.com/googleapis/nodejs-logging-winston/issues/540). In addition, [Cloud Logging for Bunyan](https://github.com/googleapis/nodejs-logging-bunyan) could be considered as alternative.
 
