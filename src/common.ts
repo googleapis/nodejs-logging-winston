@@ -241,7 +241,7 @@ export class LoggingCommon {
 
     // If the metadata contains a httpRequest property, promote it to the
     // entry metadata. This allows Cloud Logging to use request log formatting.
-    // https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#HttpRequest
+    // https://cloud.google.com/logging/docs/reference/v2/rpc/google.logging.type#google.logging.type.HttpRequest
     // Note that the httpRequest field must properly validate as HttpRequest
     // proto message, or the log entry would be rejected by the API. We no do
     // validation here.
@@ -259,7 +259,7 @@ export class LoggingCommon {
 
     // If the metadata contains a labels property, promote it to the entry
     // metadata.
-    // https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry
+    // https://cloud.google.com/logging/docs/reference/v2/rpc/google.logging.v2#logentry
     if (this.labels || metadata.labels) {
       entryMetadata.labels = !this.labels
         ? metadata.labels
@@ -277,7 +277,7 @@ export class LoggingCommon {
     }
 
     if (LOGGING_SAMPLED_KEY in metadata) {
-      entryMetadata.traceSampled = metadata[LOGGING_SAMPLED_KEY] === '1';
+      entryMetadata.traceSampled = metadata[LOGGING_SAMPLED_KEY] === true;
     }
 
     // we have tests that assert that metadata is always passed.
