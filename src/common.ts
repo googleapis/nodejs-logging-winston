@@ -329,7 +329,7 @@ export class LoggingCommon {
       }
       // In case if original error was null and callback thrown exception, rethrow it to make sure
       // we do not swallow it since upon success the exceptions normally should not be thrown. Also
-      // we should retrhrow callbackError when defaultCallback was not provided to keep
+      // we should rethrow callbackError when defaultCallback was not provided to keep
       // prevous behaviour intact
       if ((!this.defaultCallback || err === null) && callbackError) {
         throw callbackError;
