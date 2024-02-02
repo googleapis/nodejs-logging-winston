@@ -18,6 +18,7 @@ import {
   LOGGING_TRACE_KEY as COMMON_TRACE_KEY,
   LOGGING_SPAN_KEY as COMMON_SPAN_KEY,
   LOGGING_SAMPLED_KEY as COMMON_SAMPLED_KEY,
+  LOGGING_OPERATION_KEY as COMMON_OPERATION_KEY,
   LoggingCommon,
   getCurrentTraceFromAgent,
 } from './common';
@@ -199,6 +200,7 @@ export class LoggingWinston extends TransportStream {
   static readonly LOGGING_TRACE_KEY = COMMON_TRACE_KEY;
   static readonly LOGGING_SPAN_KEY = COMMON_SPAN_KEY;
   static readonly LOGGING_SAMPLED_KEY = COMMON_SAMPLED_KEY;
+  static readonly LOGGING_OPERATIONS_KEY = COMMON_OPERATION_KEY;
 
   common: LoggingCommon;
 
@@ -242,3 +244,9 @@ export const LOGGING_SPAN_KEY = COMMON_SPAN_KEY;
 // The value of this field must be either true or false. For more information,
 // see traceSampled on the LogEntry page:	https://cloud.google.com/logging/docs/reference/v2/rpc/google.logging.v2#logentry
 export const LOGGING_SAMPLED_KEY = COMMON_SAMPLED_KEY;
+
+// LOGGING_OPERATIONS_KEY is Cloud Logging specific and has the format:
+// logging.googleapis.com/operation
+// The value of this field is an object with optional producer, id, first and last parameters.
+// For more information, see: https://cloud.google.com/logging/docs/reference/v2/rpc/google.logging.v2#logentryoperation
+export const LOGGING_OPERATION_KEY = COMMON_OPERATION_KEY;

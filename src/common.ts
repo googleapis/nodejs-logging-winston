@@ -30,6 +30,8 @@ import mapValues = require('lodash.mapvalues');
 import {Options} from '.';
 import {Entry, LogEntry} from '@google-cloud/logging/build/src/entry';
 import {LogSyncOptions} from '@google-cloud/logging/build/src/log-sync';
+import {google} from '@google-cloud/logging/build/protos/protos';
+import ILogEntryOperation = google.logging.v2.ILogEntryOperation;
 
 type Callback = (err: Error | null, apiResponse?: {}) => void;
 export type MonitoredResource = protos.google.api.MonitoredResource;
@@ -89,6 +91,11 @@ export const LOGGING_SPAN_KEY = 'logging.googleapis.com/spanId';
  * Log entry data key to allow users to indicate a traceSampled flag for the request.
  */
 export const LOGGING_SAMPLED_KEY = 'logging.googleapis.com/trace_sampled';
+
+/*!
+ * Log entry data key to allow users to indicate operation details for the request.
+ */
+export const LOGGING_OPERATION_KEY = 'logging.googleapis.com/operation';
 
 /**
  * Default library version to be used
@@ -280,6 +287,12 @@ export class LoggingCommon {
       entryMetadata.traceSampled = metadata[LOGGING_SAMPLED_KEY] === true;
     }
 
+    if (LOGGING_OPERATION_KEY in metadata) {
+      entryMetadata.operation = metadata[
+        LOGGING_OPERATION_KEY
+      ] as ILogEntryOperation;
+    }
+
     // we have tests that assert that metadata is always passed.
     // not sure if its correct but for now we always set it even if it has
     // nothing in it
@@ -292,6 +305,7 @@ export class LoggingCommon {
       delete data.metadata![LOGGING_TRACE_KEY];
       delete data.metadata![LOGGING_SPAN_KEY];
       delete data.metadata![LOGGING_SAMPLED_KEY];
+      delete data.metadata![LOGGING_OPERATION_KEY];
       delete data.metadata!.httpRequest;
       delete data.metadata!.labels;
       delete data.metadata!.timestamp;

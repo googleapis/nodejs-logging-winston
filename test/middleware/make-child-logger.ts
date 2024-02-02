@@ -19,14 +19,18 @@ import {
   LOGGING_TRACE_KEY,
   LOGGING_SPAN_KEY,
   LOGGING_SAMPLED_KEY,
+  LOGGING_OPERATION_KEY,
 } from '../../src/common';
 
 import {makeChildLogger} from '../../src/middleware/make-child-logger';
+import {google} from '@google-cloud/logging/build/protos/protos';
+import ILogEntryOperation = google.logging.v2.ILogEntryOperation;
 
 describe('makeChildLogger', () => {
   const FAKE_TRACE = '🤥';
   const FAKE_SPAN = '☂️';
   const FAKE_SAMPLE = true;
+  const FAKE_OPERATION: ILogEntryOperation = {id: 'some-operation'};
   const LOGGER = winston.createLogger({
     transports: [new winston.transports.Console({silent: true})],
   });
@@ -108,22 +112,54 @@ describe('makeChildLogger', () => {
     assert.strictEqual(sample, FAKE_SAMPLE);
   });
 
-  it('should not overwrite existing LOGGING_X_KEY values', () => {
-    const child = makeChildLogger(LOGGER, FAKE_TRACE, FAKE_SPAN, FAKE_SAMPLE);
-    let trace, span, sample;
+  it('should inject the LOGGING_OPERATION_KEY into the metadata', () => {
+    const child = makeChildLogger(
+      LOGGER,
+      FAKE_TRACE,
+      FAKE_SPAN,
+      FAKE_SAMPLE,
+      FAKE_OPERATION
+    );
+    let trace, span, sample, operation;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (LOGGER.write as any) = (info: winston.LogEntry) => {
       trace = info[LOGGING_TRACE_KEY];
       span = info[LOGGING_SPAN_KEY];
       sample = info[LOGGING_SAMPLED_KEY];
+      operation = info[LOGGING_OPERATION_KEY];
+    };
+    child.debug('hello world');
+    assert.strictEqual(trace, FAKE_TRACE);
+    assert.strictEqual(span, FAKE_SPAN);
+    assert.strictEqual(sample, FAKE_SAMPLE);
+    assert.strictEqual(operation, FAKE_OPERATION);
+  });
+
+  it('should not overwrite existing LOGGING_X_KEY values', () => {
+    const child = makeChildLogger(
+      LOGGER,
+      FAKE_TRACE,
+      FAKE_SPAN,
+      FAKE_SAMPLE,
+      FAKE_OPERATION
+    );
+    let trace, span, sample, operation;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (LOGGER.write as any) = (info: winston.LogEntry) => {
+      trace = info[LOGGING_TRACE_KEY];
+      span = info[LOGGING_SPAN_KEY];
+      sample = info[LOGGING_SAMPLED_KEY];
+      operation = info[LOGGING_OPERATION_KEY];
     };
     child.debug('hello world', {
       [LOGGING_TRACE_KEY]: 'to-be-clobbered',
       [LOGGING_SPAN_KEY]: 'to-be-clobbered',
       [LOGGING_SAMPLED_KEY]: false,
+      [LOGGING_OPERATION_KEY]: {id: 'some-other-operation'},
     });
     assert.notStrictEqual(trace, FAKE_TRACE);
     assert.notStrictEqual(span, FAKE_SPAN);
     assert.notStrictEqual(sample, FAKE_SAMPLE);
+    assert.notStrictEqual(operation, FAKE_OPERATION);
   });
 });

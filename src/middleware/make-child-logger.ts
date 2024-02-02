@@ -17,17 +17,22 @@ import {
   LOGGING_TRACE_KEY,
   LOGGING_SPAN_KEY,
   LOGGING_SAMPLED_KEY,
+  LOGGING_OPERATION_KEY,
 } from '../index';
+import {google} from '@google-cloud/logging/build/protos/protos';
+import ILogEntryOperation = google.logging.v2.ILogEntryOperation;
 
 export function makeChildLogger(
   logger: winston.Logger,
   trace: string,
   span?: string,
-  sampled?: boolean
+  sampled?: boolean,
+  operation?: ILogEntryOperation
 ) {
   return logger.child({
     [LOGGING_TRACE_KEY]: trace,
     [LOGGING_SPAN_KEY]: span,
     [LOGGING_SAMPLED_KEY]: sampled,
+    [LOGGING_OPERATION_KEY]: operation,
   });
 }
