@@ -111,7 +111,7 @@ describe(__filename, () => {
           const [requestLogEntry] = requestLogEntries;
           assert.strictEqual(
             requestLogEntry.metadata.trace,
-            appLogEntry.metadata.trace
+            appLogEntry.metadata.trace,
           );
 
           resolve();
