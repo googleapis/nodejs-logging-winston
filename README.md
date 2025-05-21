@@ -46,7 +46,7 @@ Google APIs Client Libraries, in [Client Libraries Explained][explained].
 
 1.  [Select or create a Cloud Platform project][projects].
 1.  [Enable the Cloud Logging for Winston API][enable_api].
-1.  [Set up authentication with a service account][auth] so you can access the
+1.  [Set up authentication][auth] so you can access the
     API from your local workstation.
 
 ### Installing the client library
@@ -173,7 +173,7 @@ serviceContext: {
 
 It is an error to specify a `serviceContext` but not specify `serviceContext.service`.
 
-Make sure to add logs to your [uncaught exception][uncaught] and [unhandled rejection][unhandled] handlers if you want to see those errors too.
+Make sure to add logs to your [uncaught exception](https://nodejs.org/api/process.html#process_event_uncaughtexception) and [unhandled rejection](https://nodejs.org/api/process.html#process_event_unhandledrejection) handlers if you want to see those errors too.
 
 You may also want to see the [@google-cloud/error-reporting](https://github.com/googleapis/nodejs-error-reporting) module which provides direct access to the Error Reporting API.
 
@@ -204,7 +204,7 @@ defaultCallback: err => {
 
 **NOTE: The express middleware provided by this library handles this automatically for you. These instructions are for there case where you may want to handle this manually.**
 
-To format your request logs you can provide a `httpRequest` property as part of the log metadata you provide to winston. We will treat this as the [`HttpRequest`](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#HttpRequest) message and Cloud Logging will show this as a request log. Example:
+To format your request logs you can provide a `httpRequest` property as part of the log metadata you provide to winston. We will treat this as the [`HttpRequest`](https://cloud.google.com/logging/docs/reference/v2/rpc/google.logging.type#google.logging.type.HttpRequest) message and Cloud Logging will show this as a request log. Example:
 
 ![Request Log Example](https://raw.githubusercontent.com/googleapis/nodejs-logging-winston/master/doc/images/request-log.png)
 
@@ -220,7 +220,7 @@ httpRequest: {
 });
 ```
 
-The `httpRequest` property must be a properly formatted [`HttpRequest`](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#HttpRequest) message.
+The `httpRequest` property must be a properly formatted [`HttpRequest`](https://cloud.google.com/logging/docs/reference/v2/rpc/google.logging.type#google.logging.type.HttpRequest) message.
 
 **NOTE: Due to a bug in [logform](https://github.com/winstonjs/logform/issues/125) some built in Winston formatters might not work properly with `LoggingWinston`. For more information about the problem and possible workaround please see [540](https://github.com/googleapis/nodejs-logging-winston/issues/540). In addition, [Cloud Logging for Bunyan](https://github.com/googleapis/nodejs-logging-bunyan) could be considered as alternative.
 
@@ -228,7 +228,7 @@ The `httpRequest` property must be a properly formatted [`HttpRequest`](https://
 
 **NOTE: The express middleware provided by this library handles this automatically for you. These instructions are for there case where you may want to handle this manually.**
 
-If you use [@google-cloud/trace-agent][trace-agent] module, then this module will set the Cloud Logging [LogEntry][LogEntry] `trace` property based on the current trace context when available. That correlation allows you to [view log entries][trace-viewing-log-entries] inline with trace spans in the Cloud Trace Viewer. Example:
+If you use [@google-cloud/trace-agent](https://www.npmjs.com/package/@google-cloud/trace-agent) module, then this module will set the Cloud Logging [LogEntry](https://cloud.google.com/logging/docs/reference/v2/rpc/google.logging.v2#logentry) `trace` property based on the current trace context when available. That correlation allows you to [view log entries](https://cloud.google.com/trace/docs/viewing-details#log_entries) inline with trace spans in the Cloud Trace Viewer. Example:
 
 ![Logs in Trace Example](https://raw.githubusercontent.com/googleapis/nodejs-logging-winston/master/doc/images/winston-logs-in-trace.png)
 
@@ -402,4 +402,4 @@ See [LICENSE](https://github.com/googleapis/nodejs-logging-winston/blob/main/LIC
 [projects]: https://console.cloud.google.com/project
 [billing]: https://support.google.com/cloud/answer/6293499#enable-billing
 [enable_api]: https://console.cloud.google.com/flows/enableapi?apiid=logging.googleapis.com
-[auth]: https://cloud.google.com/docs/authentication/getting-started
+[auth]: https://cloud.google.com/docs/authentication/external/set-up-adc-local
