@@ -16,7 +16,7 @@
 
 import * as assert from 'assert';
 import {describe, it} from 'mocha';
-import * as uuid from 'uuid';
+import * as crypto from 'crypto';
 import {ErrorsApiTransport} from './errors-transport';
 import * as proxyquire from 'proxyquire';
 import * as winston from 'winston';
@@ -27,7 +27,7 @@ const logging = new Logging();
 
 const WRITE_CONSISTENCY_DELAY_MS = 90000;
 
-const UUID = uuid.v4();
+const UUID = crypto.randomBytes(16).toString('hex');
 function logName(name: string) {
   return `${UUID}_${name}`;
 }
