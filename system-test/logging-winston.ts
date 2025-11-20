@@ -101,7 +101,7 @@ describe('LoggingWinston', function () {
                 entry.data as {
                   message: string;
                 }
-              ).message.startsWith('fourth Error:')
+              ).message.startsWith('fourth Error:'),
             );
           },
         },
@@ -120,7 +120,7 @@ describe('LoggingWinston', function () {
                 entry.data as {
                   message: string;
                 }
-              ).message.startsWith('fifth message')
+              ).message.startsWith('fifth message'),
             );
           },
         },
@@ -143,7 +143,7 @@ describe('LoggingWinston', function () {
         LOG_NAME,
         start,
         testData.length,
-        WRITE_CONSISTENCY_DELAY_MS
+        WRITE_CONSISTENCY_DELAY_MS,
       );
       assert.strictEqual(entries.length, testData.length);
       entries.reverse().forEach((entry, index) => {
@@ -160,7 +160,7 @@ describe('LoggingWinston', function () {
         transports: [new LoggingWinston({logName: LOG_NAME})],
         format: winston.format.combine(
           winston.format.colorize(),
-          winston.format.padLevels()
+          winston.format.padLevels(),
         ),
       });
       // Make sure we logging below with error severity so the further query
@@ -171,14 +171,14 @@ describe('LoggingWinston', function () {
         LOG_NAME,
         start,
         2,
-        WRITE_CONSISTENCY_DELAY_MS
+        WRITE_CONSISTENCY_DELAY_MS,
       );
       entries.forEach(entry => {
         assert.ok(entry.data);
         if (
           Object.prototype.hasOwnProperty.call(
             entry.data,
-            instrumentation.DIAGNOSTIC_INFO_KEY
+            instrumentation.DIAGNOSTIC_INFO_KEY,
           )
         ) {
           const info =
@@ -223,7 +223,7 @@ describe('LoggingWinston', function () {
       const errors = await errorsTransport.pollForNewEvents(
         service,
         start,
-        ERROR_REPORTING_POLL_TIMEOUT
+        ERROR_REPORTING_POLL_TIMEOUT,
       );
 
       assert.strictEqual(errors.length, 1);
@@ -241,7 +241,7 @@ function pollLogs(
   logName: string,
   logTime: number,
   size: number,
-  timeout: number
+  timeout: number,
 ) {
   const p = new Promise<Entry[]>((resolve, reject) => {
     const end = Date.now() + timeout;
@@ -269,7 +269,7 @@ function pollLogs(
               return reject(new Error('timeout'));
             }
             loop();
-          }
+          },
         );
       }, 500);
     }
