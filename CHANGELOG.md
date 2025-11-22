@@ -4,6 +4,17 @@
 
 [1]: https://www.npmjs.com/package/@google-cloud/logging-winston?activeTab=versions
 
+## [7.0.0](https://github.com/googleapis/nodejs-logging-winston/compare/v6.0.1...v7.0.0) (2025-11-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate to node 18 ([#909](https://github.com/googleapis/nodejs-logging-winston/issues/909))
+
+### Miscellaneous Chores
+
+* Migrate to node 18 ([#909](https://github.com/googleapis/nodejs-logging-winston/issues/909)) ([f44a9cf](https://github.com/googleapis/nodejs-logging-winston/commit/f44a9cf0004721869e81f5a4190a07bc5c2cc040))
+
 ## [6.0.1](https://github.com/googleapis/nodejs-logging-winston/compare/v6.0.0...v6.0.1) (2024-10-23)
 
 
