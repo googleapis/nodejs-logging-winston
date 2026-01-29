@@ -254,6 +254,26 @@ fi
 log_yellow "Changing to the project root: ${PROJECT_ROOT}."
 cd "${PROJECT_ROOT}"
 
+# --------------------------------------------------------------------
+# Manual Injection for verification
+# --------------------------------------------------------------------
+if [[ "${RUNNING_IN_CI:-}" == "true" ]]; then
+    # For testing, we check .github/ folder
+    RELATIVE_PKG_PATH=".github/"
+    echo "Checking for changes in ${RELATIVE_PKG_PATH}..."
+    
+    # We use HEAD^..HEAD as the range
+    DIFF_RANGE="HEAD^..HEAD"
+
+    if git diff --quiet "${DIFF_RANGE}" -- "${RELATIVE_PKG_PATH}"; then
+        echo "No changes detected in ${RELATIVE_PKG_PATH}. Skipping tests."
+        exit 0
+    else
+        echo "Changes detected in ${RELATIVE_PKG_PATH}. Proceeding with tests."
+    fi
+fi
+# --------------------------------------------------------------------
+
 # To support relative path for `TRAMPOLINE_SERVICE_ACCOUNT`, we need
 # to use this environment variable in `PROJECT_ROOT`.
 if [[ -n "${TRAMPOLINE_SERVICE_ACCOUNT:-}" ]]; then
