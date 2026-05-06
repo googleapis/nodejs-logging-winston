@@ -22,7 +22,7 @@ jobs:
       - run: npm install --production --engine-strict --ignore-scripts --no-package-lock
       # Clean up the production install, before installing dev/production:
       - run: rm -rf node_modules
-      - run: npm ci --engine-strict
+      - run: npm install --engine-strict
       - run: npm test
         env:
           MOCHA_THROW_DEPRECATION: false
@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: 18
       - run: node --version
-      - run: npm ci --engine-strict
+      - run: npm install --engine-strict
         working-directory: .github/scripts
       - run: npm test
         working-directory: .github/scripts
@@ -58,7 +58,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 18
-      - run: npm ci
+      - run: npm install
       - run: npm run lint
   docs:
     runs-on: ubuntu-latest
@@ -67,7 +67,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 18
-      - run: npm ci
+      - run: npm install
       - run: npm run docs
       - uses: JustinBeckwith/linkinator-action@v1
         with:
